@@ -1,0 +1,43 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="2023-11-16-v1-create-subject" author="Artem Lysenko">
+
+        <preConditions>
+            <not>
+                <tableExists tableName="subject"/>
+            </not>
+        </preConditions>
+        
+        <createTable tableName="subject">
+
+            <column name="id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <sql>
+            alter table subject
+                add constraint subject_name_check check ( length(name) > 0 );
+        </sql>
+
+        <sql>
+            INSERT INTO subject (name) values ('МАТЕМАТИКА');
+            INSERT INTO subject (name) values ('ИСТОРИЯ');
+            INSERT INTO subject (name) values ('ВЕБ-ПРОГРАММИРОВАНИЕ');
+            INSERT INTO subject (name) values ('ПРОГРАММИРОВАНИЕ');
+            INSERT INTO subject (name) values ('НИЗКОУРОВНЕВОЕ ПРОГРАММИРОВАНИЕ');
+            INSERT INTO subject (name) values ('АРХИТЕКТУРА КОМПЬЮТЕРА');
+        </sql>
+        
+    </changeSet>
+
+</databaseChangeLog>

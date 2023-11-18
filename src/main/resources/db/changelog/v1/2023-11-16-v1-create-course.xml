@@ -1,0 +1,44 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="2023-11-16-v1-create-course" author="Artem Lysenko">
+
+        <preConditions>
+            <not>
+                <tableExists tableName="course"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="course">
+
+            <column name="course_number" type="serial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="description" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <sql>
+            alter table course
+                add constraint course_description_check check ( length(description) > 0 );
+        </sql>
+
+    </changeSet>
+    
+    <changeSet id="2023-11-16-v1-insert-data-into-course" author="Artem Lysenko">
+        <sql>
+            INSERT INTO COURSE (description) VALUES ('1 курс бакалавриата');
+            INSERT INTO COURSE (description) VALUES ('2 курс бакалавриата');
+            INSERT INTO COURSE (description) VALUES ('3 курс бакалавриата');
+            INSERT INTO COURSE (description) VALUES ('4 курс бакалавриата');
+            INSERT INTO COURSE (description) VALUES ('1 курс магистратуры');
+            INSERT INTO COURSE (description) VALUES ('2 курс магистратуры');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
