@@ -1,0 +1,45 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="2023-11-16-v1-create-file" author="Artem Lysenko">
+
+        <preConditions>
+            <not>
+                <tableExists tableName="file"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="file">
+
+            <column name="id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="file_url" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="extension" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="publication_id" type="bigint">
+                <constraints foreignKeyName="file_publication_id_fkey" nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <sql>
+            alter table file
+                add constraint file_file_url_check check ( length(file_url) > 0 );
+
+            alter table file
+                add constraint file_extension_url_check check ( length(extension) > 0 );
+        </sql>
+
+    </changeSet>
+
+</databaseChangeLog>
