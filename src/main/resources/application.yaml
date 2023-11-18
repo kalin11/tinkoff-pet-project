@@ -2,7 +2,7 @@ server:
   port: ${PORT:8080}
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost/tink}
+    url: 'jdbc:postgresql://localhost:35100/tink'
     username: 'user'
     password: 'password'
   jpa:
@@ -16,4 +16,3 @@ spring:
   springdoc:
     swagger-ui:
       path: /moi-swagger.html
-
