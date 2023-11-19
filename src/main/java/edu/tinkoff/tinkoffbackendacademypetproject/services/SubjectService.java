@@ -2,7 +2,7 @@ package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.SubjectAlreadyExistsException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
-import edu.tinkoff.tinkoffbackendacademypetproject.repositories.SubjectCriteriaRepositoryImpl;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.SubjectCriteriaRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 public class SubjectService {
     private final SubjectRepository subjectRepository;
-    private final SubjectCriteriaRepositoryImpl subjectCriteriaRepository;
+    private final SubjectCriteriaRepository subjectCriteriaRepository;
 
     /**
      * Получение всех предметов, которые есть на указанном курсе
@@ -37,6 +37,7 @@ public class SubjectService {
 
     /**
      * Получение списка всех предметов
+     *
      * @return список всех предметов
      */
     @Transactional
