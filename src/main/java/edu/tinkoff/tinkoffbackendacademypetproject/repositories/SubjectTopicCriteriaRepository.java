@@ -12,8 +12,9 @@ import java.util.List;
 public interface SubjectTopicCriteriaRepository {
     /**
      * Получение типов топиков по указанному номеру курса и его имени
+     *
      * @param courseNumber номер курса
-     * @param name название предмета
+     * @param name         название предмета
      * @return список подходящих топиков предметов
      */
     List<SubjectTopic> findAllByCourseNumberAndSubjectName(Long courseNumber, String name);

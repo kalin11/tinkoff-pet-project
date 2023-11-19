@@ -16,6 +16,17 @@ import java.util.List;
 public interface TopicMapper {
 
     /**
+     * Получение описания типа топика
+     *
+     * @param topic тип топика
+     * @return описание типа топика
+     */
+    @Named("getTopicType")
+    static String getTopicType(Topic topic) {
+        return topic.getDescription();
+    }
+
+    /**
      * Конвертация объекта типа топика в ДТО типа топика
      *
      * @param type тип топика
@@ -31,15 +42,4 @@ public interface TopicMapper {
      * @return список ДТО типа топика
      */
     List<TopicTypeResponseDTO> toListTopicResponseDTO(List<TopicType> types);
-
-    /**
-     * Получение описания типа топика
-     *
-     * @param topic тип топика
-     * @return описание типа топика
-     */
-    @Named("getTopicType")
-    static String getTopicType(Topic topic) {
-        return topic.getDescription();
-    }
 }

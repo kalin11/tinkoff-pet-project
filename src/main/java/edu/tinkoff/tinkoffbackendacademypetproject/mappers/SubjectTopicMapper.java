@@ -20,24 +20,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface SubjectTopicMapper {
     /**
-     * Конвертация топика предмета в ДТО
-     * @param subjectTopic топик предмета
-     * @return ДТО топика предмета
-     */
-    @Mapping(source = "subjectTopic.subject", target = "subjectResponseDTO", qualifiedByName = "getSubjectName")
-    @Mapping(source = "subjectTopic.course", target = "courseNumber", qualifiedByName = "getCourseNumber")
-    @Mapping(source = "subjectTopic.type", target = "topicTypeResponseDTO", qualifiedByName = "getTopicType")
-    SubjectTopicResponseDTO getSubjectTopicResponseDTO(SubjectTopic subjectTopic);
-
-    /**
-     * Конвертация списка топиков предметов в ДТО
-     * @param subjectTopic список топиков предметов
-     * @return список ДТО топиков предметов
-     */
-    List<SubjectTopicResponseDTO> getListSubjectTopicResponseDTO(List<SubjectTopic> subjectTopic);
-
-    /**
      * Получение названия предмета
+     *
      * @param subject предмет
      * @return название предмета
      */
@@ -48,6 +32,7 @@ public interface SubjectTopicMapper {
 
     /**
      * Получение номера курса
+     *
      * @param course курс
      * @return номер курса
      */
@@ -58,6 +43,7 @@ public interface SubjectTopicMapper {
 
     /**
      * Получение ДТО типа топика
+     *
      * @param type тип топика
      * @return ДТО типа топика
      */
@@ -65,4 +51,23 @@ public interface SubjectTopicMapper {
     static TopicTypeResponseDTO getTopicType(TopicType type) {
         return new TopicTypeResponseDTO(type.getId(), type.getTopic().getDescription());
     }
+
+    /**
+     * Конвертация топика предмета в ДТО
+     *
+     * @param subjectTopic топик предмета
+     * @return ДТО топика предмета
+     */
+    @Mapping(source = "subjectTopic.subject", target = "subjectResponseDTO", qualifiedByName = "getSubjectName")
+    @Mapping(source = "subjectTopic.course", target = "courseNumber", qualifiedByName = "getCourseNumber")
+    @Mapping(source = "subjectTopic.type", target = "topicTypeResponseDTO", qualifiedByName = "getTopicType")
+    SubjectTopicResponseDTO getSubjectTopicResponseDTO(SubjectTopic subjectTopic);
+
+    /**
+     * Конвертация списка топиков предметов в ДТО
+     *
+     * @param subjectTopic список топиков предметов
+     * @return список ДТО топиков предметов
+     */
+    List<SubjectTopicResponseDTO> getListSubjectTopicResponseDTO(List<SubjectTopic> subjectTopic);
 }

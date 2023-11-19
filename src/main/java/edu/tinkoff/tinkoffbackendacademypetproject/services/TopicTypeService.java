@@ -20,6 +20,7 @@ public class TopicTypeService {
 
     /**
      * Получение всех типов топиков
+     *
      * @return список типов топиков
      */
     public List<TopicType> findAll() {
