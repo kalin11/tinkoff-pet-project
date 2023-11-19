@@ -12,7 +12,7 @@ spring:
         dialect: 'org.hibernate.dialect.PostgreSQLDialect'
         format_sql: true
   liquibase:
-    change-log: classpath:/db/changelog/main-changelog.xml
+    change-log: classpath:/db/changelog/main-changelog.yaml
   springdoc:
     swagger-ui:
       path: /moi-swagger.html
