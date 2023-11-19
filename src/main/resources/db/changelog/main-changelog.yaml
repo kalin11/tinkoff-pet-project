@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: './v2/schemas/2023-11-19-v2-create-schemas.sql'
+      relativeToChangelogFile: true
+  - include:
+      file: './v2/data/2023-11-19-v2-insert-data.sql'
+      relativeToChangelogFile: true
