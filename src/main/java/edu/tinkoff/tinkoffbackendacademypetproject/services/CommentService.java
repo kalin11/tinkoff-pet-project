@@ -1,0 +1,42 @@
+package edu.tinkoff.tinkoffbackendacademypetproject.services;
+
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Comment;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CommentRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class CommentService {
+    private final CommentRepository commentRepository;
+    private final PublicationService publicationService;
+
+    public Comment createComment(Comment comment) throws EntityModelNotFoundException {
+        comment.setPublication(publicationService.getPublication(comment.getPublication().getId()));
+        return commentRepository.save(comment);
+    }
+
+    public Comment getComment(Long id) throws EntityModelNotFoundException {
+        return commentRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Комментария", "id", id));
+    }
+
+    public Comment updateComment(Comment comment) throws EntityModelNotFoundException {
+        var changeComment = getComment(comment.getId());
+        changeComment.setContent(comment.getContent());
+        return commentRepository.save(changeComment);
+    }
+
+    public void deleteComment(Long id) throws EntityModelNotFoundException {
+        commentRepository.delete(getComment(id));
+    }
+
+    public Page<Comment> getCommentsOnThePublication(Integer pageNumber, Integer pageSize, Long publicationId) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return commentRepository.findByPublication_Id(publicationId, pageable);
+    }
+
+}
