@@ -1,6 +1,7 @@
-package edu.tinkoff.tinkoffbackendacademypetproject.validation;
+package edu.tinkoff.tinkoffbackendacademypetproject.exceptions.handler;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.ApiErrorResponse;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.SubjectAlreadyExistsException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ public class CustomExceptionHandler {
 
     /**
      * Обработчик, если валидация не была пройдена
+     *
      * @param e ошибка
      * @return отчет об ошибке
      */
@@ -34,8 +36,15 @@ public class CustomExceptionHandler {
         return new ApiErrorResponse(message, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(EntityModelNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErrorResponse handleEntityModelNotFoundException(EntityModelNotFoundException ex) {
+        return new ApiErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     /**
      * Обработчик, если валидация что-то уже существует
+     *
      * @param e ошибка
      * @return отчет об ошибке
      */

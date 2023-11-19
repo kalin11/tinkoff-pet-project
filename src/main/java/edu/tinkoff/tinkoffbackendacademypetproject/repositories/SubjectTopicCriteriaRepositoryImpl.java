@@ -26,8 +26,9 @@ public class SubjectTopicCriteriaRepositoryImpl implements SubjectTopicCriteriaR
 
     /**
      * Получение типов топиков по указанному номеру курса и его имени
+     *
      * @param courseNumber номер курса
-     * @param name название предмета
+     * @param name         название предмета
      * @return список подходящих топиков предметов
      */
     @Override
@@ -47,9 +48,10 @@ public class SubjectTopicCriteriaRepositoryImpl implements SubjectTopicCriteriaR
 
     /**
      * Получение предиката для фильтрации
+     *
      * @param subjectTopic объект топика предмета
      * @param courseNumber номер курса
-     * @param name название предмета
+     * @param name         название предмета
      * @return предикат
      */
     private Predicate getPredicateByCourseNumberAndSubjectName(QSubjectTopic subjectTopic, Long courseNumber, String name) {

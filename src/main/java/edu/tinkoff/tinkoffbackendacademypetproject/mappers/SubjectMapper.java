@@ -16,6 +16,17 @@ import java.util.List;
 public interface SubjectMapper {
 
     /**
+     * Перевод названия предмета в верхний регистр
+     *
+     * @param name название предмета
+     * @return название предмета в верхнем регистре
+     */
+    @Named("getSubjectName")
+    static String getSubjectName(String name) {
+        return name.trim().toUpperCase();
+    }
+
+    /**
      * Конвертация объекта Subject в ДТО-ответ
      *
      * @param subject объект предмета
@@ -39,15 +50,4 @@ public interface SubjectMapper {
      */
     @Mapping(target = "name", source = "dto.name", qualifiedByName = "getSubjectName")
     Subject toSubject(SubjectRequestDTO dto);
-
-    /**
-     * Перевод названия предмета в верхний регистр
-     *
-     * @param name название предмета
-     * @return название предмета в верхнем регистре
-     */
-    @Named("getSubjectName")
-    static String getSubjectName(String name) {
-        return name.trim().toUpperCase();
-    }
 }

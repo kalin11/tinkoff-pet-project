@@ -20,6 +20,7 @@ public class SubjectCriteriaRepositoryImpl implements SubjectCriteriaRepository 
 
     /**
      * Получение списка предметов по указанному курсу
+     *
      * @param courseNumber номер курса
      * @return список предметов на заданном курсе
      */

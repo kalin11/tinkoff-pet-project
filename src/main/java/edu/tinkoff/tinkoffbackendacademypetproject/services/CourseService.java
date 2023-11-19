@@ -21,6 +21,7 @@ public class CourseService {
 
     /**
      * Получение всех курсов
+     *
      * @return список всех курсов
      */
     @Transactional
