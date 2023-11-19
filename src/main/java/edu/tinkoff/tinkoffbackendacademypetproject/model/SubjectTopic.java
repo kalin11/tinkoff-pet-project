@@ -50,6 +50,6 @@ public class SubjectTopic {
     /**
      * Посты, которые относятся к топику
      */
-    @OneToMany(mappedBy = "topic", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subjectTopic", fetch = FetchType.LAZY)
     private List<Publication> publications;
 }

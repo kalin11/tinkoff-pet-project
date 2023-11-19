@@ -45,17 +45,17 @@ public class Publication {
      */
     @ManyToOne
     @JoinColumn(name = "subject_topic_id", referencedColumnName = "id")
-    private SubjectTopic topic;
+    private SubjectTopic subjectTopic;
 
     /**
      * Вложенные файлы в пост
      */
-    @OneToMany(mappedBy = "publication", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "publication", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<File> files;
 
     /**
      * Комментарии к посту
      */
-    @OneToMany(mappedBy = "publication", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "publication", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> comments;
 }
