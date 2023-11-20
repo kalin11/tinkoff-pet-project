@@ -32,7 +32,7 @@ public class SubjectTopicCriteriaRepositoryImpl implements SubjectTopicCriteriaR
      * @return список подходящих топиков предметов
      */
     @Override
-    public List<SubjectTopic> findAllByCourseNumberAndSubjectName(Long courseNumber, String name) {
+    public List<SubjectTopic> findAllByCourseNumberAndSubjectId(Long courseNumber, Long subjectId) {
         var query = new JPAQueryFactory(entityManager);
         var subjectTopic = QSubjectTopic.subjectTopic;
         var subject = QSubject.subject;
@@ -41,7 +41,7 @@ public class SubjectTopicCriteriaRepositoryImpl implements SubjectTopicCriteriaR
                 .select(subjectTopic)
                 .from(subjectTopic)
                 .join(subject).on(subjectTopic.subject.id.eq(subject.id))
-                .where(getPredicateByCourseNumberAndSubjectName(subjectTopic, courseNumber, name))
+                .where(getPredicateByCourseNumberAndSubjectName(subjectTopic, courseNumber, subjectId))
                 .orderBy(subject.id.asc())
                 .fetch();
     }
@@ -51,16 +51,16 @@ public class SubjectTopicCriteriaRepositoryImpl implements SubjectTopicCriteriaR
      *
      * @param subjectTopic объект топика предмета
      * @param courseNumber номер курса
-     * @param name         название предмета
+     * @param subjectId    id предмета
      * @return предикат
      */
-    private Predicate getPredicateByCourseNumberAndSubjectName(QSubjectTopic subjectTopic, Long courseNumber, String name) {
+    private Predicate getPredicateByCourseNumberAndSubjectName(QSubjectTopic subjectTopic, Long courseNumber, Long subjectId) {
         List<Predicate> predicates = new ArrayList<>();
         if (nonNull(courseNumber)) {
             predicates.add(subjectTopic.course.courseNumber.eq(courseNumber));
         }
-        if (isNotBlank(name)) {
-            predicates.add(subjectTopic.subject.name.eq(name));
+        if (nonNull(subjectId)) {
+            predicates.add(subjectTopic.subject.id.eq(subjectId));
         }
         return predicates.isEmpty() ? subjectTopic.isNotNull() : ExpressionUtils.allOf(predicates);
     }

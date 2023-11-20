@@ -30,8 +30,8 @@ public class SubjectTopicService {
      * @return список всех топиков
      */
     @Transactional
-    public List<SubjectTopic> findAllByCourseNumberAndSubjectName(Long courseNumber, String name) {
-        return criteriaRepository.findAllByCourseNumberAndSubjectName(courseNumber, name.toUpperCase());
+    public List<SubjectTopic> findAllByCourseNumberAndSubjectId(Long courseNumber, Long subjectId) {
+        return criteriaRepository.findAllByCourseNumberAndSubjectId(courseNumber, subjectId);
     }
 
     public SubjectTopic getSubjectTopic(Long id) throws EntityModelNotFoundException {

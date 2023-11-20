@@ -14,8 +14,8 @@ public interface SubjectTopicCriteriaRepository {
      * Получение типов топиков по указанному номеру курса и его имени
      *
      * @param courseNumber номер курса
-     * @param name         название предмета
+     * @param subjectId         id предмета
      * @return список подходящих топиков предметов
      */
-    List<SubjectTopic> findAllByCourseNumberAndSubjectName(Long courseNumber, String name);
+    List<SubjectTopic> findAllByCourseNumberAndSubjectId(Long courseNumber, Long subjectId);
 }

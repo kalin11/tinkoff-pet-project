@@ -43,7 +43,7 @@ public class SubjectTopicController {
             @ApiResponse(responseCode = "200", description = "Успешное получение данных", content = @Content)
     })
     public List<SubjectTopicResponseDTO> findAllByCourseNumberAndSubjectName(@Valid @RequestBody SubjectTopicRequestDTO dto) {
-        List<SubjectTopic> subjectTopics = topicService.findAllByCourseNumberAndSubjectName(dto.getCourseNumber(), dto.getSubjectName());
+        List<SubjectTopic> subjectTopics = topicService.findAllByCourseNumberAndSubjectId(dto.getCourseNumber(), dto.getSubjectId());
         return subjectTopicMapper.getListSubjectTopicResponseDTO(subjectTopics);
     }
 }

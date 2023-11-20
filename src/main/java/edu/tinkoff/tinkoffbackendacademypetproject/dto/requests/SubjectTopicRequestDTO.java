@@ -28,8 +28,8 @@ public class SubjectTopicRequestDTO {
     /**
      * Название предмета
      */
-    @NotBlank(message = "название предмета не может быть пустым")
-    @Schema(description = "Название предмета", example = "Математика")
-    @JsonProperty("subject_name")
-    private String subjectName;
+    @Min(1)
+    @Schema(description = "Id предмета", example = "1")
+    @JsonProperty("subject_id")
+    private Long subjectId;
 }
