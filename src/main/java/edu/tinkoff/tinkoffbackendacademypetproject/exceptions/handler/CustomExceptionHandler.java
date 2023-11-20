@@ -1,6 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.exceptions.handler;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.ApiErrorResponse;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.AlreadyExistsException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.SubjectAlreadyExistsException;
 import jakarta.validation.ConstraintViolationException;
@@ -48,7 +49,7 @@ public class CustomExceptionHandler {
      * @param e ошибка
      * @return отчет об ошибке
      */
-    @ExceptionHandler(SubjectAlreadyExistsException.class)
+    @ExceptionHandler(AlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApiErrorResponse handleSubjectAlreadyExistsException(Exception e) {
         return new ApiErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
