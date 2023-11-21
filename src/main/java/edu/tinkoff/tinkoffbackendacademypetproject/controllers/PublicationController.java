@@ -34,11 +34,11 @@ public class PublicationController {
      * @return The response object containing the details of the created publication.
      * @throws EntityModelNotFoundException If the publication could not be found.
      */
-    @PostMapping
+    @PostMapping(consumes = {"multipart/form-data"})
     @Operation(description = "Добавить новую публикацию", summary = "Добавить новую публикацию")
-    public PublicationResponseDto createPublication(@RequestBody CreatePublicationRequestDto request) throws EntityModelNotFoundException {
+    public PublicationResponseDto createPublication(@ModelAttribute CreatePublicationRequestDto request) throws EntityModelNotFoundException {
         return publicationMapper.toPublicationResponseDto(
-                publicationService.createPublication(publicationMapper.fromCreatePublicationRequestDto(request))
+                publicationService.createPublication(publicationMapper.fromCreatePublicationRequestDto(request), request.files())
         );
     }
 

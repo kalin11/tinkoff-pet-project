@@ -1,6 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.File;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Publication;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.PublicationRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,17 +10,28 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class PublicationService {
     private final PublicationRepository publicationRepository;
     private final SubjectTopicService subjectTopicService;
+    private final FileService fileService;
 
     @Transactional
-    public Publication createPublication(Publication publication) throws EntityModelNotFoundException {
+    public Publication createPublication(Publication publication, List<MultipartFile> files) throws EntityModelNotFoundException {
+        var filesInPublication = new ArrayList<File>();
+        for (var file : files) {
+            var fileInPublication = fileService.store(file);
+            fileInPublication.setPublication(publication);
+            filesInPublication.add(fileInPublication);
+        }
         publication.setSubjectTopic(subjectTopicService.getSubjectTopic(publication.getSubjectTopic().getId()));
-        publication.getFiles().forEach(file -> file.setPublication(publication));
+        publication.setFiles(filesInPublication);
         return publicationRepository.save(publication);
     }
 
