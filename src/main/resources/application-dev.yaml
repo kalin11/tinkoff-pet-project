@@ -18,3 +18,5 @@ spring:
       path: /moi-swagger.html
 storage:
   location: D:\files
+cors:
+  allowed-origin: http://localhost:3000

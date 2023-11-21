@@ -12,6 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SubjectTopicResponseDTO {
+    @Schema(description = "id топика")
+    private Long id;
     /**
      * ДТО-ответ предмета
      */
