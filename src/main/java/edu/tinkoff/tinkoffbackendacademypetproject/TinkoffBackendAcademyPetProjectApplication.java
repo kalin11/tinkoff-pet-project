@@ -1,15 +1,12 @@
 package edu.tinkoff.tinkoffbackendacademypetproject;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.configuration.StorageProperties;
+import edu.tinkoff.tinkoffbackendacademypetproject.config.StorageProperties;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.StorageService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @EnableConfigurationProperties({StorageProperties.class})
