@@ -1,5 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicRequestDTO;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectResponseDTO;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectTopicResponseDTO;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.TopicTypeResponseDTO;
@@ -52,6 +53,27 @@ public interface SubjectTopicMapper {
         return new TopicTypeResponseDTO(type.getId(), type.getTopic().getDescription());
     }
 
+    @Named("getCourseWithId")
+    static Course getCourseWithId(Long id) {
+        Course course = new Course();
+        course.setCourseNumber(id);
+        return course;
+    }
+
+    @Named("getSubjectWithId")
+    static Subject getSubjectWithId(Long id) {
+        Subject subject = new Subject();
+        subject.setId(id);
+        return subject;
+    }
+
+    @Named("getTopicWithId")
+    static TopicType getTopicWithId(Long id) {
+        TopicType type = new TopicType();
+        type.setId(id);
+        return type;
+    }
+
     /**
      * Конвертация топика предмета в ДТО
      *
@@ -70,4 +92,10 @@ public interface SubjectTopicMapper {
      * @return список ДТО топиков предметов
      */
     List<SubjectTopicResponseDTO> getListSubjectTopicResponseDTO(List<SubjectTopic> subjectTopic);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "dto.courseNumber", target = "course", qualifiedByName = "getCourseWithId")
+    @Mapping(source = "dto.subjectId", target = "subject", qualifiedByName = "getSubjectWithId")
+    @Mapping(source = "dto.topicId", target = "type", qualifiedByName = "getTopicWithId")
+    SubjectTopic getSubjectTopicFromDTO(SubjectTopicRequestDTO dto);
 }

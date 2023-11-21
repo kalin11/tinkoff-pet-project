@@ -32,4 +32,9 @@ public class SubjectTopicRequestDTO {
     @Schema(description = "Id предмета", example = "1")
     @JsonProperty("subject_id")
     private Long subjectId;
+
+    @Min(1)
+    @Schema(description = "Id типа топика", example = "2")
+    @JsonProperty("topic_id")
+    private Long topicId;
 }
