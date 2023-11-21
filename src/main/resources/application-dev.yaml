@@ -16,3 +16,5 @@ spring:
   springdoc:
     swagger-ui:
       path: /moi-swagger.html
+cors:
+  allowed-origin: http://localhost:3000
