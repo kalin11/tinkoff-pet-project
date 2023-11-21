@@ -26,14 +26,14 @@ public class File {
     /**
      * Ссылка на вложение (файл)
      */
-    @Column(name = "file_url")
-    private String fileUrl;
+    @Column(name = "file_name_in_directory")
+    private String fileNameInDirectory;
 
     /**
      * Расширение вложения (файла)
      */
-    @Column(name = "extension")
-    private String extension;
+    @Column(name = "initial_file_name")
+    private String initialFileName;
 
     /**
      * К какому посту было приложено
