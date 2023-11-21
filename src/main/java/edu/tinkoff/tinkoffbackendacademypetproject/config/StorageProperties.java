@@ -1,4 +1,4 @@
-package edu.tinkoff.tinkoffbackendacademypetproject.configuration;
+package edu.tinkoff.tinkoffbackendacademypetproject.config;
 
 import lombok.Getter;
 import lombok.Setter;

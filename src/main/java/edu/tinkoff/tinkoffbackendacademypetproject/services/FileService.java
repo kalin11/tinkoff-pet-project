@@ -1,6 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.configuration.StorageProperties;
+import edu.tinkoff.tinkoffbackendacademypetproject.config.StorageProperties;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.StorageException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.StorageFileNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.File;
