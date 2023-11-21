@@ -33,6 +33,9 @@ public class Publication {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "title")
+    private String title;
+
     /**
      * Дата создания поста
      */

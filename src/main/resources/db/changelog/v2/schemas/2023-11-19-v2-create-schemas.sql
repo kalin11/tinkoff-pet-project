@@ -47,6 +47,7 @@ create sequence if not exists publication_pk_seq start 1 increment 1;
 
 create table if not exists publication (
     id bigint primary key,
+    title text not null,
     description text,
     subject_topic_id bigint references subject_topic(id) not null,
     created_at timestamp not null
@@ -59,8 +60,8 @@ create sequence if not exists file_pk_seq start 1 increment 1;
 
 create table if not exists file (
     id bigint primary key,
-    file_url text not null,
-    extension text not null,
+    file_name_in_directory text not null,
+    initial_file_name text not null,
     publication_id bigint references publication(id) not null
 );
 

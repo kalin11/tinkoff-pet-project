@@ -29,3 +29,28 @@ insert into subject_topic (type_id, subject_id, course_number) values (1, 4, 1);
 insert into subject_topic (type_id, subject_id, course_number) values (1, 3, 2);
 insert into subject_topic (type_id, subject_id, course_number) values (2, 5, 2);
 
+--changeset Daniil Korshunov:insert-data-into-publication
+insert into publication (title, description, subject_topic_id, created_at) values ('Контрольная работа 1',
+                                                                                   'Файлы к кр 1',
+                                                                                   1,
+                                                                                   '2023-10-30');
+insert into publication (title, description, subject_topic_id, created_at) values ('Записи по матлогу',
+                                                                                   'Все конспекты семинаров',
+                                                                                   2,
+                                                                                   '2022-11-14');
+insert into publication (title, description, subject_topic_id, created_at) values ('Полезные курсы по Кумиру',
+                                                                                   'Самые полезные курсы для Кумир-разработчиков',
+                                                                                   3,
+                                                                                   '2020-12-31');
+
+--changeset Daniil Korshunov:insert-data-into-comment
+insert into comment (content, publication_id, created_at) values ('Охххх, сложная контрольная...', 1, '2023-10-30');
+insert into comment (content, publication_id, created_at) values ('Ураааа, не зря не ходил', 2, '2022-11-14');
+insert into comment (content, publication_id, created_at) values ('Чтоооо, Кумир!?!?!?', 3, '2020-12-31');
+insert into comment (content, publication_id, created_at) values ('Да-да, он самый)', 3, '2020-12-31');
+
+--changeset Daniil Korshunov:insert-data-into-file
+insert into file (file_name_in_directory, initial_file_name, publication_id) values ('1Kr_1.pdf', 'Kr_1.pdf', 1);
+insert into file (file_name_in_directory, initial_file_name, publication_id) values ('2Konspect.png', 'Konspect.png', 2);
+insert into file (file_name_in_directory, initial_file_name, publication_id) values ('3Konspect.jpg', 'Konspect.jpg', 2);
+insert into file (file_name_in_directory, initial_file_name, publication_id) values ('4Kumir.pdf', 'Kumir.pdf', 3);
