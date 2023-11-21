@@ -4,6 +4,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.CreatePublicatio
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.PublicationsInOneCategoryRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PublicationResponseDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PublicationTitleAndIdResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PublicationMapper;
@@ -84,9 +85,9 @@ public class PublicationController {
     @GetMapping
     @Operation(description = "Найти все публикации в заданном топике по id",
             summary = "Найти все публикации в заданном топике по id")
-    public PageResponseDto<PublicationResponseDto> getPublicationsInOneTopic(@ParameterObject PublicationsInOneCategoryRequestDto publications) {
+    public PageResponseDto<PublicationTitleAndIdResponseDto> getPublicationsInOneTopic(@ParameterObject PublicationsInOneCategoryRequestDto publications) {
         return pageMapper.toPageResponseDto(publicationService.getPublicationsInOneCategory(publications.getPageNumber(), publications.getPageSize(), publications.getSubjectTopicId()),
-                publicationMapper::toPublicationResponseDto);
+                publicationMapper::toPublicationTitleAndIdResponseDto);
     }
 
 }
