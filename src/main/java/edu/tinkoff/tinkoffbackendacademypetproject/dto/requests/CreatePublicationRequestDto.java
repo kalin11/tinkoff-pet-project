@@ -14,6 +14,7 @@ public record CreatePublicationRequestDto(
         @Size(max = 150, message = "Слишком длинный заголовок публикации")
         @NotBlank(message = "Заголовок публикации не может быть пустым")
         String title,
+
         @Schema(description = "Описание публикации", example = "Фото контрольной работы")
         @Size(max = 300, message = "Слишком длинное описание публикации")
         @NotBlank(message = "Описание публикации не может быть пустым")
@@ -23,6 +24,7 @@ public record CreatePublicationRequestDto(
         @NotNull(message = "Id топика не может быть пустым")
         @Schema(description = "Id топика, в котором сделана публикация", example = "1")
         Long subjectTopicId,
+
         @Size(max = 10)
         List<MultipartFile> files) {
 }

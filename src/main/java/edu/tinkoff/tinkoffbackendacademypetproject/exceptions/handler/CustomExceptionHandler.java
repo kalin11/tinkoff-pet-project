@@ -3,7 +3,6 @@ package edu.tinkoff.tinkoffbackendacademypetproject.exceptions.handler;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.ApiErrorResponse;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.AlreadyExistsException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.SubjectAlreadyExistsException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
