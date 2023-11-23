@@ -7,12 +7,16 @@ import edu.tinkoff.tinkoffbackendacademypetproject.model.Course;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopic;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.TopicType;
-import edu.tinkoff.tinkoffbackendacademypetproject.repositories.*;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CourseRepository;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.SubjectRepository;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.SubjectTopicRepository;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.TopicRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Сервис для работы с типами топиков для предметов
@@ -23,7 +27,7 @@ public class SubjectTopicService {
     /**
      * Репозиторий для работы с топиками для предметов
      */
-    private final SubjectTopicCriteriaRepository criteriaRepository;
+
     private final SubjectTopicRepository subjectTopicRepository;
     private final CourseRepository courseRepository;
     private final TopicRepository topicRepository;
@@ -37,8 +41,9 @@ public class SubjectTopicService {
      * @return список всех топиков
      */
     @Transactional
-    public List<SubjectTopic> findAllByCourseNumberAndSubjectId(Long courseNumber, Long subjectId) {
-        return criteriaRepository.findAllByCourseNumberAndSubjectId(courseNumber, subjectId);
+    public Page<SubjectTopic> findAllByCourseNumberAndSubjectId(Integer pageNumber, Integer pageSize, Long courseNumber, Long subjectId) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return subjectTopicRepository.findAllByCourse_CourseNumberAndSubject_Id(courseNumber, subjectId, pageable);
     }
 
     @Transactional

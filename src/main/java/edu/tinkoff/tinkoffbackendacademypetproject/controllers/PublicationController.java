@@ -86,7 +86,10 @@ public class PublicationController {
     @Operation(description = "Найти все публикации в заданном топике по id",
             summary = "Найти все публикации в заданном топике по id")
     public PageResponseDto<PublicationTitleAndIdResponseDto> getPublicationsInOneTopic(@ParameterObject PublicationsInOneCategoryRequestDto publications) {
-        return pageMapper.toPageResponseDto(publicationService.getPublicationsInOneCategory(publications.getPageNumber(), publications.getPageSize(), publications.getSubjectTopicId()),
+        return pageMapper.toPageResponseDto(publicationService.getPublicationsInOneCategory(
+                        publications.getPageNumber(),
+                        publications.getPageSize(),
+                        publications.getSubjectTopicId()),
                 publicationMapper::toPublicationTitleAndIdResponseDto);
     }
 
