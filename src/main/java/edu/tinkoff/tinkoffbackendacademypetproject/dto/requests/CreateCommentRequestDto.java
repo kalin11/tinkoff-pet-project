@@ -15,6 +15,7 @@ public record CreateCommentRequestDto(
         @Size(max = 250, message = "Слишком длинный комментарий")
         @NotBlank(message = "Комментарий не может быть пустым")
         String content,
+
         @JsonProperty("publication_id")
         @Min(value = 1, message = "Id публикации не может быть меньше 1")
         @NotNull(message = "Id публикации не может быть пустым")
