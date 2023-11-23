@@ -7,7 +7,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.repositories.PublicationRepos
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,8 +45,7 @@ public class PublicationService {
     }
 
     public Page<Publication> getPublicationsInOneCategory(Integer pageNumber, Integer pageSize, Long subjectTopicId) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return publicationRepository.findBySubjectTopic_Id(subjectTopicId, pageable);
+        return publicationRepository.findBySubjectTopic_Id(subjectTopicId, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
 
 }

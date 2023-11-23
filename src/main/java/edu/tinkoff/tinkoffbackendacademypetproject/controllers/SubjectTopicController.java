@@ -1,8 +1,11 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicByCourseAndSubjectIdRequestDTO;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicRequestDTO;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectTopicResponseDTO;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.SubjectTopicMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopic;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.SubjectTopicService;
@@ -11,12 +14,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Контроллер для работы с топиками предметов
@@ -35,17 +36,21 @@ public class SubjectTopicController {
      * Маппер топиков предметов
      */
     private final SubjectTopicMapper subjectTopicMapper;
+    private final PageMapper pageMapper;
 
     @GetMapping
     @Operation(summary = "Получение всех топиков по предметам с указанным курсом и указанным названием предмета", description = "Получение всех топиков по предметам с указанным курсом и указанным названием предмета")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное получение данных", content = @Content)
     })
-    public List<SubjectTopicResponseDTO> findAllByCourseNumberAndSubjectId(@Valid @RequestParam(required = false, value = "course") @Min(1) Long course,
-                                                                           @Valid @RequestParam(required = false, value = "subjectId") @Min(1) Long subjectId
-    ) {
-        List<SubjectTopic> subjectTopics = topicService.findAllByCourseNumberAndSubjectId(course, subjectId);
-        return subjectTopicMapper.getListSubjectTopicResponseDTO(subjectTopics);
+    public PageResponseDto<SubjectTopicResponseDTO> findAllByCourseNumberAndSubjectId(@ParameterObject SubjectTopicByCourseAndSubjectIdRequestDTO dto) {
+        return pageMapper.toPageResponseDto(topicService.findAllByCourseNumberAndSubjectId(
+                        dto.getPageNumber(),
+                        dto.getPageSize(),
+                        dto.getCourse(),
+                        dto.getSubjectId()),
+                subjectTopicMapper::getSubjectTopicResponseDTO
+        );
     }
 
     @PostMapping
