@@ -18,7 +18,6 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-@Log4j2
 public class SubjectService {
     private final SubjectRepository subjectRepository;
 
@@ -33,7 +32,6 @@ public class SubjectService {
 
     @Transactional
     public Page<Subject> findAllByCourseNumber(Integer pageNumber, Integer pageSize, Long courseNumber) {
-        log.info("request with " + pageNumber + " " + pageSize);
         return subjectRepository.findDistinctBySubjectTopics_Course_CourseNumber(courseNumber, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
 
