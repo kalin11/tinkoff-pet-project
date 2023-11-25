@@ -12,6 +12,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.services.PublicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class PublicationController {
      */
     @PostMapping(consumes = {"multipart/form-data"})
     @Operation(description = "Добавить новую публикацию", summary = "Добавить новую публикацию")
-    public PublicationResponseDto createPublication(@ModelAttribute CreatePublicationRequestDto request) throws EntityModelNotFoundException {
+    public PublicationResponseDto createPublication(@ModelAttribute @Valid CreatePublicationRequestDto request) throws EntityModelNotFoundException {
         return publicationMapper.toPublicationResponseDto(
                 publicationService.createPublication(publicationMapper.fromCreatePublicationRequestDto(request), request.files())
         );
@@ -85,7 +86,7 @@ public class PublicationController {
     @GetMapping
     @Operation(description = "Найти все публикации в заданном топике по id",
             summary = "Найти все публикации в заданном топике по id")
-    public PageResponseDto<PublicationTitleAndIdResponseDto> getPublicationsInOneTopic(@ParameterObject PublicationsInOneCategoryRequestDto publications) {
+    public PageResponseDto<PublicationTitleAndIdResponseDto> getPublicationsInOneTopic(@ParameterObject @Valid PublicationsInOneCategoryRequestDto publications) {
         return pageMapper.toPageResponseDto(publicationService.getPublicationsInOneCategory(
                         publications.getPageNumber(),
                         publications.getPageSize(),

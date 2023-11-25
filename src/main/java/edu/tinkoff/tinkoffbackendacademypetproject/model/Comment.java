@@ -42,7 +42,7 @@ public class Comment {
     /**
      * Пост, к которому комментарий был написан
      */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publication_id", referencedColumnName = "id")
     private Publication publication;
 }

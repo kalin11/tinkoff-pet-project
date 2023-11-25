@@ -46,7 +46,7 @@ public class Publication {
     /**
      * К какому топику относится пост
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_topic_id", referencedColumnName = "id")
     private SubjectTopic subjectTopic;
 

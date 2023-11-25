@@ -38,7 +38,7 @@ public class File {
     /**
      * К какому посту было приложено
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publication_id", referencedColumnName = "id")
     private Publication publication;
 }

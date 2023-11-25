@@ -12,6 +12,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.services.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class CommentController {
      */
     @PostMapping
     @Operation(description = "Добавить новый комментарий к публикации", summary = "Добавить новый комментарий к публикации")
-    public CommentResponseDto createComment(@RequestBody CreateCommentRequestDto request) throws EntityModelNotFoundException {
+    public CommentResponseDto createComment(@RequestBody @Valid CreateCommentRequestDto request) throws EntityModelNotFoundException {
         return commentMapper.toCommentResponseDto(
                 commentService.createComment(commentMapper.fromCreateCommentRequestDto(request))
         );
@@ -68,7 +69,7 @@ public class CommentController {
      */
     @PutMapping
     @Operation(description = "Изменить содержимое комментария", summary = "Изменить содержимое комментария")
-    public CommentResponseDto updateComment(@RequestBody ChangeCommentRequestDto request) throws EntityModelNotFoundException {
+    public CommentResponseDto updateComment(@RequestBody @Valid ChangeCommentRequestDto request) throws EntityModelNotFoundException {
         return commentMapper.toCommentResponseDto(
                 commentService.updateComment(commentMapper.fromChangeCommentRequestDto(request))
         );
@@ -99,7 +100,7 @@ public class CommentController {
     @GetMapping
     @Operation(description = "Получить все комментарии к публикации",
             summary = "Получить все комментарии к публикации")
-    public PageResponseDto<CommentResponseDto> getCommentsOnThePublication(@ParameterObject CommentsOnThePublicationRequestDto request) {
+    public PageResponseDto<CommentResponseDto> getCommentsOnThePublication(@ParameterObject @Valid CommentsOnThePublicationRequestDto request) {
         return pageMapper.toPageResponseDto(commentService.getCommentsOnThePublication(request.getPageNumber(), request.getPageSize(), request.getPublicationId()),
                 commentMapper::toCommentResponseDto);
     }
