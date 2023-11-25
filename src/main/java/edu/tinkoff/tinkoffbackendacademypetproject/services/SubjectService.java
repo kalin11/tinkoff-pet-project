@@ -1,10 +1,10 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.SubjectAlreadyExistsException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.SubjectRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubjectService {
     private final SubjectRepository subjectRepository;
+    private final CourseService courseService;
 
     /**
      * Получение всех предметов, которые есть на указанном курсе
@@ -31,8 +32,8 @@ public class SubjectService {
      */
 
     @Transactional
-    public Page<Subject> findAllByCourseNumber(Integer pageNumber, Integer pageSize, Long courseNumber) {
-        return subjectRepository.findDistinctBySubjectTopics_Course_CourseNumber(courseNumber, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
+    public Page<Subject> findAllByCourseNumber(Integer pageNumber, Integer pageSize, Integer courseNumber) {
+        return subjectRepository.findByCourse_CourseNumber(courseNumber, PageRequest.of(pageNumber, pageSize, Sort.by("name")));
     }
 
     /**
@@ -53,10 +54,15 @@ public class SubjectService {
      * @throws SubjectAlreadyExistsException если предмет с таким названием уже существует
      */
     @Transactional
-    public Subject createSubject(Subject subject) throws SubjectAlreadyExistsException {
-        if (subjectRepository.existsSubjectByName(subject.getName())) {
+    public Subject createSubject(Subject subject) throws SubjectAlreadyExistsException, EntityModelNotFoundException {
+        if (subjectRepository.existsSubjectByNameAndCourse_CourseNumber(subject.getName(), subject.getCourse().getCourseNumber())) {
             throw new SubjectAlreadyExistsException(subject.getName());
         }
+        subject.setCourse(courseService.getCourse(subject.getCourse().getCourseNumber()));
         return subjectRepository.save(subject);
+    }
+
+    public Subject getSubject(Long id) throws EntityModelNotFoundException {
+        return subjectRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Предмета", "id", id));
     }
 }

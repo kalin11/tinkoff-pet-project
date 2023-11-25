@@ -1,6 +1,5 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.repositories;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Course;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopic;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.TopicType;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SubjectTopicRepository extends JpaRepository<SubjectTopic, Long> {
-    boolean existsByCourseAndSubjectAndType(Course course, Subject subject, TopicType type);
+    boolean existsBySubjectAndType(Subject subject, TopicType type);
 
-    Page<SubjectTopic> findAllByCourse_CourseNumberAndSubject_Id(Long courseNumber, Long subjectId, Pageable pageable);
+    Page<SubjectTopic> findBySubject_Id(Long subjectId, Pageable pageable);
 }

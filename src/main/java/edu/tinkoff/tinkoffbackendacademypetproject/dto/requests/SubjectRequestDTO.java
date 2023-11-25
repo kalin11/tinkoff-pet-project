@@ -1,24 +1,20 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.dto.requests;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * ДТО для создания нового предмета
  */
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-public class SubjectRequestDTO {
-    /**
-     * Название предмета
-     */
-    @Schema(description = "Название предмета", example = "Математика")
-    @NotBlank(message = "Название предмета не может быть пустым")
-    private String name;
+public record SubjectRequestDTO(@Schema(description = "Название предмета", example = "Математика")
+                                @NotBlank(message = "Название предмета не может быть пустым")
+                                String name,
+                                @JsonProperty("course_number")
+                                @Min(value = 1, message = "Номер курса не может быть меньше 1")
+                                @NotNull(message = "Номер курса не может быть пустым")
+                                @Schema(description = "Номер курса, который содержит этот предмет", example = "1")
+                                Integer courseNumber) {
 }

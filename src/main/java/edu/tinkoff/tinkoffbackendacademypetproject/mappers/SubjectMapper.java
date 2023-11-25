@@ -2,6 +2,7 @@ package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectRequestDTO;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectResponseDTO;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Course;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -26,6 +27,13 @@ public interface SubjectMapper {
         return name.trim().toUpperCase();
     }
 
+    @Named("emptyCourseWithCourseNumber")
+    static Course emptyCourseWithCourseNumber(Integer courseNumber) {
+        var course = new Course();
+        course.setCourseNumber(courseNumber);
+        return course;
+    }
+
     /**
      * Конвертация объекта Subject в ДТО-ответ
      *
@@ -48,6 +56,9 @@ public interface SubjectMapper {
      * @param dto ДТО
      * @return объекта класса Subject
      */
-    @Mapping(target = "name", source = "dto.name", qualifiedByName = "getSubjectName")
-    Subject toSubject(SubjectRequestDTO dto);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "subjectTopics", ignore = true)
+    @Mapping(target = "course", qualifiedByName = "emptyCourseWithCourseNumber", source = "courseNumber")
+    @Mapping(target = "name", qualifiedByName = "getSubjectName", source = "name")
+    Subject fromSubjectRequestDTO(SubjectRequestDTO dto);
 }

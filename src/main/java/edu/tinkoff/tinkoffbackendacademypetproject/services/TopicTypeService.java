@@ -1,5 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.TopicType;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.TopicRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,9 @@ public class TopicTypeService {
      */
     public List<TopicType> findAll() {
         return topicRepository.findAll();
+    }
+
+    public TopicType getTopicType(Long id) throws EntityModelNotFoundException {
+        return topicRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Типа топика", "id", id));
     }
 }

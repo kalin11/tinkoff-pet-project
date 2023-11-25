@@ -10,6 +10,6 @@ import lombok.EqualsAndHashCode;
 public class SubjectByCourseNumberRequestDTO extends PageRequestDto {
     @Min(1)
     @Schema(description = "Номер курса предмета", example = "1")
-    private Long course;
+    private Integer course;
 }
 

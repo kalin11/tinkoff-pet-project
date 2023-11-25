@@ -25,7 +25,8 @@ public class Course {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long courseNumber;
+    @Column(name = "course_number")
+    private Integer courseNumber;
 
     /**
      * Описание курса
@@ -37,5 +38,5 @@ public class Course {
      * Список топиков, которые имеют данный курс
      */
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-    private List<SubjectTopic> subjectTopics;
+    private List<Subject> subjects;
 }

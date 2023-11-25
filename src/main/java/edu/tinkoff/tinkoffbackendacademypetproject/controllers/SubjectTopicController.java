@@ -1,6 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicByCourseAndSubjectIdRequestDTO;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicBySubjectIdRequestDTO;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicRequestDTO;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectTopicResponseDTO;
@@ -43,11 +43,10 @@ public class SubjectTopicController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное получение данных", content = @Content)
     })
-    public PageResponseDto<SubjectTopicResponseDTO> findAllByCourseNumberAndSubjectId(@ParameterObject SubjectTopicByCourseAndSubjectIdRequestDTO dto) {
-        return pageMapper.toPageResponseDto(topicService.findAllByCourseNumberAndSubjectId(
+    public PageResponseDto<SubjectTopicResponseDTO> findAllBySubjectId(@ParameterObject @Valid SubjectTopicBySubjectIdRequestDTO dto) {
+        return pageMapper.toPageResponseDto(topicService.findAllBySubjectId(
                         dto.getPageNumber(),
                         dto.getPageSize(),
-                        dto.getCourse(),
                         dto.getSubjectId()),
                 subjectTopicMapper::getSubjectTopicResponseDTO
         );

@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * Репозиторий для работы с курсом
  */
 @Repository
-public interface CourseRepository extends JpaRepository<Course, Long> {
+public interface CourseRepository extends JpaRepository<Course, Integer> {
 }
