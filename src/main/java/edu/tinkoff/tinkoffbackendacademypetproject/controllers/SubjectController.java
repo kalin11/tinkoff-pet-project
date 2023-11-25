@@ -4,6 +4,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectByCourseN
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectRequestDTO;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectResponseDTO;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.SubjectMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
@@ -34,7 +35,6 @@ public class SubjectController {
      * Маппер для работы с предметами
      */
     private final SubjectMapper subjectMapper;
-
     private final PageMapper pageMapper;
 
     /**
@@ -50,7 +50,7 @@ public class SubjectController {
             @ApiResponse(responseCode = "200", description = "Запрос был успешно выполнен"),
             @ApiResponse(responseCode = "400", description = "Запрос имеет не валидные параметры", content = @Content),
     })
-    public PageResponseDto<SubjectResponseDTO> findAllByCourseNumber(@ParameterObject SubjectByCourseNumberRequestDTO dto) {
+    public PageResponseDto<SubjectResponseDTO> findAllByCourseNumber(@ParameterObject @Valid SubjectByCourseNumberRequestDTO dto) {
         return pageMapper.toPageResponseDto(subjectService.findAllByCourseNumber(
                         dto.getPageNumber(),
                         dto.getPageSize(),
@@ -70,8 +70,8 @@ public class SubjectController {
             @ApiResponse(responseCode = "200", description = "Предмет был успешно создан"),
             @ApiResponse(responseCode = "400", description = "Такой предмет уже существует", content = @Content)
     })
-    public SubjectResponseDTO createSubject(@Valid @RequestBody SubjectRequestDTO dto) {
-        Subject subject = subjectMapper.toSubject(dto);
+    public SubjectResponseDTO createSubject(@Valid @RequestBody SubjectRequestDTO dto) throws EntityModelNotFoundException {
+        Subject subject = subjectMapper.fromSubjectRequestDTO(dto);
         var savedSubject = subjectService.createSubject(subject);
         return subjectMapper.toSubjectResponseDTO(savedSubject);
     }

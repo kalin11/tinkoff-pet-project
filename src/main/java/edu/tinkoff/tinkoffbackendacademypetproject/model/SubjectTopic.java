@@ -29,27 +29,20 @@ public class SubjectTopic {
     /**
      * Тип топика
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id", referencedColumnName = "id")
     private TopicType type;
 
     /**
      * Предмет, к которому относится топик
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private Subject subject;
 
     /**
-     * Курс, к которому относится топик
-     */
-    @ManyToOne
-    @JoinColumn(name = "course_number", referencedColumnName = "courseNumber")
-    private Course course;
-
-    /**
      * Посты, которые относятся к топику
      */
-    @OneToMany(mappedBy = "subjectTopic", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subjectTopic", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
     private List<Publication> publications;
 }

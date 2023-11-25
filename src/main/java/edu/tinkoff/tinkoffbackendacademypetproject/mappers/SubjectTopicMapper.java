@@ -1,10 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicRequestDTO;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectResponseDTO;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectTopicResponseDTO;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.TopicTypeResponseDTO;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Course;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopic;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.TopicType;
@@ -18,58 +15,18 @@ import java.util.List;
 /**
  * Маппер для топика предмета
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {SubjectMapper.class, TopicMapper.class})
 public interface SubjectTopicMapper {
-    /**
-     * Получение названия предмета
-     *
-     * @param subject предмет
-     * @return название предмета
-     */
-    @Named("getSubjectName")
-    static SubjectResponseDTO getSubjectName(Subject subject) {
-        return new SubjectResponseDTO(subject.getId(), subject.getName());
-    }
-
-    /**
-     * Получение номера курса
-     *
-     * @param course курс
-     * @return номер курса
-     */
-    @Named("getCourseNumber")
-    static Long getCourseNumber(Course course) {
-        return course.getCourseNumber();
-    }
-
-    /**
-     * Получение ДТО типа топика
-     *
-     * @param type тип топика
-     * @return ДТО типа топика
-     */
-    @Named("getTopicType")
-    static TopicTypeResponseDTO getTopicType(TopicType type) {
-        return new TopicTypeResponseDTO(type.getId(), type.getTopic().getDescription());
-    }
-
-    @Named("getCourseWithId")
-    static Course getCourseWithId(Long id) {
-        Course course = new Course();
-        course.setCourseNumber(id);
-        return course;
-    }
-
     @Named("getSubjectWithId")
     static Subject getSubjectWithId(Long id) {
-        Subject subject = new Subject();
+        var subject = new Subject();
         subject.setId(id);
         return subject;
     }
 
     @Named("getTopicWithId")
     static TopicType getTopicWithId(Long id) {
-        TopicType type = new TopicType();
+        var type = new TopicType();
         type.setId(id);
         return type;
     }
@@ -80,9 +37,8 @@ public interface SubjectTopicMapper {
      * @param subjectTopic топик предмета
      * @return ДТО топика предмета
      */
-    @Mapping(source = "subjectTopic.subject", target = "subjectResponseDTO", qualifiedByName = "getSubjectName")
-    @Mapping(source = "subjectTopic.course", target = "courseNumber", qualifiedByName = "getCourseNumber")
-    @Mapping(source = "subjectTopic.type", target = "topicTypeResponseDTO", qualifiedByName = "getTopicType")
+    @Mapping(target = "topicTypeResponseDTO", source = "type")
+    @Mapping(target = "subjectResponseDTO", source = "subject")
     SubjectTopicResponseDTO getSubjectTopicResponseDTO(SubjectTopic subjectTopic);
 
     /**
@@ -94,8 +50,8 @@ public interface SubjectTopicMapper {
     List<SubjectTopicResponseDTO> getListSubjectTopicResponseDTO(List<SubjectTopic> subjectTopic);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(source = "dto.courseNumber", target = "course", qualifiedByName = "getCourseWithId")
-    @Mapping(source = "dto.subjectId", target = "subject", qualifiedByName = "getSubjectWithId")
-    @Mapping(source = "dto.topicId", target = "type", qualifiedByName = "getTopicWithId")
+    @Mapping(source = "subjectId", target = "subject", qualifiedByName = "getSubjectWithId")
+    @Mapping(source = "topicId", target = "type", qualifiedByName = "getTopicWithId")
+    @Mapping(target = "publications", ignore = true)
     SubjectTopic getSubjectTopicFromDTO(SubjectTopicRequestDTO dto);
 }

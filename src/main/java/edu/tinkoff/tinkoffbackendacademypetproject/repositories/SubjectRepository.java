@@ -17,7 +17,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
      * @param name название предмета
      * @return факт существования
      */
-    boolean existsSubjectByName(String name);
+    boolean existsSubjectByNameAndCourse_CourseNumber(String name, Integer courseNumber);
 
-    Page<Subject> findDistinctBySubjectTopics_Course_CourseNumber(Long courseNumber, Pageable pageable);
+    Page<Subject> findByCourse_CourseNumber(Integer courseNumber, Pageable pageable);
 }

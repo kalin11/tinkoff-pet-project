@@ -38,4 +38,10 @@ public class Subject {
     @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
     private List<SubjectTopic> subjectTopics;
 
+    /**
+     * Курс, к которому относится предмет
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_number", referencedColumnName = "course_number")
+    private Course course;
 }
