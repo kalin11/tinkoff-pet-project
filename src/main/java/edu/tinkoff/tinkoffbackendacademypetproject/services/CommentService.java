@@ -6,7 +6,6 @@ import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CommentRepositor
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +38,7 @@ public class CommentService {
     }
 
     public Page<Comment> getCommentsOnThePublication(Integer pageNumber, Integer pageSize, Long publicationId) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return commentRepository.findByPublication_Id(publicationId, pageable);
+        return commentRepository.findByPublication_Id(publicationId, PageRequest.of(pageNumber, pageSize));
     }
 
 }

@@ -3,7 +3,11 @@ package edu.tinkoff.tinkoffbackendacademypetproject.exceptions.handler;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.ApiErrorResponse;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.AlreadyExistsException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.StorageException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.StorageFileNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -40,6 +44,30 @@ public class CustomExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiErrorResponse handleEntityModelNotFoundException(EntityModelNotFoundException ex) {
         return new ApiErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(StorageFileNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErrorResponse handleStorageFileNotFoundException(StorageFileNotFoundException ex) {
+        return new ApiErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(StorageException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrorResponse handleStorageException(StorageFileNotFoundException ex) {
+        return new ApiErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SizeLimitExceededException.class)
+    @ResponseStatus(HttpStatus.REQUEST_ENTITY_TOO_LARGE)
+    public ApiErrorResponse handleSizeLimitExceededException(SizeLimitExceededException ex) {
+        return new ApiErrorResponse("Передаваемые файлы превышают размер 5MB", HttpStatus.REQUEST_ENTITY_TOO_LARGE);
+    }
+
+    @ExceptionHandler(FileSizeLimitExceededException.class)
+    @ResponseStatus(HttpStatus.REQUEST_ENTITY_TOO_LARGE)
+    public ApiErrorResponse handleFileSizeLimitExceededException(FileSizeLimitExceededException ex) {
+        return new ApiErrorResponse("Один из передаваемых файлов превышает размер 5MB", HttpStatus.REQUEST_ENTITY_TOO_LARGE);
     }
 
     /**

@@ -16,5 +16,11 @@ spring:
   springdoc:
     swagger-ui:
       path: /moi-swagger.html
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
 storage:
   location: /files
+cors:
+  allowed-origin: http://localhost:3000

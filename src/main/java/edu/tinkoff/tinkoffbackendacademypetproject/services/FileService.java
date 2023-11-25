@@ -39,7 +39,6 @@ public class FileService implements StorageService {
                             Paths.get(uuid + file.getOriginalFilename()))
                     .normalize().toAbsolutePath();
             if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
-                // This is a security check
                 throw new StorageException(
                         "Cannot store file outside current directory.");
             }
@@ -68,17 +67,16 @@ public class FileService implements StorageService {
                 return resource;
             } else {
                 throw new StorageFileNotFoundException(
-                        "Could not read file: " + filename);
-
+                        "Файл: " + filename + " не найден");
             }
         } catch (MalformedURLException e) {
-            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+            throw new StorageFileNotFoundException("Невозможно прочитать файл: " + filename, e);
         }
     }
 
     @Override
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(rootLocation.toFile());
+        FileSystemUtils.deleteRecursively(Paths.get(storageProperties.getLocation()).toFile());
     }
 
     @Override

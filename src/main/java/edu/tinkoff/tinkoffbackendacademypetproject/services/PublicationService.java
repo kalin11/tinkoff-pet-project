@@ -24,14 +24,18 @@ public class PublicationService {
 
     @Transactional
     public Publication createPublication(Publication publication, List<MultipartFile> files) throws EntityModelNotFoundException {
-        var filesInPublication = new ArrayList<File>();
-        for (var file : files) {
-            var fileInPublication = fileService.store(file);
-            fileInPublication.setPublication(publication);
-            filesInPublication.add(fileInPublication);
+        if (files != null) {
+            var filesInPublication = new ArrayList<File>();
+            for (var file : files) {
+                var fileInPublication = fileService.store(file);
+                fileInPublication.setPublication(publication);
+                filesInPublication.add(fileInPublication);
+            }
+            publication.setFiles(filesInPublication);
+        } else {
+            publication.setFiles(new ArrayList<>());
         }
         publication.setSubjectTopic(subjectTopicService.getSubjectTopic(publication.getSubjectTopic().getId()));
-        publication.setFiles(filesInPublication);
         return publicationRepository.save(publication);
     }
 

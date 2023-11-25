@@ -1,7 +1,12 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.services.StorageService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +24,13 @@ public class FileController {
     private final StorageService storageService;
 
     @GetMapping("/{filename}")
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+    @Operation(description = "Достать файл из папки", summary = "Достать файл из папки")
+    public ResponseEntity<Resource> serveFile(@PathVariable
+                                              @Valid
+                                              @Schema(description = "Название файла в папке", example = "obi.jpg")
+                                              @Size(max = 400, message = "Слишком длинное название для файла")
+                                              @NotBlank(message = "Название файла не может быть пустым")
+                                              String filename) {
         Resource file = storageService.loadAsResource(filename);
 
         if (file == null)
