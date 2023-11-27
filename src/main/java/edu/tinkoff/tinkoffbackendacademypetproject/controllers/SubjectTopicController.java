@@ -8,6 +8,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoun
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.SubjectTopicMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopic;
+import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.SubjectTopicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -52,6 +53,7 @@ public class SubjectTopicController {
         );
     }
 
+    @IsAdmin
     @PostMapping
     public SubjectTopicResponseDTO createSubjectTopic(@Valid @RequestBody SubjectTopicRequestDTO dto) throws EntityModelNotFoundException {
         SubjectTopic savedTopic = topicService.createSubjectTopic(subjectTopicMapper.getSubjectTopicFromDTO(dto));

@@ -8,6 +8,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoun
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.SubjectMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
+import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.SubjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -70,6 +71,7 @@ public class SubjectController {
             @ApiResponse(responseCode = "200", description = "Предмет был успешно создан"),
             @ApiResponse(responseCode = "400", description = "Такой предмет уже существует", content = @Content)
     })
+    @IsAdmin
     public SubjectResponseDTO createSubject(@Valid @RequestBody SubjectRequestDTO dto) throws EntityModelNotFoundException {
         Subject subject = subjectMapper.fromSubjectRequestDTO(dto);
         var savedSubject = subjectService.createSubject(subject);
