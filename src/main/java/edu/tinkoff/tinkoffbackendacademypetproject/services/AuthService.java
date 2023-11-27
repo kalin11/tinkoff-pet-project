@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class AuthService {
     private final AccountRepository accountRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
+    @Transactional
     public String login(String email, String password) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)

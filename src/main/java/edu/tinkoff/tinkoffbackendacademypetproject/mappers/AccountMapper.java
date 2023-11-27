@@ -14,5 +14,7 @@ public interface AccountMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "publications", ignore = true)
     Account fromAccountRegistrationRequestDto(AccountRegistrationRequestDto account);
 }

@@ -36,6 +36,12 @@ public class Account implements UserDetails {
     @Column(name = "role")
     private Role role;
 
+    @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Publication> publications;
+
+    @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Comment> comments;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

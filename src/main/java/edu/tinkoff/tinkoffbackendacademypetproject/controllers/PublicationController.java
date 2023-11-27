@@ -8,6 +8,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PublicationTitl
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PublicationMapper;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.PublicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,6 +18,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,9 +39,10 @@ public class PublicationController {
      */
     @PostMapping(consumes = {"multipart/form-data"})
     @Operation(description = "Добавить новую публикацию", summary = "Добавить новую публикацию")
-    public PublicationResponseDto createPublication(@ModelAttribute @Valid CreatePublicationRequestDto request) throws EntityModelNotFoundException {
+    public PublicationResponseDto createPublication(@ModelAttribute @Valid CreatePublicationRequestDto request,
+                                                    @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
         return publicationMapper.toPublicationResponseDto(
-                publicationService.createPublication(publicationMapper.fromCreatePublicationRequestDto(request), request.files())
+                publicationService.createPublication(publicationMapper.fromCreatePublicationRequestDto(request), account, request.files())
         );
     }
 

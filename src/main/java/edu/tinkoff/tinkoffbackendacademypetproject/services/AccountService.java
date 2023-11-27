@@ -1,7 +1,9 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.AccountAlreadyExistException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Comment;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.JwtService;
@@ -14,13 +16,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public String register(Account account) throws AccountAlreadyExistException {
         if (accountRepository.findByEmail(account.getEmail()) != null) {
             throw new AccountAlreadyExistException(account.getEmail());
@@ -30,6 +32,7 @@ public class AccountService implements UserDetailsService {
         return jwtService.generateToken(accountRepository.save(account));
     }
 
+    @Transactional
     public void registerAdmin(Account account) throws AccountAlreadyExistException {
         if (accountRepository.findByEmail(account.getEmail()) == null) {
             account.setPassword(passwordEncoder.encode(account.getPassword()));
@@ -37,6 +40,7 @@ public class AccountService implements UserDetailsService {
         }
     }
 
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return accountRepository.findByEmail(email);

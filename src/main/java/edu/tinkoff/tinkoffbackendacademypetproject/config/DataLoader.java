@@ -16,7 +16,7 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        accountService.registerAdmin(new Account(null, "admin@admin.ru", "admin", "admin", Role.ROLE_ADMIN));
+        accountService.registerAdmin(new Account(null, "admin@admin.ru", "admin", "admin", Role.ROLE_ADMIN, null, null));
     }
 
 }

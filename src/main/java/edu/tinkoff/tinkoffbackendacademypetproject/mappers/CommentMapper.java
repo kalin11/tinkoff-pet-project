@@ -18,14 +18,17 @@ public interface CommentMapper {
         return publication;
     }
 
+    @Mapping(target = "fullName", source = "account.fullName")
     CommentResponseDto toCommentResponseDto(Comment comment);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "publication", qualifiedByName = "emptyPublicationWithId", source = "publicationId")
+    @Mapping(target = "account", ignore = true)
     Comment fromCreateCommentRequestDto(CreateCommentRequestDto comment);
 
     @Mapping(target = "publication", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "account", ignore = true)
     Comment fromChangeCommentRequestDto(ChangeCommentRequestDto comment);
 }

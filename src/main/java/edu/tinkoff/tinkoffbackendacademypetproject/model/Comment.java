@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Комментарий
@@ -45,4 +46,8 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publication_id", referencedColumnName = "id")
     private Publication publication;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
 }

@@ -1,6 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.File;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Publication;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.PublicationRepository;
@@ -23,7 +24,7 @@ public class PublicationService {
     private final FileService fileService;
 
     @Transactional
-    public Publication createPublication(Publication publication, List<MultipartFile> files) throws EntityModelNotFoundException {
+    public Publication createPublication(Publication publication, Account account, List<MultipartFile> files) throws EntityModelNotFoundException {
         if (files != null) {
             var filesInPublication = new ArrayList<File>();
             for (var file : files) {
@@ -36,6 +37,7 @@ public class PublicationService {
             publication.setFiles(new ArrayList<>());
         }
         publication.setSubjectTopic(subjectTopicService.getSubjectTopic(publication.getSubjectTopic().getId()));
+        publication.setAccount(account);
         return publicationRepository.save(publication);
     }
 
