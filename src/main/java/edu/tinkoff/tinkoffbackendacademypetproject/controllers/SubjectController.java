@@ -71,6 +71,7 @@ public class SubjectController {
             @ApiResponse(responseCode = "200", description = "Предмет был успешно создан"),
             @ApiResponse(responseCode = "400", description = "Такой предмет уже существует", content = @Content)
     })
+
     @IsAdmin
     public SubjectResponseDTO createSubject(@Valid @RequestBody SubjectRequestDTO dto) throws EntityModelNotFoundException {
         Subject subject = subjectMapper.fromSubjectRequestDTO(dto);

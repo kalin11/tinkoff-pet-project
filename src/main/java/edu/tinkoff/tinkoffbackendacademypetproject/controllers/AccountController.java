@@ -8,6 +8,8 @@ import edu.tinkoff.tinkoffbackendacademypetproject.services.AccountService;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,19 +28,27 @@ public class AccountController {
 
     @PostMapping("/register")
     @Operation(description = "Зарегистрировать нового пользователя", summary = "Зарегистрировать нового пользователя")
-    public AccountResponseDto registerUserAccount(@RequestBody @Valid AccountRegistrationRequestDto request) {
-        return accountMapper.toAccountRegistrationResponseDto(
-                accountService.register(accountMapper.fromAccountRegistrationRequestDto(request))
-        );
+    public AccountResponseDto registerUserAccount(@RequestBody @Valid AccountRegistrationRequestDto request, HttpServletResponse response) {
+        String token = accountService.register(accountMapper.fromAccountRegistrationRequestDto(request));
+        addCookie(token, response);
+        return accountMapper.toAccountRegistrationResponseDto(token);
     }
 
     @PostMapping("/login")
     @Operation(description = "Войти на сайт", summary = "Войти на сайт")
-    public AccountResponseDto loginUserAccount(@RequestBody @Valid AccountLoginRequestDto request) {
-        return accountMapper.toAccountRegistrationResponseDto(
-                authService.login(request.email(), request.password())
-        );
+    public AccountResponseDto loginUserAccount(@RequestBody @Valid AccountLoginRequestDto request, HttpServletResponse response) {
+        String token = authService.login(request.email(), request.password());
+        addCookie(token, response);
+        return accountMapper.toAccountRegistrationResponseDto(token);
     }
 
+    private void addCookie(String token, HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setSecure(true);
+        cookie.setMaxAge(7 * 24 * 60 * 60);
+        response.addCookie(cookie);
+    }
 
 }
