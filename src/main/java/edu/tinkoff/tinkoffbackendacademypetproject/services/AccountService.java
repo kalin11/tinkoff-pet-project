@@ -1,9 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.AccountAlreadyExistException;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Comment;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.JwtService;

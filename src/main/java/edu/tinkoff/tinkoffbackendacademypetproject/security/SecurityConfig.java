@@ -9,10 +9,12 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +27,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig {
     private static final String[] AUTH_WHITE_LIST = {
             "/v1/auth/**",
@@ -34,6 +36,7 @@ public class SecurityConfig {
             "/v2/api-docs/**",
             "/swagger-resources/**"
     };
+
     @Value("${cors.allowed-origin}")
     private String corsUrl;
 
@@ -41,16 +44,17 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            JwtAuthenticationFilter jwtAuthenticationFilter,
                                            AuthenticationProvider authenticationProvider) throws Exception {
-        return http.csrf().disable()
-                .authorizeRequests()
-                .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                .requestMatchers(AUTH_WHITE_LIST).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+        return http
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                        .requestMatchers(AUTH_WHITE_LIST).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(managementConfigurer -> managementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
 
@@ -59,7 +63,11 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/v1/**").allowedOrigins(corsUrl).allowedMethods("*");
+                registry
+                        .addMapping("/v1/**")
+                        .allowedOrigins(corsUrl)
+                        .allowedMethods("*")
+                        .allowCredentials(true);
             }
         };
     }
