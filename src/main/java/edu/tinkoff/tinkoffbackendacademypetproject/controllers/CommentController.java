@@ -8,6 +8,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.CommentMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,6 +18,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,9 +39,10 @@ public class CommentController {
      */
     @PostMapping
     @Operation(description = "Добавить новый комментарий к публикации", summary = "Добавить новый комментарий к публикации")
-    public CommentResponseDto createComment(@RequestBody @Valid CreateCommentRequestDto request) throws EntityModelNotFoundException {
+    public CommentResponseDto createComment(@RequestBody @Valid CreateCommentRequestDto request,
+                                            @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
         return commentMapper.toCommentResponseDto(
-                commentService.createComment(commentMapper.fromCreateCommentRequestDto(request))
+                commentService.createComment(commentMapper.fromCreateCommentRequestDto(request), account)
         );
     }
 

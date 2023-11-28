@@ -61,4 +61,8 @@ public class Publication {
      */
     @OneToMany(mappedBy = "publication", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> comments;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
 }

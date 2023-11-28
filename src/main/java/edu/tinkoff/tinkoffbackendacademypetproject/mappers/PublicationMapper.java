@@ -18,8 +18,10 @@ public interface PublicationMapper {
         return subjectTopic;
     }
 
+    @Mapping(target = "fullName", source = "account.fullName")
     PublicationResponseDto toPublicationResponseDto(Publication publication);
 
+    @Mapping(target = "fullName", source = "account.fullName")
     PublicationTitleAndIdResponseDto toPublicationTitleAndIdResponseDto(Publication publication);
 
     @Mapping(target = "id", ignore = true)
@@ -27,6 +29,7 @@ public interface PublicationMapper {
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "files", ignore = true)
     @Mapping(target = "subjectTopic", qualifiedByName = "emptySubjectTopicWithId", source = "subjectTopicId")
+    @Mapping(target = "account", ignore = true)
     Publication fromCreatePublicationRequestDto(CreatePublicationRequestDto publication);
 
 }
