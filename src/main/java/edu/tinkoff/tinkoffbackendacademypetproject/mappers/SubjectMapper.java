@@ -1,7 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectRequestDTO;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectResponseDTO;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectRequestDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Course;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
 import org.mapstruct.Mapper;
@@ -40,15 +40,8 @@ public interface SubjectMapper {
      * @param subject объект предмета
      * @return ДТО
      */
-    SubjectResponseDTO toSubjectResponseDTO(Subject subject);
+    SubjectResponseDto toSubjectResponseDTO(Subject subject);
 
-    /**
-     * Конвертация списка объектов Subject в список DTO объектов
-     *
-     * @param subjects список объектов Subject
-     * @return список DTO объектов
-     */
-    List<SubjectResponseDTO> toListSubjectResponseDTO(List<Subject> subjects);
 
     /**
      * Конвертация из ДТО в entity-класс
@@ -60,5 +53,5 @@ public interface SubjectMapper {
     @Mapping(target = "subjectTopics", ignore = true)
     @Mapping(target = "course", qualifiedByName = "emptyCourseWithCourseNumber", source = "courseNumber")
     @Mapping(target = "name", qualifiedByName = "getSubjectName", source = "name")
-    Subject fromSubjectRequestDTO(SubjectRequestDTO dto);
+    Subject fromSubjectRequestDTO(SubjectRequestDto dto);
 }

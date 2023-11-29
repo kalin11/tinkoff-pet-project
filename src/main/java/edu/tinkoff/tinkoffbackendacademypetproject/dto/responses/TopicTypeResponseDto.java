@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * ДТО для получения типа топика
  */
-public record TopicTypeResponseDTO(@Schema(name = "Идентификатор типа топика", example = "1")
+public record TopicTypeResponseDto(@Schema(name = "Идентификатор типа топика", example = "1")
                                    Long id,
 
                                    @Schema(name = "Тип топика", example = "Контрольная работа")

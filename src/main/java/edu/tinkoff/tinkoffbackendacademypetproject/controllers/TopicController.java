@@ -1,6 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.TopicTypeResponseDTO;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.TopicTypeResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.TopicMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.TopicType;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.TopicTypeService;
@@ -37,7 +37,7 @@ public class TopicController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешно получен список всех типов топиков")
     })
-    public List<TopicTypeResponseDTO> findAll() {
+    public List<TopicTypeResponseDto> findAll() {
         List<TopicType> types = typeService.findAll();
         return topicMapper.toListTopicResponseDTO(types);
     }

@@ -1,7 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicRequestDTO;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectTopicResponseDTO;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicRequestDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectTopicResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopic;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.TopicType;
@@ -39,19 +39,12 @@ public interface SubjectTopicMapper {
      */
     @Mapping(target = "topicTypeResponseDTO", source = "type")
     @Mapping(target = "subjectResponseDTO", source = "subject")
-    SubjectTopicResponseDTO getSubjectTopicResponseDTO(SubjectTopic subjectTopic);
+    SubjectTopicResponseDto getSubjectTopicResponseDTO(SubjectTopic subjectTopic);
 
-    /**
-     * Конвертация списка топиков предметов в ДТО
-     *
-     * @param subjectTopic список топиков предметов
-     * @return список ДТО топиков предметов
-     */
-    List<SubjectTopicResponseDTO> getListSubjectTopicResponseDTO(List<SubjectTopic> subjectTopic);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "subjectId", target = "subject", qualifiedByName = "getSubjectWithId")
     @Mapping(source = "topicId", target = "type", qualifiedByName = "getTopicWithId")
     @Mapping(target = "publications", ignore = true)
-    SubjectTopic getSubjectTopicFromDTO(SubjectTopicRequestDTO dto);
+    SubjectTopic getSubjectTopicFromDTO(SubjectTopicRequestDto dto);
 }

@@ -2,7 +2,7 @@ package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.AccountLoginRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.AccountRegistrationRequestDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.AccountResponseDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.AuthResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.AccountMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.AccountService;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.AuthService;
@@ -28,18 +28,18 @@ public class AccountController {
 
     @PostMapping("/register")
     @Operation(description = "Зарегистрировать нового пользователя", summary = "Зарегистрировать нового пользователя")
-    public AccountResponseDto registerUserAccount(@RequestBody @Valid AccountRegistrationRequestDto request, HttpServletResponse response) {
+    public AuthResponseDto registerUserAccount(@RequestBody @Valid AccountRegistrationRequestDto request, HttpServletResponse response) {
         String token = accountService.register(accountMapper.fromAccountRegistrationRequestDto(request));
         addCookie(token, response);
-        return accountMapper.toAccountRegistrationResponseDto(token);
+        return new AuthResponseDto("register success");
     }
 
     @PostMapping("/login")
     @Operation(description = "Войти на сайт", summary = "Войти на сайт")
-    public AccountResponseDto loginUserAccount(@RequestBody @Valid AccountLoginRequestDto request, HttpServletResponse response) {
-        String token = authService.login(request.email(), request.password());
+    public AuthResponseDto loginUserAccount(@RequestBody @Valid AccountLoginRequestDto request, HttpServletResponse response) {
+        String token = authService.login(request.email().trim(), request.password().trim());
         addCookie(token, response);
-        return accountMapper.toAccountRegistrationResponseDto(token);
+        return new AuthResponseDto("login success");
     }
 
     private void addCookie(String token, HttpServletResponse response) {
