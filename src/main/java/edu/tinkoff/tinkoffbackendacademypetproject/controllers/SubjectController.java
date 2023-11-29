@@ -1,9 +1,9 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectByCourseNumberRequestDTO;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectRequestDTO;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectByCourseNumberRequestDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectResponseDTO;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.SubjectMapper;
@@ -51,7 +51,7 @@ public class SubjectController {
             @ApiResponse(responseCode = "200", description = "Запрос был успешно выполнен"),
             @ApiResponse(responseCode = "400", description = "Запрос имеет не валидные параметры", content = @Content),
     })
-    public PageResponseDto<SubjectResponseDTO> findAllByCourseNumber(@ParameterObject @Valid SubjectByCourseNumberRequestDTO dto) {
+    public PageResponseDto<SubjectResponseDto> findAllByCourseNumber(@ParameterObject @Valid SubjectByCourseNumberRequestDto dto) {
         return pageMapper.toPageResponseDto(subjectService.findAllByCourseNumber(
                         dto.getPageNumber(),
                         dto.getPageSize(),
@@ -73,7 +73,7 @@ public class SubjectController {
     })
 
     @IsAdmin
-    public SubjectResponseDTO createSubject(@Valid @RequestBody SubjectRequestDTO dto) throws EntityModelNotFoundException {
+    public SubjectResponseDto createSubject(@Valid @RequestBody SubjectRequestDto dto) throws EntityModelNotFoundException {
         Subject subject = subjectMapper.fromSubjectRequestDTO(dto);
         var savedSubject = subjectService.createSubject(subject);
         return subjectMapper.toSubjectResponseDTO(savedSubject);

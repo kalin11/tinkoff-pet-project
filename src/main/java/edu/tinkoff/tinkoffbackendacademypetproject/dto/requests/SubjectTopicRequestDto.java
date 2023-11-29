@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Min;
 /**
  * Класс для получения всех секций с указанным предметом и курсом
  */
-public record SubjectTopicRequestDTO(/**
+public record SubjectTopicRequestDto(/**
                                       * Название предмета
                                       */
                                      @Min(1)

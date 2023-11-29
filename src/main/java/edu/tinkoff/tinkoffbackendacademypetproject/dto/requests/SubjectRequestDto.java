@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 /**
  * ДТО для создания нового предмета
  */
-public record SubjectRequestDTO(@Schema(description = "Название предмета", example = "Математика")
+public record SubjectRequestDto(@Schema(description = "Название предмета", example = "Математика")
                                 @NotBlank(message = "Название предмета не может быть пустым")
                                 String name,
                                 @JsonProperty("course_number")

@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SubjectByCourseNumberRequestDTO extends PageRequestDto {
+public class SubjectByCourseNumberRequestDto extends PageRequestDto {
     @Min(1)
     @Schema(description = "Номер курса предмета", example = "1")
     private Integer course;

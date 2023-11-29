@@ -1,6 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.TopicTypeResponseDTO;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.TopicTypeResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Topic;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.TopicType;
 import org.mapstruct.Mapper;
@@ -33,7 +33,7 @@ public interface TopicMapper {
      * @return ДТО топика
      */
     @Mapping(source = "type.topic", target = "topicType", qualifiedByName = "getTopicType")
-    TopicTypeResponseDTO toTopicResponseDTO(TopicType type);
+    TopicTypeResponseDto toTopicResponseDTO(TopicType type);
 
     /**
      * Конвертация списка объектов типа топика в список ДТО типа топика
@@ -41,5 +41,5 @@ public interface TopicMapper {
      * @param types список объектов типа топика
      * @return список ДТО типа топика
      */
-    List<TopicTypeResponseDTO> toListTopicResponseDTO(List<TopicType> types);
+    List<TopicTypeResponseDto> toListTopicResponseDTO(List<TopicType> types);
 }

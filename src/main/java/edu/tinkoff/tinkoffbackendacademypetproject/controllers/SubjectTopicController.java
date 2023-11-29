@@ -1,9 +1,9 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicBySubjectIdRequestDTO;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicRequestDTO;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicBySubjectIdRequestDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectTopicResponseDTO;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectTopicResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.SubjectTopicMapper;
@@ -44,7 +44,7 @@ public class SubjectTopicController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное получение данных", content = @Content)
     })
-    public PageResponseDto<SubjectTopicResponseDTO> findAllBySubjectId(@ParameterObject @Valid SubjectTopicBySubjectIdRequestDTO dto) {
+    public PageResponseDto<SubjectTopicResponseDto> findAllBySubjectId(@ParameterObject @Valid SubjectTopicBySubjectIdRequestDto dto) {
         return pageMapper.toPageResponseDto(topicService.findAllBySubjectId(
                         dto.getPageNumber(),
                         dto.getPageSize(),
@@ -55,7 +55,7 @@ public class SubjectTopicController {
 
     @IsAdmin
     @PostMapping
-    public SubjectTopicResponseDTO createSubjectTopic(@Valid @RequestBody SubjectTopicRequestDTO dto) throws EntityModelNotFoundException {
+    public SubjectTopicResponseDto createSubjectTopic(@Valid @RequestBody SubjectTopicRequestDto dto) throws EntityModelNotFoundException {
         SubjectTopic savedTopic = topicService.createSubjectTopic(subjectTopicMapper.getSubjectTopicFromDTO(dto));
         return subjectTopicMapper.getSubjectTopicResponseDTO(savedTopic);
     }
