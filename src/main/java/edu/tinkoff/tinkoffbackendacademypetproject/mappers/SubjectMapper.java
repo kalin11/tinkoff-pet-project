@@ -42,13 +42,6 @@ public interface SubjectMapper {
      */
     SubjectResponseDto toSubjectResponseDTO(Subject subject);
 
-    /**
-     * Конвертация списка объектов Subject в список DTO объектов
-     *
-     * @param subjects список объектов Subject
-     * @return список DTO объектов
-     */
-    List<SubjectResponseDto> toListSubjectResponseDTO(List<Subject> subjects);
 
     /**
      * Конвертация из ДТО в entity-класс

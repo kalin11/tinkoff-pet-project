@@ -41,13 +41,6 @@ public interface SubjectTopicMapper {
     @Mapping(target = "subjectResponseDTO", source = "subject")
     SubjectTopicResponseDto getSubjectTopicResponseDTO(SubjectTopic subjectTopic);
 
-    /**
-     * Конвертация списка топиков предметов в ДТО
-     *
-     * @param subjectTopic список топиков предметов
-     * @return список ДТО топиков предметов
-     */
-    List<SubjectTopicResponseDto> getListSubjectTopicResponseDTO(List<SubjectTopic> subjectTopic);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "subjectId", target = "subject", qualifiedByName = "getSubjectWithId")
