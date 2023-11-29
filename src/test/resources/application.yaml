@@ -1,0 +1,30 @@
+server:
+  port: ${PORT:8080}
+spring:
+  datasource:
+    url: 'jdbc:postgresql://localhost:35100/tink'
+    username: 'user'
+    password: 'password'
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+        format_sql: true
+  liquibase:
+    change-log: classpath:/db/changelog/main-changelog.yaml
+  springdoc:
+    swagger-ui:
+      path: /moi-swagger.html
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+jwt:
+  secret: 77397A24432646294A404E635266556A586E3272357538782F4125442A472D4B
+  issuer: daniil
+
+storage:
+  location: D:\files
+cors:
+  allowed-origin: http://localhost:3000
