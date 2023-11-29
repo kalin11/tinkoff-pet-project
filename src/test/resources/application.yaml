@@ -28,3 +28,7 @@ storage:
   location: D:\files
 cors:
   allowed-origin: http://localhost:3000
+admin:
+  email: admin@admin.ru
+  nickname: admin
+  password: admin
