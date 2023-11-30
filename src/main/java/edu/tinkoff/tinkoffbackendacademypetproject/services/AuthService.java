@@ -1,11 +1,14 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.LoginFailException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,15 +20,19 @@ public class AuthService {
     private final JwtService jwtService;
 
     @Transactional
-    public String login(String email, String password) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
-        );
+    public Pair<Account, String> login(String email, String password) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, password)
+            );
 
-        Account account = accountRepository.findByEmail(email);
-        if (account == null) {
-            throw new RuntimeException();
+            Account account = accountRepository.findByEmail(email);
+            if (account == null) {
+                throw new LoginFailException();
+            }
+            return Pair.of(account, jwtService.generateToken(account));
+        } catch (AuthenticationException e) {
+            throw new LoginFailException();
         }
-        return jwtService.generateToken(account);
     }
 }

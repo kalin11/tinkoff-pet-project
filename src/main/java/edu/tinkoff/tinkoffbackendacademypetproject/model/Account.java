@@ -37,10 +37,10 @@ public class Account implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Publication> publications;
+    private List<PublicationEntity> publications;
 
     @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Comment> comments;
+    private List<CommentEntity> comments;
 
 
     @Override

@@ -2,14 +2,12 @@ package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectTopicResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopic;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.TopicType;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopicEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.TopicTypeEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-
-import java.util.List;
 
 
 /**
@@ -18,15 +16,15 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {SubjectMapper.class, TopicMapper.class})
 public interface SubjectTopicMapper {
     @Named("getSubjectWithId")
-    static Subject getSubjectWithId(Long id) {
-        var subject = new Subject();
+    static SubjectEntity getSubjectWithId(Long id) {
+        var subject = new SubjectEntity();
         subject.setId(id);
         return subject;
     }
 
     @Named("getTopicWithId")
-    static TopicType getTopicWithId(Long id) {
-        var type = new TopicType();
+    static TopicTypeEntity getTopicWithId(Long id) {
+        var type = new TopicTypeEntity();
         type.setId(id);
         return type;
     }
@@ -39,12 +37,12 @@ public interface SubjectTopicMapper {
      */
     @Mapping(target = "topicTypeResponseDTO", source = "type")
     @Mapping(target = "subjectResponseDTO", source = "subject")
-    SubjectTopicResponseDto getSubjectTopicResponseDTO(SubjectTopic subjectTopic);
+    SubjectTopicResponseDto getSubjectTopicResponseDTO(SubjectTopicEntity subjectTopic);
 
 
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "subjectId", target = "subject", qualifiedByName = "getSubjectWithId")
     @Mapping(source = "topicId", target = "type", qualifiedByName = "getTopicWithId")
     @Mapping(target = "publications", ignore = true)
-    SubjectTopic getSubjectTopicFromDTO(SubjectTopicRequestDto dto);
+    SubjectTopicEntity getSubjectTopicFromDTO(SubjectTopicRequestDto dto);
 }

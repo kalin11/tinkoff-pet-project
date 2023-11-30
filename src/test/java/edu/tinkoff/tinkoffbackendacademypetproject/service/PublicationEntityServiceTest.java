@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ContextConfiguration(initializers = PostgresTestConfig.Initializer.class)
-public class PublicationServiceTest {
+class PublicationEntityServiceTest {
     @Autowired
     private PublicationService publicationService;
 
@@ -49,7 +49,7 @@ public class PublicationServiceTest {
 
     @BeforeEach
     @AfterEach
-    public void clear() {
+    void clear() {
         subjectTopicRepository.deleteAll();
         jdbcTemplate.execute("ALTER SEQUENCE subject_topic_pk_seq RESTART");
         subjectRepository.deleteAll();
@@ -65,7 +65,7 @@ public class PublicationServiceTest {
     @CsvSource(value = {
             "0, 50, 1",
     })
-    public void getPublicationsInOneCategoryTest(Integer pageNumber, Integer pageSize, Long subjectTopicId) {
+    void getPublicationsInOneCategoryTest(Integer pageNumber, Integer pageSize, Long subjectTopicId) {
         // given
         createBeforeStart();
         createPublications(subjectTopicId);
@@ -83,7 +83,7 @@ public class PublicationServiceTest {
     @DisplayName("Get publication")
     @ParameterizedTest(name = "{index} - publication {0} is find")
     @ValueSource(longs = {1, 2})
-    public void getPublicationTest(Long id) throws EntityModelNotFoundException {
+    void getPublicationTest(Long id) throws EntityModelNotFoundException {
         // given
         createBeforeStart();
         createPublications(1L);
@@ -103,7 +103,7 @@ public class PublicationServiceTest {
     @DisplayName("Get publication with throw")
     @ParameterizedTest(name = "{index} - publication {0} is not find")
     @ValueSource(longs = {1, 2, 3})
-    public void getPublicationWithThrowTest(Long id) {
+    void getPublicationWithThrowTest(Long id) {
         // given
 
         // when
@@ -117,15 +117,15 @@ public class PublicationServiceTest {
     }
 
     private void createBeforeStart() {
-        subjectRepository.save(new Subject(null, "Mathematics", null, courseRepository.findById(1).get()));
-        subjectTopicRepository.save(new SubjectTopic(null, topicRepository.findById(1L).get(), subjectRepository.findById(1L).get(), null));
+        subjectRepository.save(new SubjectEntity(null, "Mathematics", null, courseRepository.findById(1).get()));
+        subjectTopicRepository.save(new SubjectTopicEntity(null, topicRepository.findById(1L).get(), subjectRepository.findById(1L).get(), null));
         accountRepository.save(new Account(null, "dan@dam.ru", "1234", "Daniil K", Role.ROLE_USER, null, null));
     }
 
     private void createPublications(Long subjectTopicId) {
-        publicationRepository.save(new Publication(null, "Первая публикация", "First", null, subjectTopicRepository.findById(subjectTopicId).get(), null, null, accountRepository.findById(1L).get()));
-        publicationRepository.save(new Publication(null, "Вторая публикация", "Second", null, subjectTopicRepository.findById(subjectTopicId).get(), null, null, accountRepository.findById(1L).get()));
-        publicationRepository.save(new Publication(null, "Третья публикация", "Third", null, subjectTopicRepository.findById(subjectTopicId).get(), null, null, accountRepository.findById(1L).get()));
+        publicationRepository.save(new PublicationEntity(null, "Первая публикация", "First", null, subjectTopicRepository.findById(subjectTopicId).get(), null, null, accountRepository.findById(1L).get()));
+        publicationRepository.save(new PublicationEntity(null, "Вторая публикация", "Second", null, subjectTopicRepository.findById(subjectTopicId).get(), null, null, accountRepository.findById(1L).get()));
+        publicationRepository.save(new PublicationEntity(null, "Третья публикация", "Third", null, subjectTopicRepository.findById(subjectTopicId).get(), null, null, accountRepository.findById(1L).get()));
     }
 }
 

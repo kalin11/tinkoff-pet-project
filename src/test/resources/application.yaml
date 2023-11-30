@@ -25,7 +25,7 @@ jwt:
   issuer: daniil
 
 storage:
-  location: D:\files
+  location: /home/kalin/IdeaProjects/tinkoff-backend-academy-pet-project/files
 cors:
   allowed-origin: http://localhost:3000
 admin:

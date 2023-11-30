@@ -2,7 +2,7 @@ package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CourseResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.CourseMapper;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Course;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.CourseEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -43,7 +43,7 @@ public class CourseController {
             @ApiResponse(responseCode = "200", description = "Успешно получен список курсов")
     })
     public List<CourseResponseDto> getCourses() {
-        List<Course> courses = courseService.findAll();
+        List<CourseEntity> courses = courseService.findAll();
         return courseMapper.toListOfCourseResponseDTO(courses);
     }
 }

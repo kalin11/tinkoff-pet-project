@@ -1,4 +1,4 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.dto.responses;
 
-public record AuthResponseDto(String message) {
+public record AuthResponseDto(String email) {
 }

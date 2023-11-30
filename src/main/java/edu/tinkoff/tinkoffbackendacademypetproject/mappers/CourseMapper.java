@@ -1,7 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CourseResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Course;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.CourseEntity;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface CourseMapper {
      * @param course объект курса
      * @return ДТО курса
      */
-    CourseResponseDto toCourseResponseDTO(Course course);
+    CourseResponseDto toCourseResponseDTO(CourseEntity course);
 
     /**
      * Конвертация списка курсов в список ДТО курсов
@@ -26,6 +26,6 @@ public interface CourseMapper {
      * @param courses список курсов
      * @return список ДТО курсов
      */
-    List<CourseResponseDto> toListOfCourseResponseDTO(List<Course> courses);
+    List<CourseResponseDto> toListOfCourseResponseDTO(List<CourseEntity> courses);
 
 }

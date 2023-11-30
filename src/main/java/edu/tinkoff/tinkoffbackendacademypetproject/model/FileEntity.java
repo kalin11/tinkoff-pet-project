@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class File {
+public class FileEntity {
     /**
      * Идентификатор вложения (файла)
      */
@@ -40,5 +40,5 @@ public class File {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publication_id", referencedColumnName = "id")
-    private Publication publication;
+    private PublicationEntity publication;
 }

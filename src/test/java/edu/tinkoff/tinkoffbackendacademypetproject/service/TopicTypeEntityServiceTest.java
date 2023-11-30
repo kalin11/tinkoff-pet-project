@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ContextConfiguration(initializers = PostgresTestConfig.Initializer.class)
-public class TopicTypeServiceTest {
+class TopicTypeEntityServiceTest {
     @Autowired
     private TopicTypeService topicTypeService;
 
@@ -25,7 +25,7 @@ public class TopicTypeServiceTest {
 
     @DisplayName("Find all topic")
     @Test
-    public void findAllTopicTest() {
+    void findAllTopicTest() {
         // given
 
         // when
@@ -42,7 +42,7 @@ public class TopicTypeServiceTest {
     @DisplayName("Get topic")
     @ParameterizedTest(name = "{index} - topic {0} is find")
     @ValueSource(longs = {1, 2, 3})
-    public void getTopicTest(Long id) throws EntityModelNotFoundException {
+    void getTopicTest(Long id) throws EntityModelNotFoundException {
         // given
 
         // when
@@ -58,7 +58,7 @@ public class TopicTypeServiceTest {
     @DisplayName("Get topic with throw")
     @ParameterizedTest(name = "{index} - topic {0} is not find")
     @ValueSource(longs = {4, 5, 6})
-    public void getTopicWithThrowTest(Long id) {
+    void getTopicWithThrowTest(Long id) {
         // given
 
         // when

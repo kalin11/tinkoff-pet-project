@@ -2,13 +2,11 @@ package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Course;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.CourseEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-
-import java.util.List;
 
 /**
  * Маппер для предмета
@@ -28,8 +26,8 @@ public interface SubjectMapper {
     }
 
     @Named("emptyCourseWithCourseNumber")
-    static Course emptyCourseWithCourseNumber(Integer courseNumber) {
-        var course = new Course();
+    static CourseEntity emptyCourseWithCourseNumber(Integer courseNumber) {
+        var course = new CourseEntity();
         course.setCourseNumber(courseNumber);
         return course;
     }
@@ -40,7 +38,7 @@ public interface SubjectMapper {
      * @param subject объект предмета
      * @return ДТО
      */
-    SubjectResponseDto toSubjectResponseDTO(Subject subject);
+    SubjectResponseDto toSubjectResponseDTO(SubjectEntity subject);
 
 
     /**
@@ -53,5 +51,5 @@ public interface SubjectMapper {
     @Mapping(target = "subjectTopics", ignore = true)
     @Mapping(target = "course", qualifiedByName = "emptyCourseWithCourseNumber", source = "courseNumber")
     @Mapping(target = "name", qualifiedByName = "getSubjectName", source = "name")
-    Subject fromSubjectRequestDTO(SubjectRequestDto dto);
+    SubjectEntity fromSubjectRequestDTO(SubjectRequestDto dto);
 }

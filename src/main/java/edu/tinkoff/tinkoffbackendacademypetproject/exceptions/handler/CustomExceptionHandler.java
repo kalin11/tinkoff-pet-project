@@ -1,10 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.exceptions.handler;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.ApiErrorResponse;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.AlreadyExistsException;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.StorageException;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.StorageFileNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.*;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
@@ -38,6 +35,12 @@ public class CustomExceptionHandler {
             message = "Номер курса должен быть больше 0";
         }
         return new ApiErrorResponse(message, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(LoginFailException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    protected ApiErrorResponse handleLoginErrorException(Exception e) {
+        return new ApiErrorResponse(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(EntityModelNotFoundException.class)

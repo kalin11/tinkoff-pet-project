@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Course {
+public class CourseEntity {
 
     /**
      * Номер курса
@@ -38,5 +38,5 @@ public class Course {
      * Список топиков, которые имеют данный курс
      */
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-    private List<Subject> subjects;
+    private List<SubjectEntity> subjects;
 }

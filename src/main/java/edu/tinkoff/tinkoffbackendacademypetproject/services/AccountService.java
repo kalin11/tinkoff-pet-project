@@ -6,6 +6,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,13 +22,13 @@ public class AccountService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public String register(Account account) throws AccountAlreadyExistException {
+    public Pair<Account, String> register(Account account) throws AccountAlreadyExistException {
         if (accountRepository.findByEmail(account.getEmail()) != null) {
             throw new AccountAlreadyExistException(account.getEmail());
         }
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setRole(Role.ROLE_USER);
-        return jwtService.generateToken(accountRepository.save(account));
+        return Pair.of(account, jwtService.generateToken(accountRepository.save(account)));
     }
 
     @Transactional
