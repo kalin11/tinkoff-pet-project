@@ -2,18 +2,20 @@ package edu.tinkoff.tinkoffbackendacademypetproject.config;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
-import edu.tinkoff.tinkoffbackendacademypetproject.services.AccountService;
+import edu.tinkoff.tinkoffbackendacademypetproject.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 public class DataLoader implements ApplicationRunner {
 
-    private final AccountService accountService;
+    private final AuthService authService;
 
     @Value("${admin.email}")
     private String adminEmail;
@@ -26,7 +28,20 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        accountService.registerAdmin(new Account(null, adminEmail, password, nickname, Role.ROLE_ADMIN, null, null));
+        authService.registerAdmin(
+                new Account(null,
+                        adminEmail,
+                        password,
+                        nickname,
+                        "admin",
+                        "admin",
+                        "admin",
+                        LocalDateTime.now(),
+                        false,
+                        Role.ROLE_ADMIN,
+                        null,
+                        null,
+                        null));
     }
 
 }

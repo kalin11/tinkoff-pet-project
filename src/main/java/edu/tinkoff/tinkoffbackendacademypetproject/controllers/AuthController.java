@@ -4,7 +4,6 @@ import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.AccountLoginRequ
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.AccountRegistrationRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.AuthResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.AccountMapper;
-import edu.tinkoff.tinkoffbackendacademypetproject.services.AccountService;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,14 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Аккаунты", description = "Работа с аккаунтами")
 @RequestMapping("/v1/auth")
 public class AuthController {
-    private final AccountService accountService;
     private final AuthService authService;
     private final AccountMapper accountMapper;
 
     @PostMapping("/register")
     @Operation(description = "Зарегистрировать нового пользователя", summary = "Зарегистрировать нового пользователя")
     public AuthResponseDto registerUserAccount(@RequestBody @Valid AccountRegistrationRequestDto request, HttpServletResponse response) {
-        var answer = accountService.register(accountMapper.fromAccountRegistrationRequestDto(request));
+        var answer = authService.register(accountMapper.fromAccountRegistrationRequestDto(request));
         addCookie(answer.getSecond(), response);
         return new AuthResponseDto(answer.getFirst().getEmail());
     }

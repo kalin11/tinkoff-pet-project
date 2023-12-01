@@ -4,5 +4,5 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record PublicationTitleAndIdResponseDto(Long id,
                                                String title,
-                                               @JsonProperty("full_name") String fullName) {
+                                               @JsonProperty("nickname") String nickname) {
 }

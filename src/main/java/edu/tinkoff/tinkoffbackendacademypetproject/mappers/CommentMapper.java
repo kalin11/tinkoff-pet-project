@@ -18,7 +18,7 @@ public interface CommentMapper {
         return publication;
     }
 
-    @Mapping(target = "fullName", source = "account.fullName")
+    @Mapping(target = "nickname", source = "account.nickname")
     CommentResponseDto toCommentResponseDto(CommentEntity comment);
 
     @Mapping(target = "id", ignore = true)

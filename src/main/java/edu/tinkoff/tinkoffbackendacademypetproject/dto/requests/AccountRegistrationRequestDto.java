@@ -8,8 +8,8 @@ import jakarta.validation.constraints.Size;
 
 public record AccountRegistrationRequestDto(@Size(max = 150, message = "Слишком длинное имя")
                                             @NotBlank(message = "Имя не должно быть пустым")
-                                            @JsonProperty("full_name")
-                                            String fullName,
+                                            @JsonProperty("nickname")
+                                            String nickname,
 
                                             @Size(max = 50, message = "Слишком длинный пароль")
                                             @NotBlank(message = "Пароль не должен быть пустым")

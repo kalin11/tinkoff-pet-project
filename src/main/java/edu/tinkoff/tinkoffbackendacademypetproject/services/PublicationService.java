@@ -54,4 +54,8 @@ public class PublicationService {
         return publicationRepository.findBySubjectTopic_Id(subjectTopicId, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
 
+    public List<PublicationEntity> getAllByAccountId(Long id) {
+        return publicationRepository.findAllByAccount_Id(id);
+    }
+
 }

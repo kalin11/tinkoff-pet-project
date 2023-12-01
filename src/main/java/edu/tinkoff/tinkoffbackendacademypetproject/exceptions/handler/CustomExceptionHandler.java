@@ -62,15 +62,15 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(SizeLimitExceededException.class)
-    @ResponseStatus(HttpStatus.REQUEST_ENTITY_TOO_LARGE)
+    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
     public ApiErrorResponse handleSizeLimitExceededException(SizeLimitExceededException ex) {
-        return new ApiErrorResponse("Передаваемые файлы превышают размер 5MB", HttpStatus.REQUEST_ENTITY_TOO_LARGE);
+        return new ApiErrorResponse("Передаваемые файлы превышают размер 5MB", HttpStatus.PAYLOAD_TOO_LARGE);
     }
 
     @ExceptionHandler(FileSizeLimitExceededException.class)
-    @ResponseStatus(HttpStatus.REQUEST_ENTITY_TOO_LARGE)
+    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
     public ApiErrorResponse handleFileSizeLimitExceededException(FileSizeLimitExceededException ex) {
-        return new ApiErrorResponse("Один из передаваемых файлов превышает размер 5MB", HttpStatus.REQUEST_ENTITY_TOO_LARGE);
+        return new ApiErrorResponse("Один из передаваемых файлов превышает размер 5MB", HttpStatus.PAYLOAD_TOO_LARGE);
     }
 
     /**
@@ -82,6 +82,12 @@ public class CustomExceptionHandler {
     @ExceptionHandler(AlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApiErrorResponse handleSubjectAlreadyExistsException(Exception e) {
+        return new ApiErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BannedAccountException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiErrorResponse handleBannedAccountException(Exception e) {
         return new ApiErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

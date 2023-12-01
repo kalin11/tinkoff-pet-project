@@ -11,5 +11,5 @@ public record PublicationResponseDto(Long id,
                                      String title,
                                      @JsonProperty("created_at") LocalDateTime createdAt,
                                      List<FileResponseDto> files,
-                                     @JsonProperty("full_name") String fullName){
+                                     @JsonProperty("nickname") String nickname){
 }

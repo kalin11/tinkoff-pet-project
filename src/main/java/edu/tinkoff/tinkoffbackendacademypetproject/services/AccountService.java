@@ -1,47 +1,35 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.AccountAlreadyExistException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
-import edu.tinkoff.tinkoffbackendacademypetproject.security.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.util.Pair;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AccountService implements UserDetailsService {
+public class AccountService {
     private final AccountRepository accountRepository;
-    private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
 
-    @Transactional
-    public Pair<Account, String> register(Account account) throws AccountAlreadyExistException {
-        if (accountRepository.findByEmail(account.getEmail()) != null) {
-            throw new AccountAlreadyExistException(account.getEmail());
-        }
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
-        account.setRole(Role.ROLE_USER);
-        return Pair.of(account, jwtService.generateToken(accountRepository.save(account)));
+    public Page<Account> getAllUsers(Integer pageNumber, Integer pageSize) {
+        return accountRepository.findAll(PageRequest.of(pageNumber, pageSize));
     }
 
     @Transactional
-    public void registerAdmin(Account account) throws AccountAlreadyExistException {
-        if (accountRepository.findByEmail(account.getEmail()) == null) {
-            account.setPassword(passwordEncoder.encode(account.getPassword()));
-            accountRepository.save(account);
-        }
+    public Account banUserById(Long id) throws EntityModelNotFoundException {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Пользователя", "id", id));
+        account.setBanned(true);
+        return accountRepository.save(account);
     }
 
     @Transactional
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return accountRepository.findByEmail(email);
+    public Account unbanUserById(Long id) throws EntityModelNotFoundException {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Пользователя", "id", id));
+        account.setBanned(false);
+        return accountRepository.save(account);
     }
+
 }

@@ -18,10 +18,10 @@ public interface PublicationMapper {
         return subjectTopic;
     }
 
-    @Mapping(target = "fullName", source = "account.fullName")
+    @Mapping(target = "nickname", source = "account.nickname")
     PublicationResponseDto toPublicationResponseDto(PublicationEntity publication);
 
-    @Mapping(target = "fullName", source = "account.fullName")
+    @Mapping(target = "nickname", source = "account.nickname")
     PublicationTitleAndIdResponseDto toPublicationTitleAndIdResponseDto(PublicationEntity publication);
 
     @Mapping(target = "id", ignore = true)

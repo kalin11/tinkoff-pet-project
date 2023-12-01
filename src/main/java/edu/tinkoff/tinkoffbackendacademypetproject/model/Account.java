@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,8 +30,23 @@ public class Account implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "full_name")
-    private String fullName;
+    @Column(name = "nickname")
+    private String nickname;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "middle_name")
+    private String middleName;
+
+    @Column(name = "birth_date")
+    private LocalDateTime birthDate;
+
+    @Column(name = "is_banned")
+    private boolean isBanned;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
@@ -42,6 +58,8 @@ public class Account implements UserDetails {
     @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CommentEntity> comments;
 
+    @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ProfilePhotoEntity> profilePhotos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
