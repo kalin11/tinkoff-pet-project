@@ -20,5 +20,8 @@ public record CreateCommentRequestDto(
         @Min(value = 1, message = "Id публикации не может быть меньше 1")
         @NotNull(message = "Id публикации не может быть пустым")
         @Schema(description = "Id публикации, к которой написан комментарий", example = "1")
-        Long publicationId) {
+        Long publicationId,
+        @JsonProperty("is_anonymous")
+        @NotNull(message = "Не может быть пустым")
+        Boolean isAnonymous) {
 }

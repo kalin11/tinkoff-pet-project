@@ -18,7 +18,7 @@ public interface CommentMapper {
         return publication;
     }
 
-    @Mapping(target = "nickname", source = "account.nickname")
+    @Mapping(target = "nickname", expression = "java(comment.getIsAnonymous() ? \"anonymous\" : comment.getAccount().getNickname())")
     CommentResponseDto toCommentResponseDto(CommentEntity comment);
 
     @Mapping(target = "id", ignore = true)
@@ -27,6 +27,7 @@ public interface CommentMapper {
     @Mapping(target = "account", ignore = true)
     CommentEntity fromCreateCommentRequestDto(CreateCommentRequestDto comment);
 
+    @Mapping(target = "isAnonymous", ignore = true)
     @Mapping(target = "publication", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "account", ignore = true)

@@ -7,5 +7,6 @@ import java.time.LocalDateTime;
 public record CommentResponseDto(Long id,
                                  String content,
                                  @JsonProperty("created_at") LocalDateTime createdAt,
-                                 @JsonProperty("nickname") String nickname) {
+                                 String nickname,
+                                 @JsonProperty("is_anonymous") Boolean isAnonymous) {
 }

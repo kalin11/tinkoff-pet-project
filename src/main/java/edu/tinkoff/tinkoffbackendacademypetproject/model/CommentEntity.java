@@ -32,6 +32,9 @@ public class CommentEntity {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "is_anonymous")
+    private Boolean isAnonymous;
+
     /**
      * Дата создания комментария
      */
