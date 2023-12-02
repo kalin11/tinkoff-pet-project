@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Аккаунты", description = "Работа с аккаунтами")
+@Tag(name = "Авторизация", description = "Работа с авторизацией")
 @RequestMapping("/v1/auth")
 public class AuthController {
     private final AuthService authService;
@@ -27,9 +27,9 @@ public class AuthController {
     @PostMapping("/register")
     @Operation(description = "Зарегистрировать нового пользователя", summary = "Зарегистрировать нового пользователя")
     public AuthResponseDto registerUserAccount(@RequestBody @Valid AccountRegistrationRequestDto request, HttpServletResponse response) {
-        var answer = authService.register(accountMapper.fromAccountRegistrationRequestDto(request));
+        var answer = authService.register(request.email().trim(), request.nickname().trim(), request.password().trim());
         addCookie(answer.getSecond(), response);
-        return new AuthResponseDto(answer.getFirst().getEmail());
+        return new AuthResponseDto(answer.getFirst().getEmail(), answer.getFirst().getRole().getDescription());
     }
 
     @PostMapping("/login")
@@ -37,7 +37,7 @@ public class AuthController {
     public AuthResponseDto loginUserAccount(@RequestBody @Valid AccountLoginRequestDto request, HttpServletResponse response) {
         var answer = authService.login(request.email().trim(), request.password().trim());
         addCookie(answer.getSecond(), response);
-        return new AuthResponseDto(answer.getFirst().getEmail());
+        return new AuthResponseDto(answer.getFirst().getEmail(), answer.getFirst().getRole().getDescription());
     }
 
     private void addCookie(String token, HttpServletResponse response) {

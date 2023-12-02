@@ -2,6 +2,7 @@ package edu.tinkoff.tinkoffbackendacademypetproject;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.config.StorageProperties;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.StorageService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,9 +18,11 @@ public class TinkoffBackendAcademyPetProjectApplication {
     }
 
     @Bean
-    CommandLineRunner init(StorageService storageService) {
+    CommandLineRunner init(@Qualifier("fileService") StorageService fileService,
+                           @Qualifier("photoService") StorageService photoService) {
         return (args) -> {
-            storageService.init();
+            fileService.init();
+            photoService.init();
         };
     }
 

@@ -1,6 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.services.StorageService;
+import edu.tinkoff.tinkoffbackendacademypetproject.services.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Файлы", description = "Работа с файлами")
 @RequestMapping("/v1/files")
 public class FileController {
-    private final StorageService storageService;
+    private final FileService storageService;
 
     @GetMapping("/{filename}")
     @Operation(description = "Достать файл из папки", summary = "Достать файл из папки")

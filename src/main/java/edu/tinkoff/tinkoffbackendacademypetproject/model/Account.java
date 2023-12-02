@@ -33,6 +33,9 @@ public class Account implements UserDetails {
     @Column(name = "nickname")
     private String nickname;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "first_name")
     private String firstName;
 
@@ -46,7 +49,7 @@ public class Account implements UserDetails {
     private LocalDateTime birthDate;
 
     @Column(name = "is_banned")
-    private boolean isBanned;
+    private Boolean isBanned;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
@@ -58,8 +61,9 @@ public class Account implements UserDetails {
     @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CommentEntity> comments;
 
-    @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ProfilePhotoEntity> profilePhotos;
+    @OneToOne(mappedBy = "account", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @PrimaryKeyJoinColumn
+    private ProfilePictureEntity profilePicture;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

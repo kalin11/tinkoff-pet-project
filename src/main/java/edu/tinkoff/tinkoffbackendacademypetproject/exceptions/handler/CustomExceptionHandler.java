@@ -91,6 +91,18 @@ public class CustomExceptionHandler {
         return new ApiErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NotEnoughRightsException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ApiErrorResponse handleNotEnoughRightsException(Exception e) {
+        return new ApiErrorResponse(e.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiErrorResponse handleRuntimeException(Exception e) {
+        return new ApiErrorResponse("Упсс, что-то пошло не так/ " + e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     /**
      * Обработчик ошибок, связанных с неправильным запросом
      *

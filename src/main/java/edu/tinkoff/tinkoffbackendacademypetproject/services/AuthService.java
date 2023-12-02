@@ -35,7 +35,7 @@ public class AuthService {
             if (account == null) {
                 throw new LoginFailException();
             }
-            if (account.isBanned()) {
+            if (account.getIsBanned()) {
                 throw new BannedAccountException();
             }
             return Pair.of(account, jwtService.generateToken(account));
@@ -45,15 +45,19 @@ public class AuthService {
     }
 
     @Transactional
-    public Pair<Account, String> register(Account account) throws AccountAlreadyExistException {
-        if (accountRepository.findByEmail(account.getEmail()) != null) {
-            throw new AccountAlreadyExistException("почтой", account.getEmail());
+    public Pair<Account, String> register(String email, String nickname, String password) throws AccountAlreadyExistException {
+        if (accountRepository.findByEmail(email) != null) {
+            throw new AccountAlreadyExistException("почтой", email);
         }
-        if (accountRepository.findByNicknameAndBanned(account.getNickname(), true) != null) {
-            throw new AccountAlreadyExistException("ником", account.getNickname());
+        if (accountRepository.findByNickname(nickname) != null) {
+            throw new AccountAlreadyExistException("ником", nickname);
         }
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        var account = new Account();
+        account.setEmail(email);
+        account.setNickname(nickname);
+        account.setPassword(passwordEncoder.encode(password));
         account.setRole(Role.ROLE_USER);
+        account.setIsBanned(false);
         return Pair.of(account, jwtService.generateToken(accountRepository.save(account)));
     }
 

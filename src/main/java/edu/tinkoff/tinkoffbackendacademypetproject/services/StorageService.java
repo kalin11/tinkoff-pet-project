@@ -1,6 +1,5 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.model.FileEntity;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,7 +9,7 @@ public interface StorageService {
 
     void init();
 
-    FileEntity store(MultipartFile file);
+    <T> T store(MultipartFile file);
 
     Path load(String filename);
 

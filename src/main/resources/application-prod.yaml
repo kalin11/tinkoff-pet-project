@@ -23,8 +23,12 @@ spring:
 jwt:
   secret: 77397A24432646294A404E635266556A586E3272357538782F4125442A472D4B
   issuer: daniil
-
 storage:
   location: /files
+  location-for-photos: /photos
 cors:
   allowed-origin: http://localhost:3000
+admin:
+  email: admin@admin.ru
+  nickname: admin
+  password: admin
