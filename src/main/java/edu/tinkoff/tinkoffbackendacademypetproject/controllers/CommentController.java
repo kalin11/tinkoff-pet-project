@@ -9,6 +9,8 @@ import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoun
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.CommentMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
+import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
+import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsUser;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,6 +41,7 @@ public class CommentController {
      */
     @PostMapping
     @Operation(description = "Добавить новый комментарий к публикации", summary = "Добавить новый комментарий к публикации")
+    @IsUser
     public CommentResponseDto createComment(@RequestBody @Valid CreateCommentRequestDto request,
                                             @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
         return commentMapper.toCommentResponseDto(
@@ -72,6 +75,7 @@ public class CommentController {
      */
     @PutMapping
     @Operation(description = "Изменить содержимое комментария", summary = "Изменить содержимое комментария")
+    @IsUser
     public CommentResponseDto updateComment(@RequestBody @Valid ChangeCommentRequestDto request) throws EntityModelNotFoundException {
         return commentMapper.toCommentResponseDto(
                 commentService.updateComment(commentMapper.fromChangeCommentRequestDto(request))
@@ -86,6 +90,7 @@ public class CommentController {
      */
     @DeleteMapping("/{id}")
     @Operation(description = "Удалить комментарий по id", summary = "Удалить комментарий по id")
+    @IsAdmin
     public void deleteComment(@PathVariable
                               @Min(value = 1, message = "Id комментария не может быть меньше 1")
                               @NotNull(message = "Id комментария не может быть пустым")

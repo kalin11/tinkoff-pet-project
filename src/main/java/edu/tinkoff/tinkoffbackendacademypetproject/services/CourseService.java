@@ -31,6 +31,6 @@ public class CourseService {
     }
 
     public CourseEntity getCourse(Integer id) throws EntityModelNotFoundException {
-        return courseRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Курса", "id", id.longValue()));
+        return courseRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Курса", "id", Long.toString(id)));
     }
 }

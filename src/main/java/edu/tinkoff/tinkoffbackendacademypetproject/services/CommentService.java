@@ -1,6 +1,5 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.BannedAccountException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentEntity;
@@ -11,8 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -21,17 +18,13 @@ public class CommentService {
 
     @Transactional
     public CommentEntity createComment(CommentEntity comment, Account account) throws EntityModelNotFoundException {
-        if (!account.isBanned()) {
-            comment.setPublication(publicationService.getPublication(comment.getPublication().getId()));
-            comment.setAccount(account);
-            return commentRepository.save(comment);
-        } else {
-            throw new BannedAccountException();
-        }
+        comment.setPublication(publicationService.getPublication(comment.getPublication().getId()));
+        comment.setAccount(account);
+        return commentRepository.save(comment);
     }
 
     public CommentEntity getComment(Long id) throws EntityModelNotFoundException {
-        return commentRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Комментария", "id", id));
+        return commentRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Комментария", "id", Long.toString(id)));
     }
 
     @Transactional
@@ -49,9 +42,4 @@ public class CommentService {
     public Page<CommentEntity> getCommentsOnThePublication(Integer pageNumber, Integer pageSize, Long publicationId) {
         return commentRepository.findByPublication_Id(publicationId, PageRequest.of(pageNumber, pageSize));
     }
-
-    public List<CommentEntity> findAllByAccountId(Long id) {
-        return commentRepository.findAllByAccount_Id(id);
-    }
-
 }

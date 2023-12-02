@@ -9,6 +9,8 @@ import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoun
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PublicationMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
+import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
+import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsUser;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.PublicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,6 +41,7 @@ public class PublicationController {
      */
     @PostMapping(consumes = {"multipart/form-data"})
     @Operation(description = "Добавить новую публикацию", summary = "Добавить новую публикацию")
+    @IsUser
     public PublicationResponseDto createPublication(@ModelAttribute @Valid CreatePublicationRequestDto request,
                                                     @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
         return publicationMapper.toPublicationResponseDto(
@@ -72,6 +75,7 @@ public class PublicationController {
      */
     @DeleteMapping("/{id}")
     @Operation(description = "Удалить публикацию по id", summary = "Удалить публикацию по id")
+    @IsAdmin
     public void deletePublication(@PathVariable
                                   @Min(value = 1, message = "Id публикации не может быть меньше 1")
                                   @NotNull(message = "Id публикации не может быть пустой")

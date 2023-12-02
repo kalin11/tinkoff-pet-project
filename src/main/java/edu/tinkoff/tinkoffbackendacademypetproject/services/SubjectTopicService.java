@@ -27,7 +27,7 @@ public class SubjectTopicService {
 
 
     public SubjectTopicEntity getSubjectTopic(Long id) throws EntityModelNotFoundException {
-        return subjectTopicRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Топика", "id", id));
+        return subjectTopicRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Топика", "id", Long.toString(id)));
     }
 
     @Transactional

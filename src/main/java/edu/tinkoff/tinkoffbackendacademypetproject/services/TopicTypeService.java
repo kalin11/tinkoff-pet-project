@@ -29,6 +29,6 @@ public class TopicTypeService {
     }
 
     public TopicTypeEntity getTopicType(Long id) throws EntityModelNotFoundException {
-        return topicRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Типа топика", "id", id));
+        return topicRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Типа топика", "id", Long.toString(id)));
     }
 }

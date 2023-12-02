@@ -42,7 +42,7 @@ public class PublicationService {
     }
 
     public PublicationEntity getPublication(Long id) throws EntityModelNotFoundException {
-        return publicationRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Публикации", "id", id));
+        return publicationRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Публикации", "id", Long.toString(id)));
     }
 
     @Transactional
@@ -53,9 +53,4 @@ public class PublicationService {
     public Page<PublicationEntity> getPublicationsInOneCategory(Integer pageNumber, Integer pageSize, Long subjectTopicId) {
         return publicationRepository.findBySubjectTopic_Id(subjectTopicId, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
-
-    public List<PublicationEntity> getAllByAccountId(Long id) {
-        return publicationRepository.findAllByAccount_Id(id);
-    }
-
 }
