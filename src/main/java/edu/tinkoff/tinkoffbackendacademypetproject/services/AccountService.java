@@ -8,6 +8,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepositor
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class AccountService {
     private final PhotoService photoService;
 
     public Page<Account> getAllUsers(Integer pageNumber, Integer pageSize) {
-        return accountRepository.findByRole(Role.ROLE_USER, PageRequest.of(pageNumber, pageSize));
+        return accountRepository.findByRole(Role.ROLE_USER, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
 
     @Transactional

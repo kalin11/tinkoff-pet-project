@@ -29,7 +29,7 @@ public class AuthController {
     public AuthResponseDto registerUserAccount(@RequestBody @Valid AccountRegistrationRequestDto request, HttpServletResponse response) {
         var answer = authService.register(request.email().trim(), request.nickname().trim(), request.password().trim());
         addCookie(answer.getSecond(), response);
-        return new AuthResponseDto(answer.getFirst().getEmail(), answer.getFirst().getRole().getDescription());
+        return new AuthResponseDto(answer.getFirst().getNickname(), answer.getFirst().getRole().getDescription());
     }
 
     @PostMapping("/login")
@@ -37,7 +37,7 @@ public class AuthController {
     public AuthResponseDto loginUserAccount(@RequestBody @Valid AccountLoginRequestDto request, HttpServletResponse response) {
         var answer = authService.login(request.email().trim(), request.password().trim());
         addCookie(answer.getSecond(), response);
-        return new AuthResponseDto(answer.getFirst().getEmail(), answer.getFirst().getRole().getDescription());
+        return new AuthResponseDto(answer.getFirst().getNickname(), answer.getFirst().getRole().getDescription());
     }
 
     private void addCookie(String token, HttpServletResponse response) {

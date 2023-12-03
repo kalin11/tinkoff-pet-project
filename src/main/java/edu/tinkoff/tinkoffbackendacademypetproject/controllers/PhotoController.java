@@ -17,7 +17,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Фото", description = "Работа с фото")
-@RequestMapping("/v1/photo")
+@RequestMapping("/v1/photos")
 public class PhotoController {
     private final PhotoService photoService;
 

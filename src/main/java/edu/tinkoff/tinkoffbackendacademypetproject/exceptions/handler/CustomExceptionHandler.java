@@ -97,6 +97,9 @@ public class CustomExceptionHandler {
         return new ApiErrorResponse(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
+    // todo 
+    //  обсудить с архитектором
+    //  вспомнить сценарий когда 403 должна быть, а выдает 400
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApiErrorResponse handleRuntimeException(Exception e) {

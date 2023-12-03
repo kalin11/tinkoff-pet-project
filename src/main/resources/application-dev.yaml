@@ -24,8 +24,8 @@ jwt:
   secret: 77397A24432646294A404E635266556A586E3272357538782F4125442A472D4B
   issuer: daniil
 storage:
-  location: D:\files
-  location-for-photos: D:\photos
+  location: /home/kalin/IdeaProjects/tinkoff-backend-academy-pet-project/files
+  location-for-photos: /home/kalin/IdeaProjects/tinkoff-backend-academy-pet-project/prfile-photos
 cors:
   allowed-origin: http://localhost:3000
 admin:

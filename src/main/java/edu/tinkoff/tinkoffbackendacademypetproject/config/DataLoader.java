@@ -9,7 +9,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Component
 @RequiredArgsConstructor
@@ -37,7 +37,7 @@ public class DataLoader implements ApplicationRunner {
                         null,
                         null,
                         null,
-                        LocalDateTime.now(),
+                        LocalDate.now(),
                         false,
                         Role.ROLE_ADMIN,
                         null,

@@ -10,9 +10,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-//todo
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
 
@@ -22,7 +21,7 @@ public interface AccountMapper {
     }
 
     @Named("getDate")
-    static String getDate(LocalDateTime dateTime) {
+    static String getDate(LocalDate dateTime) {
         return dateTime == null ? null : dateTime.toString();
     }
 
