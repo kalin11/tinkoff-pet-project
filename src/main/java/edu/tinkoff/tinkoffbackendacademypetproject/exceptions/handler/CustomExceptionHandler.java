@@ -5,6 +5,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.*;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
+import org.quartz.SchedulerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,6 +106,18 @@ public class CustomExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApiErrorResponse handleRuntimeException(Exception e) {
         return new ApiErrorResponse("Упсс, что-то пошло не так/ " + e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SchedulerException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ApiErrorResponse handleSchedulerException(SchedulerException e) {
+        return new ApiErrorResponse("Не удалось изменить время проверки", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ParseException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ApiErrorResponse handleParseException(ParseException e) {
+        return new ApiErrorResponse("Упсс, что-то пошло не так/ " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
