@@ -42,5 +42,16 @@ public interface AccountMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "birthDate", source = "birthDate", qualifiedByName = "getBirthDate")
     Account fromSaveInformationAboutAccountRequestDto(SaveInformationAboutAccountRequestDto saveInformationAboutAccountRequestDto);
+
+    @Named("getBirthDate")
+    static LocalDate getBirthDate(String s) {
+        try {
+            return LocalDate.parse(s);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
 }

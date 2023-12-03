@@ -31,10 +31,8 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(email, password)
             );
 
-            Account account = accountRepository.findByEmail(email);
-            if (account == null) {
-                throw new LoginFailException();
-            }
+            Account account = accountRepository.findByEmail(email).orElseThrow(LoginFailException::new);
+
             if (account.getIsBanned()) {
                 throw new BannedAccountException();
             }
@@ -46,10 +44,10 @@ public class AuthService {
 
     @Transactional
     public Pair<Account, String> register(String email, String nickname, String password) throws AccountAlreadyExistException {
-        if (accountRepository.findByEmail(email) != null) {
+        if (accountRepository.findByEmail(email).isPresent()) {
             throw new AccountAlreadyExistException("почтой", email);
         }
-        if (accountRepository.findByNickname(nickname) != null) {
+        if (accountRepository.findByNickname(nickname).isPresent()) {
             throw new AccountAlreadyExistException("ником", nickname);
         }
         var account = new Account();
@@ -63,7 +61,7 @@ public class AuthService {
 
     @Transactional
     public void registerAdmin(Account account) throws AccountAlreadyExistException {
-        if (accountRepository.findByEmail(account.getEmail()) == null) {
+        if (accountRepository.findByEmail(account.getEmail()).isEmpty()) {
             account.setPassword(passwordEncoder.encode(account.getPassword()));
             accountRepository.save(account);
         }

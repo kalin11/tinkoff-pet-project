@@ -1,6 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.config.StorageProperties;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.StorageException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.StorageFileNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.ProfilePictureEntity;
@@ -94,7 +95,10 @@ public class PhotoService implements StorageService {
 
     @Override
     public String getInitialFileName(String photoName) {
-        return photoRepository.findByPhotoNameInDirectory(photoName).getInitialPhotoName();
+        ProfilePictureEntity picture = photoRepository.findByPhotoNameInDirectory(photoName).orElseThrow(
+                () -> new EntityModelNotFoundException("Фото профиля", "именем", photoName)
+        );
+        return picture.getInitialPhotoName();
     }
 
     public void delete(Long id) {

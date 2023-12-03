@@ -40,7 +40,12 @@ public class AccountService {
 
     @Transactional
     public Account saveInformationAboutAccount(Account information, MultipartFile photo) throws EntityModelNotFoundException {
-        var accountAuth = accountRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        var accountAuth = accountRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(
+                () -> new EntityModelNotFoundException(
+                        "Пользователя",
+                        "почтой",
+                        SecurityContextHolder.getContext().getAuthentication().getName())
+        );
         if (accountAuth.getNickname().equals(information.getNickname())) {
             accountAuth.setDescription(information.getDescription());
             accountAuth.setFirstName(information.getFirstName());
@@ -65,10 +70,8 @@ public class AccountService {
 
     @Transactional
     public Account getAccount(String nickname) throws EntityModelNotFoundException {
-        try {
-            return accountRepository.findByNickname(nickname);
-        } catch (Exception e) {
-            throw new EntityModelNotFoundException("Пользователя", "nickname", nickname);
-        }
+        return accountRepository.findByNickname(nickname).orElseThrow(() ->
+                new EntityModelNotFoundException("Пользователя", "nickname", nickname)
+        );
     }
 }
