@@ -74,4 +74,11 @@ public class AccountService {
                 new EntityModelNotFoundException("Пользователя", "nickname", nickname)
         );
     }
+
+    @Transactional
+    public Account getAccountByEmail(String email) throws EntityModelNotFoundException {
+        return accountRepository.findByEmail(email).orElseThrow(() ->
+                new EntityModelNotFoundException("Пользователя", "почтой", email)
+        );
+    }
 }

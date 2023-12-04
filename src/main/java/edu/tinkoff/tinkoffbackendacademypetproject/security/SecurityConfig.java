@@ -1,5 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.security;
 
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +46,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            JwtAuthenticationFilter jwtAuthenticationFilter,
+                                           BannedPersonFilter banCheckFilter,
                                            AuthenticationProvider authenticationProvider) throws Exception {
         CookieClearingLogoutHandler cookies = new CookieClearingLogoutHandler("token");
         return http
@@ -58,12 +60,20 @@ public class SecurityConfig {
                 .sessionManagement(managementConfigurer -> managementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(banCheckFilter, JwtAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .logout(logout -> logout
                         .logoutUrl("/v1/auth/logout")
                         .addLogoutHandler(cookies)
-                        .logoutSuccessHandler(((request, response, authentication) ->
-                                SecurityContextHolder.clearContext())
+                        .logoutSuccessHandler(((request, response, authentication) -> {
+                                    Cookie cookie = new Cookie("token", null);
+                                    cookie.setSecure(true);
+                                    cookie.setPath("/");
+                                    cookie.setMaxAge(0);
+                                    response.addCookie(cookie);
+                                    SecurityContextHolder.clearContext();
+                                }
+                                )
                         )
                 )
                 .build();
