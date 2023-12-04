@@ -3,6 +3,8 @@ package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -25,8 +27,11 @@ public class FileController {
 
     @GetMapping("/{filename}")
     @Operation(description = "Достать файл из папки", summary = "Достать файл из папки")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно получен файл из папки"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так")
+    })
     public ResponseEntity<Resource> serveFile(@PathVariable
-                                              @Valid
                                               @Schema(description = "Название файла в папке", example = "obi.jpg")
                                               @Size(max = 400, message = "Слишком длинное название для файла")
                                               @NotBlank(message = "Название файла не может быть пустым")
@@ -39,5 +44,4 @@ public class FileController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + storageService.getInitialFileName(filename) + "\"").body(file);
     }
-
 }

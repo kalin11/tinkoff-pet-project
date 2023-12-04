@@ -3,6 +3,8 @@ package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.PhotoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -25,12 +27,15 @@ public class PhotoController {
             value = "/{filename}",
             produces = MediaType.IMAGE_JPEG_VALUE
     )
-    @Operation(description = "Достать файл из папки", summary = "Достать файл из папки")
+    @Operation(description = "Достать фотографию из папки", summary = "Достать фотографию из папки")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно достали фотографию"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так")
+    })
     public @ResponseBody byte[] getImage(@PathVariable
-                                         @Valid
-                                         @Schema(description = "Название файла в папке", example = "obi.jpg")
-                                         @Size(max = 400, message = "Слишком длинное название для файла")
-                                         @NotBlank(message = "Название файла не может быть пустым")
+                                         @Schema(description = "Название фотографии в папке", example = "obi.jpg")
+                                         @Size(max = 400, message = "Слишком длинное название для фотографии")
+                                         @NotBlank(message = "Название фотографии не может быть пустым")
                                          String filename) throws IOException {
         return IOUtils.toByteArray(photoService.loadAsResource(filename).getInputStream());
     }

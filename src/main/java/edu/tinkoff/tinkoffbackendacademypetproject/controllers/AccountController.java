@@ -21,11 +21,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
-//todo
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Аккаунты", description = "Работа с аккаунтами")
@@ -36,7 +36,7 @@ public class AccountController {
     private final AccountMapper accountMapper;
 
     @GetMapping
-    @Operation(description = "Получение админом списка всех пользователей")
+    @Operation(description = "Получение админом списка всех пользователей", summary = "Получение админом списка всех пользователей")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешно получение всего списка пользователей"),
             @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
@@ -51,7 +51,7 @@ public class AccountController {
     }
 
     @PostMapping("/{id}/ban")
-    @Operation(description = "Удаление пользователя")
+    @Operation(description = "Удаление пользователя", summary = "Удаление пользователя")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Успешно удален пользователь"),
             @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
@@ -59,7 +59,6 @@ public class AccountController {
     })
     @IsAdmin
     public StatusAccountResponseDto banUser(@PathVariable
-                                            @Valid
                                             @Schema(description = "Id пользователя", example = "1")
                                             @Min(1)
                                             @NotNull
@@ -68,15 +67,14 @@ public class AccountController {
     }
 
     @PostMapping("/{id}/unban")
-    @Operation(description = "Возвращение пользователя")
+    @Operation(description = "Возвращение пользователя", summary = "Возвращение пользователя")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Успешно удален пользователь"),
+            @ApiResponse(responseCode = "204", description = "Успешно возвращен пользователь"),
             @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
             @ApiResponse(responseCode = "403", description = "Недостаточно прав")
     })
     @IsAdmin
     public StatusAccountResponseDto unbanUser(@PathVariable
-                                              @Valid
                                               @Schema(description = "Id пользователя", example = "1")
                                               @Min(1)
                                               @NotNull
@@ -85,17 +83,26 @@ public class AccountController {
     }
 
     @GetMapping(value = "/{nickname}")
-    @Operation(description = "Получение информации о пользователе")
+    @Operation(description = "Получение информации о пользователе", summary = "Получение информации о пользователе")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Информация успешно получена"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
+    })
     public AccountResponseDto getAccount(@PathVariable
-                                         @Valid
-                                         @Schema(description = "Nickname пользователя", example = "dan")
+                                         @Schema(description = "Nickname пользователя", example = "admin")
+                                         @Size(max = 150, message = "Слишком длинный nickname")
                                          @NotBlank
                                          String nickname) throws EntityModelNotFoundException {
         return accountMapper.toAccountResponseDto(accountService.getAccount(nickname));
     }
 
     @PutMapping(consumes = {"multipart/form-data"})
-    @Operation(description = "Сохранение информации о пользователе")
+    @Operation(description = "Сохранение информации о пользователе", summary = "Сохранение информации о пользователе")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Информация успешно сохранена"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
+            @ApiResponse(responseCode = "403", description = "Недостаточно прав")
+    })
     @IsUser
     public AccountResponseDto saveInfoAboutAccount(@ModelAttribute @Valid SaveInformationAboutAccountRequestDto request) throws EntityModelNotFoundException {
         return accountMapper.toAccountResponseDto(accountService.saveInformationAboutAccount(

@@ -10,7 +10,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class PublicationsInOneCategoryRequestDto extends PageRequestDto {
-    @JsonProperty("subject_topic_id")
     @Min(value = 1, message = "Id топика не может быть меньше 1")
     @NotNull(message = "Id топика не может быть пустым")
     @Schema(description = "Id топика", example = "1")

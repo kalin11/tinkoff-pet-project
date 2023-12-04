@@ -6,6 +6,8 @@ import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.AuthResponseDto
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.AccountMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,6 +28,10 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(description = "Зарегистрировать нового пользователя", summary = "Зарегистрировать нового пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно зарегистрирован новый пользователь"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так")
+    })
     public AuthResponseDto registerUserAccount(@RequestBody @Valid AccountRegistrationRequestDto request, HttpServletResponse response) {
         var answer = authService.register(request.email().trim(), request.nickname().trim(), request.password().trim());
         addCookie(answer.getSecond(), response);
@@ -34,6 +40,10 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(description = "Войти на сайт", summary = "Войти на сайт")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно вошел на сайт"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так")
+    })
     public AuthResponseDto loginUserAccount(@RequestBody @Valid AccountLoginRequestDto request, HttpServletResponse response) {
         var answer = authService.login(request.email().trim(), request.password().trim());
         addCookie(answer.getSecond(), response);
