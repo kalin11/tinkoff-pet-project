@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TopicType {
+public class TopicTypeEntity {
     /**
      * Идентификатор топика
      */
@@ -36,5 +36,5 @@ public class TopicType {
      * Список топиков с данным типом
      */
     @OneToMany(mappedBy = "type", fetch = FetchType.LAZY)
-    private List<SubjectTopic> subjectTopics;
+    private List<SubjectTopicEntity> subjectTopics;
 }

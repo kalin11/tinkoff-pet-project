@@ -1,46 +1,89 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.AccountAlreadyExistException;
+import com.github.dockerjava.api.exception.UnauthorizedException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.BannedAccountException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.NotEnoughRightsException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
-import edu.tinkoff.tinkoffbackendacademypetproject.security.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-public class AccountService implements UserDetailsService {
+public class AccountService {
     private final AccountRepository accountRepository;
-    private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
+    private final PhotoService photoService;
 
-    @Transactional
-    public String register(Account account) throws AccountAlreadyExistException {
-        if (accountRepository.findByEmail(account.getEmail()) != null) {
-            throw new AccountAlreadyExistException(account.getEmail());
-        }
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
-        account.setRole(Role.ROLE_USER);
-        return jwtService.generateToken(accountRepository.save(account));
+    public Page<Account> getAllUsers(Integer pageNumber, Integer pageSize) {
+        return accountRepository.findByRole(Role.ROLE_USER, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
 
     @Transactional
-    public void registerAdmin(Account account) throws AccountAlreadyExistException {
-        if (accountRepository.findByEmail(account.getEmail()) == null) {
-            account.setPassword(passwordEncoder.encode(account.getPassword()));
-            accountRepository.save(account);
-        }
+    public Account banUserById(Long id) throws EntityModelNotFoundException {
+        var account = accountRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Пользователя", "id", Long.toString(id)));
+        account.setIsBanned(true);
+        return accountRepository.save(account);
     }
 
     @Transactional
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return accountRepository.findByEmail(email);
+    public Account unbanUserById(Long id) throws EntityModelNotFoundException {
+        var account = accountRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Пользователя", "id", Long.toString(id)));
+        account.setIsBanned(false);
+        return accountRepository.save(account);
+    }
+
+    @Transactional
+    public Account saveInformationAboutAccount(Account information, MultipartFile photo) throws EntityModelNotFoundException {
+        var accountAuth = accountRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(
+                () -> new EntityModelNotFoundException(
+                        "Пользователя",
+                        "почтой",
+                        SecurityContextHolder.getContext().getAuthentication().getName())
+        );
+        if(accountAuth.getIsBanned()) {
+            throw new BannedAccountException();
+        }
+        if (accountAuth.getNickname().equals(information.getNickname())) {
+            accountAuth.setDescription(information.getDescription());
+            accountAuth.setFirstName(information.getFirstName());
+            accountAuth.setLastName(information.getLastName());
+            accountAuth.setMiddleName(information.getMiddleName());
+            accountAuth.setBirthDate(information.getBirthDate());
+            if (photo != null) {
+                var photoInProfile = photoService.store(photo);
+                if (accountAuth.getProfilePicture() != null) {
+                    accountAuth.getProfilePicture().setPhotoNameInDirectory(photoInProfile.getPhotoNameInDirectory());
+                    accountAuth.getProfilePicture().setInitialPhotoName(photoInProfile.getInitialPhotoName());
+                } else {
+                    photoInProfile.setAccount(accountAuth);
+                    accountAuth.setProfilePicture(photoInProfile);
+                }
+            }
+        } else {
+            throw new NotEnoughRightsException();
+        }
+        return accountRepository.save(accountAuth);
+    }
+
+    @Transactional
+    public Account getAccount(String nickname) throws EntityModelNotFoundException {
+        return accountRepository.findByNickname(nickname).orElseThrow(() ->
+                new EntityModelNotFoundException("Пользователя", "nickname", nickname)
+        );
+    }
+
+    @Transactional
+    public Account getAccountByEmail(String email) throws EntityModelNotFoundException {
+        return accountRepository.findByEmail(email).orElseThrow(() ->
+                new EntityModelNotFoundException("Пользователя", "почтой", email)
+        );
     }
 }

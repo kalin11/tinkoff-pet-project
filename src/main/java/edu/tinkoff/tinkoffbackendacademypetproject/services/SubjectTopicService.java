@@ -3,7 +3,7 @@ package edu.tinkoff.tinkoffbackendacademypetproject.services;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.AlreadyExistsException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.SubjectTopicAlreadyExistsException;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopic;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopicEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.SubjectTopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,17 +26,17 @@ public class SubjectTopicService {
     private final TopicTypeService topicTypeService;
 
 
-    public SubjectTopic getSubjectTopic(Long id) throws EntityModelNotFoundException {
-        return subjectTopicRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Топика", "id", id));
+    public SubjectTopicEntity getSubjectTopic(Long id) throws EntityModelNotFoundException {
+        return subjectTopicRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Топика", "id", Long.toString(id)));
     }
 
     @Transactional
-    public Page<SubjectTopic> findAllBySubjectId(Integer pageNumber, Integer pageSize, Long subjectId) {
+    public Page<SubjectTopicEntity> findAllBySubjectId(Integer pageNumber, Integer pageSize, Long subjectId) {
         return subjectTopicRepository.findBySubject_Id(subjectId, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
 
     @Transactional
-    public SubjectTopic createSubjectTopic(SubjectTopic subjectTopic) throws EntityModelNotFoundException, AlreadyExistsException {
+    public SubjectTopicEntity createSubjectTopic(SubjectTopicEntity subjectTopic) throws EntityModelNotFoundException, AlreadyExistsException {
         subjectTopic.setSubject(subjectService.getSubject(subjectTopic.getSubject().getId()));
         subjectTopic.setType(topicTypeService.getTopicType(subjectTopic.getType().getId()));
         if (subjectTopicRepository.existsBySubjectAndType(subjectTopic.getSubject(), subjectTopic.getType())) {

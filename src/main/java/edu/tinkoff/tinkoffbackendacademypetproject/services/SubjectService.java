@@ -2,7 +2,7 @@ package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.SubjectAlreadyExistsException;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ public class SubjectService {
      */
 
     @Transactional
-    public Page<Subject> findAllByCourseNumber(Integer pageNumber, Integer pageSize, Integer courseNumber) {
+    public Page<SubjectEntity> findAllByCourseNumber(Integer pageNumber, Integer pageSize, Integer courseNumber) {
         return subjectRepository.findByCourse_CourseNumber(courseNumber, PageRequest.of(pageNumber, pageSize, Sort.by("name")));
     }
 
@@ -42,7 +42,7 @@ public class SubjectService {
      * @return список всех предметов
      */
     @Transactional
-    public List<Subject> findAll() {
+    public List<SubjectEntity> findAll() {
         return subjectRepository.findAll();
     }
 
@@ -54,7 +54,7 @@ public class SubjectService {
      * @throws SubjectAlreadyExistsException если предмет с таким названием уже существует
      */
     @Transactional
-    public Subject createSubject(Subject subject) throws SubjectAlreadyExistsException, EntityModelNotFoundException {
+    public SubjectEntity createSubject(SubjectEntity subject) throws SubjectAlreadyExistsException, EntityModelNotFoundException {
         if (subjectRepository.existsSubjectByNameAndCourse_CourseNumber(subject.getName(), subject.getCourse().getCourseNumber())) {
             throw new SubjectAlreadyExistsException(subject.getName());
         }
@@ -62,7 +62,7 @@ public class SubjectService {
         return subjectRepository.save(subject);
     }
 
-    public Subject getSubject(Long id) throws EntityModelNotFoundException {
-        return subjectRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Предмета", "id", id));
+    public SubjectEntity getSubject(Long id) throws EntityModelNotFoundException {
+        return subjectRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Предмета", "id", Long.toString(id)));
     }
 }

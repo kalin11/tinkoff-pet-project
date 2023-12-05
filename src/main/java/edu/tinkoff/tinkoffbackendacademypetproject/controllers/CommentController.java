@@ -5,13 +5,18 @@ import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.CommentsOnThePub
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.CreateCommentRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.BannedAccountException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.CommentMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
+import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
+import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsUser;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -30,31 +35,30 @@ public class CommentController {
     private final CommentMapper commentMapper;
     private final PageMapper pageMapper;
 
-    /**
-     * Creates a new comment for a given publication.
-     *
-     * @param request The request body containing the details of the comment to be created.
-     * @return The response containing the created comment.
-     * @throws EntityModelNotFoundException If the publication or user referenced in the comment request does not exist.
-     */
     @PostMapping
     @Operation(description = "Добавить новый комментарий к публикации", summary = "Добавить новый комментарий к публикации")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно добавлен новый комментарий к публикации"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
+            @ApiResponse(responseCode = "403", description = "Недостаточно прав")
+    })
+    @IsUser
     public CommentResponseDto createComment(@RequestBody @Valid CreateCommentRequestDto request,
                                             @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
+        if (account.getIsBanned()) {
+            throw new BannedAccountException();
+        }
         return commentMapper.toCommentResponseDto(
                 commentService.createComment(commentMapper.fromCreateCommentRequestDto(request), account)
         );
     }
 
-    /**
-     * Retrieves a comment by its ID.
-     *
-     * @param id The ID of the comment to retrieve.
-     * @return The response containing the retrieved comment.
-     * @throws EntityModelNotFoundException If the comment with the specified ID does not exist.
-     */
     @GetMapping("/{id}")
     @Operation(description = "Найти комментарий по id", summary = "Найти комментарий по id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно найден комментарий по id"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
+    })
     public CommentResponseDto getComment(@PathVariable
                                          @Min(value = 1, message = "Id комментария не может быть меньше 1")
                                          @NotNull(message = "Id комментария не может быть пустым")
@@ -63,29 +67,28 @@ public class CommentController {
         return commentMapper.toCommentResponseDto(commentService.getComment(id));
     }
 
-    /**
-     * Updates the content of a comment.
-     *
-     * @param request The request containing the updated comment data.
-     * @return The response containing the updated comment.
-     * @throws EntityModelNotFoundException If the comment to update does not exist.
-     */
     @PutMapping
     @Operation(description = "Изменить содержимое комментария", summary = "Изменить содержимое комментария")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно изменен комментарий"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
+            @ApiResponse(responseCode = "403", description = "Недостаточно прав")
+    })
+    @IsAdmin
     public CommentResponseDto updateComment(@RequestBody @Valid ChangeCommentRequestDto request) throws EntityModelNotFoundException {
         return commentMapper.toCommentResponseDto(
                 commentService.updateComment(commentMapper.fromChangeCommentRequestDto(request))
         );
     }
 
-    /**
-     * Deletes a comment by its ID.
-     *
-     * @param id The ID of the comment to delete.
-     * @throws EntityModelNotFoundException If the comment to delete does not exist.
-     */
     @DeleteMapping("/{id}")
     @Operation(description = "Удалить комментарий по id", summary = "Удалить комментарий по id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "203", description = "Успешно удален комментарий по id"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
+            @ApiResponse(responseCode = "403", description = "Недостаточно прав")
+    })
+    @IsAdmin
     public void deleteComment(@PathVariable
                               @Min(value = 1, message = "Id комментария не может быть меньше 1")
                               @NotNull(message = "Id комментария не может быть пустым")
@@ -94,15 +97,13 @@ public class CommentController {
         commentService.deleteComment(id);
     }
 
-    /**
-     * Retrieves all comments on a publication.
-     *
-     * @param request The request object containing the page number, page size, and publication ID.
-     * @return A PageResponseDto containing the list of comment response DTOs with pagination information.
-     */
     @GetMapping
     @Operation(description = "Получить все комментарии к публикации",
             summary = "Получить все комментарии к публикации")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно получены все комментарии к публикации"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так")
+    })
     public PageResponseDto<CommentResponseDto> getCommentsOnThePublication(@ParameterObject @Valid CommentsOnThePublicationRequestDto request) {
         return pageMapper.toPageResponseDto(commentService.getCommentsOnThePublication(request.getPageNumber(), request.getPageSize(), request.getPublicationId()),
                 commentMapper::toCommentResponseDto);

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ContextConfiguration(initializers = PostgresTestConfig.Initializer.class)
-public class CourseServiceTest {
+class CourseEntityServiceTest {
     @Autowired
     private CourseService courseService;
 
@@ -25,7 +25,7 @@ public class CourseServiceTest {
 
     @DisplayName("Find all courses")
     @Test
-    public void findAllCoursesTest() {
+    void findAllCoursesTest() {
         // given
 
         // when
@@ -42,7 +42,7 @@ public class CourseServiceTest {
     @DisplayName("Get course")
     @ParameterizedTest(name = "{index} - course {0} is find")
     @ValueSource(ints = {1, 2, 3})
-    public void getCourseTest(Integer id) throws EntityModelNotFoundException {
+    void getCourseTest(Integer id) throws EntityModelNotFoundException {
         // given
 
         // when
@@ -58,7 +58,7 @@ public class CourseServiceTest {
     @DisplayName("Get course with throw")
     @ParameterizedTest(name = "{index} - course {0} is not find")
     @ValueSource(ints = {7, 8, 9})
-    public void getCourseWithThrowTest(Integer id) {
+    void getCourseWithThrowTest(Integer id) {
         // given
 
         // when

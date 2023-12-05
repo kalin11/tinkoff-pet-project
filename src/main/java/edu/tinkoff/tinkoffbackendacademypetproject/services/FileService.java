@@ -1,9 +1,10 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.config.StorageProperties;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.StorageException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.StorageFileNotFoundException;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.File;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.FileEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -29,7 +30,7 @@ public class FileService implements StorageService {
     private Path rootLocation;
 
     @Override
-    public File store(MultipartFile file) {
+    public FileEntity store(MultipartFile file) {
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file.");
@@ -47,7 +48,7 @@ public class FileService implements StorageService {
                         StandardCopyOption.REPLACE_EXISTING);
             }
 
-            return new File(null, uuid + file.getOriginalFilename(), file.getOriginalFilename(), null);
+            return new FileEntity(null, uuid + file.getOriginalFilename(), file.getOriginalFilename(), null);
         } catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
         }
@@ -94,6 +95,9 @@ public class FileService implements StorageService {
 
     @Override
     public String getInitialFileName(String filename) {
-        return fileRepository.findByFileNameInDirectory(filename).getInitialFileName();
+        FileEntity file = fileRepository.findByFileNameInDirectory(filename).orElseThrow(
+                () -> new EntityModelNotFoundException("Файла", "именем", filename)
+        );
+        return file.getInitialFileName();
     }
 }

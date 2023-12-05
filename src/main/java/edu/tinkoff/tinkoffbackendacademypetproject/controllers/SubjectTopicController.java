@@ -4,19 +4,23 @@ import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicBySu
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SubjectTopicRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectTopicResponseDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.BannedAccountException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.SubjectTopicMapper;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopic;
-import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopicEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsUser;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.SubjectTopicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/subject-topics")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Топик", description = "Работа с топиками")
 public class SubjectTopicController {
     /**
      * Сервис для работы с топиками предметов
@@ -40,7 +45,8 @@ public class SubjectTopicController {
     private final PageMapper pageMapper;
 
     @GetMapping
-    @Operation(summary = "Получение всех топиков по предметам с указанным курсом и указанным названием предмета", description = "Получение всех топиков по предметам с указанным курсом и указанным названием предмета")
+    @Operation(summary = "Получение всех топиков по предметам с указанным курсом и указанным названием предмета",
+            description = "Получение всех топиков по предметам с указанным курсом и указанным названием предмета")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешное получение данных", content = @Content)
     })
@@ -53,11 +59,20 @@ public class SubjectTopicController {
         );
     }
 
-    @IsAdmin
+    @IsUser
     @PostMapping
-    public SubjectTopicResponseDto createSubjectTopic(@Valid @RequestBody SubjectTopicRequestDto dto) throws EntityModelNotFoundException {
-        SubjectTopic savedTopic = topicService.createSubjectTopic(subjectTopicMapper.getSubjectTopicFromDTO(dto));
+    @Operation(description = "Создание топика", summary = "Создание топика")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно создан топик"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
+            @ApiResponse(responseCode = "403", description = "Недостаточно прав")
+    })
+    public SubjectTopicResponseDto createSubjectTopic(@Valid @RequestBody SubjectTopicRequestDto dto,
+                                                      @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
+        if (account.getIsBanned()) {
+            throw new BannedAccountException();
+        }
+        SubjectTopicEntity savedTopic = topicService.createSubjectTopic(subjectTopicMapper.getSubjectTopicFromDTO(dto));
         return subjectTopicMapper.getSubjectTopicResponseDTO(savedTopic);
     }
-
 }

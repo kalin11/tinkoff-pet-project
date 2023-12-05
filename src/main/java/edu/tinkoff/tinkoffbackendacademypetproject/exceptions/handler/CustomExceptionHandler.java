@@ -1,13 +1,11 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.exceptions.handler;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.ApiErrorResponse;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.AlreadyExistsException;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.StorageException;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.StorageFileNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.*;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
+import org.quartz.SchedulerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +39,12 @@ public class CustomExceptionHandler {
         return new ApiErrorResponse(message, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(LoginFailException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    protected ApiErrorResponse handleLoginErrorException(Exception e) {
+        return new ApiErrorResponse(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(EntityModelNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiErrorResponse handleEntityModelNotFoundException(EntityModelNotFoundException ex) {
@@ -59,15 +64,15 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(SizeLimitExceededException.class)
-    @ResponseStatus(HttpStatus.REQUEST_ENTITY_TOO_LARGE)
+    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
     public ApiErrorResponse handleSizeLimitExceededException(SizeLimitExceededException ex) {
-        return new ApiErrorResponse("Передаваемые файлы превышают размер 5MB", HttpStatus.REQUEST_ENTITY_TOO_LARGE);
+        return new ApiErrorResponse("Передаваемые файлы превышают размер 5MB", HttpStatus.PAYLOAD_TOO_LARGE);
     }
 
     @ExceptionHandler(FileSizeLimitExceededException.class)
-    @ResponseStatus(HttpStatus.REQUEST_ENTITY_TOO_LARGE)
+    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
     public ApiErrorResponse handleFileSizeLimitExceededException(FileSizeLimitExceededException ex) {
-        return new ApiErrorResponse("Один из передаваемых файлов превышает размер 5MB", HttpStatus.REQUEST_ENTITY_TOO_LARGE);
+        return new ApiErrorResponse("Один из передаваемых файлов превышает размер 5MB", HttpStatus.PAYLOAD_TOO_LARGE);
     }
 
     /**
@@ -80,6 +85,39 @@ public class CustomExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApiErrorResponse handleSubjectAlreadyExistsException(Exception e) {
         return new ApiErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BannedAccountException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiErrorResponse handleBannedAccountException(Exception e) {
+        return new ApiErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotEnoughRightsException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ApiErrorResponse handleNotEnoughRightsException(Exception e) {
+        return new ApiErrorResponse(e.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    // todo 
+    //  обсудить с архитектором
+    //  вспомнить сценарий когда 403 должна быть, а выдает 400
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiErrorResponse handleRuntimeException(Exception e) {
+        return new ApiErrorResponse("Упсс, что-то пошло не так/ " + e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SchedulerException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ApiErrorResponse handleSchedulerException(SchedulerException e) {
+        return new ApiErrorResponse("Не удалось изменить время проверки", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ParseException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ApiErrorResponse handleParseException(ParseException e) {
+        return new ApiErrorResponse("Упсс, что-то пошло не так/ " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**

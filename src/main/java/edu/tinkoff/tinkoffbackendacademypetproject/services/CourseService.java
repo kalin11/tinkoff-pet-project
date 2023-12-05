@@ -1,7 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Course;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.CourseEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,11 +26,11 @@ public class CourseService {
      * @return список всех курсов
      */
     @Transactional
-    public List<Course> findAll() {
+    public List<CourseEntity> findAll() {
         return courseRepository.findAll();
     }
 
-    public Course getCourse(Integer id) throws EntityModelNotFoundException {
-        return courseRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Курса", "id", id.longValue()));
+    public CourseEntity getCourse(Integer id) throws EntityModelNotFoundException {
+        return courseRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Курса", "id", Long.toString(id)));
     }
 }

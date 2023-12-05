@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Publication {
+public class PublicationEntity {
     /**
      * Идентификатор поста
      */
@@ -48,19 +48,19 @@ public class Publication {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_topic_id", referencedColumnName = "id")
-    private SubjectTopic subjectTopic;
+    private SubjectTopicEntity subjectTopic;
 
     /**
      * Вложенные файлы в пост
      */
     @OneToMany(mappedBy = "publication", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<File> files;
+    private List<FileEntity> files;
 
     /**
      * Комментарии к посту
      */
     @OneToMany(mappedBy = "publication", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Comment> comments;
+    private List<CommentEntity> comments;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")

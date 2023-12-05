@@ -2,8 +2,8 @@ package edu.tinkoff.tinkoffbackendacademypetproject.service;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.config.PostgresTestConfig;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopic;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopicEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CourseRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.SubjectRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.SubjectTopicRepository;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ContextConfiguration(initializers = PostgresTestConfig.Initializer.class)
-public class SubjectTopicServiceTest {
+class SubjectEntityTopicServiceTest {
     @Autowired
     private SubjectTopicService subjectTopicService;
 
@@ -47,7 +47,7 @@ public class SubjectTopicServiceTest {
 
     @BeforeEach
     @AfterEach
-    public void clear() {
+    void clear() {
         subjectTopicRepository.deleteAll();
         jdbcTemplate.execute("ALTER SEQUENCE subject_topic_pk_seq RESTART");
         subjectRepository.deleteAll();
@@ -60,7 +60,7 @@ public class SubjectTopicServiceTest {
             "0, 50, 2",
             "0, 50, 3"
     })
-    public void findAllBySubjectIdTest(Integer pageNumber, Integer pageSize, Long subjectId) {
+    void findAllBySubjectIdTest(Integer pageNumber, Integer pageSize, Long subjectId) {
         // given
         createSubjects(1);
         createSubjectTopics(subjectId);
@@ -82,10 +82,10 @@ public class SubjectTopicServiceTest {
             "1, 1",
             "2, 3"
     })
-    public void createSubjectTopicTest(Long topicId, Long subjectId) throws EntityModelNotFoundException {
+    void createSubjectTopicTest(Long topicId, Long subjectId) throws EntityModelNotFoundException {
         // given
         createSubjects(1);
-        var subjectTopicGiven = new SubjectTopic(null, topicRepository.findById(topicId).get(), subjectRepository.findById(subjectId).get(), null);
+        var subjectTopicGiven = new SubjectTopicEntity(null, topicRepository.findById(topicId).get(), subjectRepository.findById(subjectId).get(), null);
 
         // when
         subjectTopicService.createSubjectTopic(subjectTopicGiven);
@@ -102,7 +102,7 @@ public class SubjectTopicServiceTest {
     @DisplayName("Get subjectTopic")
     @ParameterizedTest(name = "{index} - subjectTopic {0} is find")
     @ValueSource(longs = {1, 2})
-    public void getSubjectTopicTest(Long id) throws EntityModelNotFoundException {
+    void getSubjectTopicTest(Long id) throws EntityModelNotFoundException {
         // given
         createSubjects(1);
         createSubjectTopics(1L);
@@ -122,7 +122,7 @@ public class SubjectTopicServiceTest {
     @DisplayName("Get subjectTopic with throw")
     @ParameterizedTest(name = "{index} - subjectTopic {0} is not find")
     @ValueSource(longs = {1, 2, 3})
-    public void getSubjectTopicWithThrowTest(Long id) {
+    void getSubjectTopicWithThrowTest(Long id) {
         // given
 
         // when
@@ -136,13 +136,13 @@ public class SubjectTopicServiceTest {
     }
 
     private void createSubjects(Integer courseNumber) {
-        subjectRepository.save(new Subject(null, "Mathematics", null, courseRepository.findById(courseNumber).get()));
-        subjectRepository.save(new Subject(null, "Russian", null, courseRepository.findById(courseNumber).get()));
-        subjectRepository.save(new Subject(null, "Physics", null, courseRepository.findById(courseNumber).get()));
+        subjectRepository.save(new SubjectEntity(null, "Mathematics", null, courseRepository.findById(courseNumber).get()));
+        subjectRepository.save(new SubjectEntity(null, "Russian", null, courseRepository.findById(courseNumber).get()));
+        subjectRepository.save(new SubjectEntity(null, "Physics", null, courseRepository.findById(courseNumber).get()));
     }
 
     private void createSubjectTopics(Long subjectId) {
-        subjectTopicRepository.save(new SubjectTopic(null, topicRepository.findById(1L).get(), subjectRepository.findById(subjectId).get(), null));
-        subjectTopicRepository.save(new SubjectTopic(null, topicRepository.findById(2L).get(), subjectRepository.findById(subjectId).get(), null));
+        subjectTopicRepository.save(new SubjectTopicEntity(null, topicRepository.findById(1L).get(), subjectRepository.findById(subjectId).get(), null));
+        subjectTopicRepository.save(new SubjectTopicEntity(null, topicRepository.findById(2L).get(), subjectRepository.findById(subjectId).get(), null));
     }
 }

@@ -2,11 +2,12 @@ package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.TopicTypeResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.TopicMapper;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.TopicType;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.TopicTypeEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.TopicTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/topics")
 @RequiredArgsConstructor
-@Validated
+@Tag(name = "Типы топиков", description = "Работа с типами топиков")
 public class TopicController {
     /**
      * Сервис для работы с типами топиков
@@ -38,7 +39,7 @@ public class TopicController {
             @ApiResponse(responseCode = "200", description = "Успешно получен список всех типов топиков")
     })
     public List<TopicTypeResponseDto> findAll() {
-        List<TopicType> types = typeService.findAll();
+        List<TopicTypeEntity> types = typeService.findAll();
         return topicMapper.toListTopicResponseDTO(types);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,19 +30,40 @@ public class Account implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "full_name")
-    private String fullName;
+    @Column(name = "nickname")
+    private String nickname;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "middle_name")
+    private String middleName;
+
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+
+    @Column(name = "is_banned")
+    private Boolean isBanned;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
 
     @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Publication> publications;
+    private List<PublicationEntity> publications;
 
     @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Comment> comments;
+    private List<CommentEntity> comments;
 
+    @OneToOne(mappedBy = "account", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @PrimaryKeyJoinColumn
+    private ProfilePictureEntity profilePicture;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

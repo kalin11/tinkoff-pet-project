@@ -1,7 +1,9 @@
 package edu.tinkoff.tinkoffbackendacademypetproject;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.config.StorageProperties;
+import edu.tinkoff.tinkoffbackendacademypetproject.scheduler.SchedulerProperties;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.StorageService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,7 +11,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@EnableConfigurationProperties({StorageProperties.class})
+@EnableConfigurationProperties({StorageProperties.class, SchedulerProperties.class})
 public class TinkoffBackendAcademyPetProjectApplication {
 
     public static void main(String[] args) {
@@ -17,9 +19,11 @@ public class TinkoffBackendAcademyPetProjectApplication {
     }
 
     @Bean
-    CommandLineRunner init(StorageService storageService) {
+    CommandLineRunner init(@Qualifier("fileService") StorageService fileService,
+                           @Qualifier("photoService") StorageService photoService) {
         return (args) -> {
-            storageService.init();
+            fileService.init();
+            photoService.init();
         };
     }
 

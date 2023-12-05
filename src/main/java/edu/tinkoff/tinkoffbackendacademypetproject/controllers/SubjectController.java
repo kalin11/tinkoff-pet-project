@@ -7,13 +7,14 @@ import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectResponse
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.SubjectMapper;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.SubjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/subjects")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Предмет", description = "Работа с предметами")
 public class SubjectController {
     /**
      * Сервис для работы с предметами
@@ -69,12 +71,13 @@ public class SubjectController {
     @Operation(summary = "Создание нового предмета", description = "Создание нового предмета на каком-то курсе")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Предмет был успешно создан"),
-            @ApiResponse(responseCode = "400", description = "Такой предмет уже существует", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Такой предмет уже существует", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Недостаточно прав")
     })
 
     @IsAdmin
     public SubjectResponseDto createSubject(@Valid @RequestBody SubjectRequestDto dto) throws EntityModelNotFoundException {
-        Subject subject = subjectMapper.fromSubjectRequestDTO(dto);
+        SubjectEntity subject = subjectMapper.fromSubjectRequestDTO(dto);
         var savedSubject = subjectService.createSubject(subject);
         return subjectMapper.toSubjectResponseDTO(savedSubject);
     }

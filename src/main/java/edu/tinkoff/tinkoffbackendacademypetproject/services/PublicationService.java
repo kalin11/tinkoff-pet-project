@@ -2,8 +2,8 @@ package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.File;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Publication;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.FileEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.PublicationEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.PublicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,9 +24,9 @@ public class PublicationService {
     private final FileService fileService;
 
     @Transactional
-    public Publication createPublication(Publication publication, Account account, List<MultipartFile> files) throws EntityModelNotFoundException {
+    public PublicationEntity createPublication(PublicationEntity publication, Account account, List<MultipartFile> files) throws EntityModelNotFoundException {
         if (files != null) {
-            var filesInPublication = new ArrayList<File>();
+            var filesInPublication = new ArrayList<FileEntity>();
             for (var file : files) {
                 var fileInPublication = fileService.store(file);
                 fileInPublication.setPublication(publication);
@@ -41,8 +41,8 @@ public class PublicationService {
         return publicationRepository.save(publication);
     }
 
-    public Publication getPublication(Long id) throws EntityModelNotFoundException {
-        return publicationRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Публикации", "id", id));
+    public PublicationEntity getPublication(Long id) throws EntityModelNotFoundException {
+        return publicationRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Публикации", "id", Long.toString(id)));
     }
 
     @Transactional
@@ -50,8 +50,7 @@ public class PublicationService {
         publicationRepository.delete(getPublication(id));
     }
 
-    public Page<Publication> getPublicationsInOneCategory(Integer pageNumber, Integer pageSize, Long subjectTopicId) {
+    public Page<PublicationEntity> getPublicationsInOneCategory(Integer pageNumber, Integer pageSize, Long subjectTopicId) {
         return publicationRepository.findBySubjectTopic_Id(subjectTopicId, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
-
 }

@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Subject {
+public class SubjectEntity {
     /**
      * Идентификатор предмета
      */
@@ -36,12 +36,12 @@ public class Subject {
      * Список топиков у предмета
      */
     @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
-    private List<SubjectTopic> subjectTopics;
+    private List<SubjectTopicEntity> subjectTopics;
 
     /**
      * Курс, к которому относится предмет
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_number", referencedColumnName = "course_number")
-    private Course course;
+    private CourseEntity course;
 }

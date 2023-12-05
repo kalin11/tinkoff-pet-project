@@ -14,3 +14,15 @@ databaseChangeLog:
   - include:
       file: './2023/11/27-01-changelog.sql'
       relativeToChangelogFile: true
+  - include:
+      file: '././2023/11/30-01-changelog.sql'
+      relativeToChangelogFile: true
+  - include:
+      file: '././2023/12/01-01-changelog.sql'
+      relativeToChangelogFile: true
+  - include:
+      file: '././2023/12/02-01-changelog.sql'
+      relativeToChangelogFile: true
+  - include:
+      file: '././2023/12/03-01-changelog-scheduler.sql'
+      relativeToChangelogFile: true

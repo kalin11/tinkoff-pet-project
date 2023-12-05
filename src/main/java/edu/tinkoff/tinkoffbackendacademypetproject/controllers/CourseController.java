@@ -2,11 +2,12 @@ package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CourseResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.CourseMapper;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Course;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.CourseEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/courses")
 @RequiredArgsConstructor
-@Validated
+@Tag(name = "Курс", description = "Работа с курсами")
 public class CourseController {
     /**
      * Сервис для работы с курсами
@@ -43,7 +44,7 @@ public class CourseController {
             @ApiResponse(responseCode = "200", description = "Успешно получен список курсов")
     })
     public List<CourseResponseDto> getCourses() {
-        List<Course> courses = courseService.findAll();
+        List<CourseEntity> courses = courseService.findAll();
         return courseMapper.toListOfCourseResponseDTO(courses);
     }
 }

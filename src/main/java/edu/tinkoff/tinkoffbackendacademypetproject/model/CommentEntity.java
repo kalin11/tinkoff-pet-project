@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Comment {
+public class CommentEntity {
     /**
      * Идентификатор комментария
      */
@@ -32,6 +32,9 @@ public class Comment {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "is_anonymous")
+    private Boolean isAnonymous;
+
     /**
      * Дата создания комментария
      */
@@ -44,7 +47,7 @@ public class Comment {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publication_id", referencedColumnName = "id")
-    private Publication publication;
+    private PublicationEntity publication;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")

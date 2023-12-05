@@ -3,8 +3,8 @@ package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.CreatePublicationRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PublicationResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PublicationTitleAndIdResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Publication;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopic;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.PublicationEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopicEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -12,17 +12,17 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring", uses = {FileMapper.class})
 public interface PublicationMapper {
     @Named("emptySubjectTopicWithId")
-    static SubjectTopic emptySubjectTopicWithId(Long id) {
-        var subjectTopic = new SubjectTopic();
+    static SubjectTopicEntity emptySubjectTopicWithId(Long id) {
+        var subjectTopic = new SubjectTopicEntity();
         subjectTopic.setId(id);
         return subjectTopic;
     }
 
-    @Mapping(target = "fullName", source = "account.fullName")
-    PublicationResponseDto toPublicationResponseDto(Publication publication);
+    @Mapping(target = "nickname", source = "account.nickname")
+    PublicationResponseDto toPublicationResponseDto(PublicationEntity publication);
 
-    @Mapping(target = "fullName", source = "account.fullName")
-    PublicationTitleAndIdResponseDto toPublicationTitleAndIdResponseDto(Publication publication);
+    @Mapping(target = "nickname", source = "account.nickname")
+    PublicationTitleAndIdResponseDto toPublicationTitleAndIdResponseDto(PublicationEntity publication);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
@@ -30,6 +30,6 @@ public interface PublicationMapper {
     @Mapping(target = "files", ignore = true)
     @Mapping(target = "subjectTopic", qualifiedByName = "emptySubjectTopicWithId", source = "subjectTopicId")
     @Mapping(target = "account", ignore = true)
-    Publication fromCreatePublicationRequestDto(CreatePublicationRequestDto publication);
+    PublicationEntity fromCreatePublicationRequestDto(CreatePublicationRequestDto publication);
 
 }

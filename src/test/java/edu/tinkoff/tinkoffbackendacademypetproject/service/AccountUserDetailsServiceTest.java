@@ -5,7 +5,8 @@ import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.AccountAlreadyExis
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
-import edu.tinkoff.tinkoffbackendacademypetproject.services.AccountService;
+import edu.tinkoff.tinkoffbackendacademypetproject.services.AccountUserDetailsService;
+import edu.tinkoff.tinkoffbackendacademypetproject.services.AuthService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,13 +19,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ContextConfiguration(initializers = PostgresTestConfig.Initializer.class)
-public class AccountServiceTest {
+class AccountUserDetailsServiceTest {
     @Autowired
-    private AccountService accountService;
+    private AuthService authService;
+
+    @Autowired
+    private AccountUserDetailsService accountUserDetailsService;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -34,7 +40,7 @@ public class AccountServiceTest {
 
     @BeforeEach
     @AfterEach
-    public void clear() {
+    void clear() {
         accountRepository.deleteAll();
         jdbcTemplate.execute("ALTER SEQUENCE account_pk_seq RESTART");
     }
@@ -45,12 +51,10 @@ public class AccountServiceTest {
             "dan@dan.ru, 100248, Daniil Korshunov",
             "abc1@tink.com, 123, Oleg Tink"
     })
-    public void registerTest(String email, String password, String fullName) {
+    void registerTest(String email, String password, String nickname) {
         // given
-        var accountGiven = new Account(null, email, password, fullName, null, null, null);
-
         // when
-        accountService.register(accountGiven);
+        authService.register(email, nickname, password);
 
         // then
         var accounts = accountRepository.findAll();
@@ -58,7 +62,7 @@ public class AccountServiceTest {
         var account = accounts.get(0);
         assertEquals(1, account.getId());
         assertEquals(email, account.getEmail());
-        assertEquals(fullName, account.getFullName());
+        assertEquals(nickname, account.getNickname());
     }
 
     @DisplayName("Register account with throw")
@@ -67,32 +71,32 @@ public class AccountServiceTest {
             "dan@dan.ru, 100248, Daniil Korshunov",
             "abc1@tink.com, 123, Oleg Tink"
     })
-    public void registerWithThrowTest(String email, String password, String fullName) {
+    void registerWithThrowTest(String email, String password, String nickname) {
         // given
-        var accountGiven = new Account(null, email, password, fullName, Role.ROLE_USER, null, null);
+        var accountGiven = new Account(null, email, password, nickname, null, null, null, null, null, false, Role.ROLE_USER, null, null, null);
         accountRepository.save(accountGiven);
         accountGiven.setRole(null);
 
         // when
         var exception = assertThrows(
                 AccountAlreadyExistException.class,
-                () -> accountService.register(accountGiven)
+                () -> authService.register(email, password, nickname)
         );
 
         // then
-        assertEquals("Аккаунт с данной почтой: " + email + " уже существует", exception.getMessage());
+        assertEquals("Аккаунт с почтой: " + email + " уже существует", exception.getMessage());
     }
 
     @DisplayName("Load user by user name")
     @ParameterizedTest(name = "{index} - load user by user name {0}")
     @ValueSource(strings = {"dan@dan.ru", "daad@dddd.com"})
-    public void loadUserByUsernameTest(String email) {
+    void loadUserByUsernameTest(String email) {
         // given
-        var accountGiven = new Account(null, email, "123", "Daniil Korsh", Role.ROLE_USER, null, null);
+        var accountGiven = new Account(null, email, "123", "asdasda", null, null, null, null, null, false, Role.ROLE_USER, null, null, null);
         accountRepository.save(accountGiven);
 
         // when
-        var accountWhen = accountService.loadUserByUsername(email);
+        var accountWhen = accountUserDetailsService.loadUserByUsername(email);
 
         // then
         var account = accountRepository.findById(1L);
@@ -103,11 +107,11 @@ public class AccountServiceTest {
 
     @DisplayName("Register admin")
     @Test
-    public void registerAdminTest() {
+    void registerAdminTest() {
         // given
 
         // when
-        accountService.registerAdmin(new Account(null, "admin@admin.ru", "admin", "admin", Role.ROLE_ADMIN, null, null));
+        authService.registerAdmin(new Account(null, "admin@admin.ru", "admin", "admin", "example", "example", "example", null, null, false, Role.ROLE_ADMIN, null, null, null));
 
         // then
         var accounts = accountRepository.findAll();
@@ -115,7 +119,7 @@ public class AccountServiceTest {
         var account = accounts.get(0);
         assertEquals(1, account.getId());
         assertEquals("admin@admin.ru", account.getEmail());
-        assertEquals("admin", account.getFullName());
+        assertEquals("admin", account.getNickname());
     }
 }
 

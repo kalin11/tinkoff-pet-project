@@ -3,7 +3,7 @@ package edu.tinkoff.tinkoffbackendacademypetproject.service;
 import edu.tinkoff.tinkoffbackendacademypetproject.config.PostgresTestConfig;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.SubjectAlreadyExistsException;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Subject;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CourseRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.SubjectRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.SubjectService;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ContextConfiguration(initializers = PostgresTestConfig.Initializer.class)
-public class SubjectServiceTest {
+class SubjectEntityServiceTest {
     @Autowired
     private SubjectService subjectService;
 
@@ -40,7 +40,7 @@ public class SubjectServiceTest {
 
     @BeforeEach
     @AfterEach
-    public void clear() {
+    void clear() {
         subjectRepository.deleteAll();
         jdbcTemplate.execute("ALTER SEQUENCE subject_pk_seq RESTART");
     }
@@ -51,7 +51,7 @@ public class SubjectServiceTest {
             "0, 50, 2",
             "0, 50, 3"
     })
-    public void findAllByCourseNumberTest(Integer pageNumber, Integer pageSize, Integer courseNumber) {
+    void findAllByCourseNumberTest(Integer pageNumber, Integer pageSize, Integer courseNumber) {
         // given
         createSubjects(courseNumber);
 
@@ -68,7 +68,7 @@ public class SubjectServiceTest {
 
     @DisplayName("Find all subjects")
     @Test
-    public void findAllSubjectsTest() {
+    void findAllSubjectsTest() {
         // given
         createSubjects(1);
         createSubjects(2);
@@ -91,9 +91,9 @@ public class SubjectServiceTest {
             "Russian, 2",
             "Physics, 3"
     })
-    public void createSubjectTest(String name, Integer courseNumber) throws EntityModelNotFoundException {
+    void createSubjectTest(String name, Integer courseNumber) throws EntityModelNotFoundException {
         // given
-        var subjectGiven = new Subject(null, name, null, courseRepository.findById(courseNumber).get());
+        var subjectGiven = new SubjectEntity(null, name, null, courseRepository.findById(courseNumber).get());
 
         // when
         subjectService.createSubject(subjectGiven);
@@ -115,9 +115,9 @@ public class SubjectServiceTest {
             "Russian, 2",
             "Physics, 3"
     })
-    public void createSubjectWithThrowTest(String name, Integer courseNumber) throws EntityModelNotFoundException {
+    void createSubjectWithThrowTest(String name, Integer courseNumber) throws EntityModelNotFoundException {
         // given
-        var subjectGiven = new Subject(null, name, null, courseRepository.findById(courseNumber).get());
+        var subjectGiven = new SubjectEntity(null, name, null, courseRepository.findById(courseNumber).get());
         createSubjects(courseNumber);
 
         // when
@@ -133,7 +133,7 @@ public class SubjectServiceTest {
     @DisplayName("Get subject")
     @ParameterizedTest(name = "{index} - subject {0} is find")
     @ValueSource(longs = {1, 3})
-    public void getSubjectTest(Long id) throws EntityModelNotFoundException {
+    void getSubjectTest(Long id) throws EntityModelNotFoundException {
         // given
         createSubjects(1);
 
@@ -151,7 +151,7 @@ public class SubjectServiceTest {
     @DisplayName("Get subject with throw")
     @ParameterizedTest(name = "{index} - subject {0} is not find")
     @ValueSource(longs = {1, 2, 3})
-    public void getSubjectWithThrowTest(Long id) {
+    void getSubjectWithThrowTest(Long id) {
         // given
 
         // when
@@ -166,8 +166,8 @@ public class SubjectServiceTest {
 
 
     private void createSubjects(Integer courseNumber) {
-        subjectRepository.save(new Subject(null, "Mathematics", null, courseRepository.findById(courseNumber).get()));
-        subjectRepository.save(new Subject(null, "Russian", null, courseRepository.findById(courseNumber).get()));
-        subjectRepository.save(new Subject(null, "Physics", null, courseRepository.findById(courseNumber).get()));
+        subjectRepository.save(new SubjectEntity(null, "Mathematics", null, courseRepository.findById(courseNumber).get()));
+        subjectRepository.save(new SubjectEntity(null, "Russian", null, courseRepository.findById(courseNumber).get()));
+        subjectRepository.save(new SubjectEntity(null, "Physics", null, courseRepository.findById(courseNumber).get()));
     }
 }

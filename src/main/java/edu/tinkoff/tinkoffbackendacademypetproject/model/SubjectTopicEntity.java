@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class SubjectTopic {
+public class SubjectTopicEntity {
     /**
      * Идентификатор топика
      */
@@ -31,18 +31,18 @@ public class SubjectTopic {
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id", referencedColumnName = "id")
-    private TopicType type;
+    private TopicTypeEntity type;
 
     /**
      * Предмет, к которому относится топик
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
-    private Subject subject;
+    private SubjectEntity subject;
 
     /**
      * Посты, которые относятся к топику
      */
     @OneToMany(mappedBy = "subjectTopic", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
-    private List<Publication> publications;
+    private List<PublicationEntity> publications;
 }
