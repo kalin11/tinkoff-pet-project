@@ -121,7 +121,7 @@ class PublicationEntityServiceTest {
     private void createBeforeStart() {
         subjectRepository.save(new SubjectEntity(null, "Mathematics", null, courseRepository.findById(1).get()));
         subjectTopicRepository.save(new SubjectTopicEntity(null, topicRepository.findById(1L).get(), subjectRepository.findById(1L).get(), null));
-        accountRepository.save(new Account(null, "dan@dam.ru", "1234", "Daniil K", "example", "example", "example", LocalDateTime.now(), false, Role.ROLE_USER, null, null, null));
+        accountRepository.save(new Account(null, "dan@dam.ru", "1234", "Daniil K", null, null, null, null, null, false, Role.ROLE_USER, null, null, null));
     }
 
     private void createPublications(Long subjectTopicId) {

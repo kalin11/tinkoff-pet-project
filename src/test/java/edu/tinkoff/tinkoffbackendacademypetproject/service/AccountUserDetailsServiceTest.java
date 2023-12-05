@@ -53,10 +53,8 @@ class AccountUserDetailsServiceTest {
     })
     void registerTest(String email, String password, String nickname) {
         // given
-        var accountGiven = new Account(null, email, password, nickname, "example", "example", "example", LocalDateTime.now(), false, Role.ROLE_USER, null, null, null);
-
         // when
-        authService.register(accountGiven);
+        authService.register(email, nickname, password);
 
         // then
         var accounts = accountRepository.findAll();
@@ -75,18 +73,18 @@ class AccountUserDetailsServiceTest {
     })
     void registerWithThrowTest(String email, String password, String nickname) {
         // given
-        var accountGiven = new Account(null, email, password, nickname, "example", "example", "example", LocalDateTime.now(), false, Role.ROLE_USER, null, null, null);
+        var accountGiven = new Account(null, email, password, nickname, null, null, null, null, null, false, Role.ROLE_USER, null, null, null);
         accountRepository.save(accountGiven);
         accountGiven.setRole(null);
 
         // when
         var exception = assertThrows(
                 AccountAlreadyExistException.class,
-                () -> authService.register(accountGiven)
+                () -> authService.register(email, password, nickname)
         );
 
         // then
-        assertEquals("Аккаунт с данной почтой: " + email + " уже существует", exception.getMessage());
+        assertEquals("Аккаунт с почтой: " + email + " уже существует", exception.getMessage());
     }
 
     @DisplayName("Load user by user name")
@@ -94,7 +92,7 @@ class AccountUserDetailsServiceTest {
     @ValueSource(strings = {"dan@dan.ru", "daad@dddd.com"})
     void loadUserByUsernameTest(String email) {
         // given
-        var accountGiven = new Account(null, email, "", "", "example", "example", "example", LocalDateTime.now(), false, Role.ROLE_USER, null, null, null);
+        var accountGiven = new Account(null, email, "123", "asdasda", null, null, null, null, null, false, Role.ROLE_USER, null, null, null);
         accountRepository.save(accountGiven);
 
         // when
@@ -113,7 +111,7 @@ class AccountUserDetailsServiceTest {
         // given
 
         // when
-        authService.registerAdmin(new Account(null, "admin@admin.ru", "admin", "admin", "example", "example", "example", LocalDateTime.now(), false, Role.ROLE_ADMIN, null, null, null));
+        authService.registerAdmin(new Account(null, "admin@admin.ru", "admin", "admin", "example", "example", "example", null, null, false, Role.ROLE_ADMIN, null, null, null));
 
         // then
         var accounts = accountRepository.findAll();
