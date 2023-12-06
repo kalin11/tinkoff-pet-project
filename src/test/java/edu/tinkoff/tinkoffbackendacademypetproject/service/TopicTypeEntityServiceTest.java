@@ -1,5 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.service;
 
+import edu.tinkoff.tinkoffbackendacademypetproject.CommonAbstractTest;
 import edu.tinkoff.tinkoffbackendacademypetproject.config.PostgresTestConfig;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.TopicRepository;
@@ -9,14 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 @ContextConfiguration(initializers = PostgresTestConfig.Initializer.class)
-class TopicTypeEntityServiceTest {
+class TopicTypeEntityServiceTest extends CommonAbstractTest {
     @Autowired
     private TopicTypeService topicTypeService;
 
@@ -57,7 +56,7 @@ class TopicTypeEntityServiceTest {
 
     @DisplayName("Get topic with throw")
     @ParameterizedTest(name = "{index} - topic {0} is not find")
-    @ValueSource(longs = {4, 5, 6})
+    @ValueSource(longs = {5, 6})
     void getTopicWithThrowTest(Long id) {
         // given
 

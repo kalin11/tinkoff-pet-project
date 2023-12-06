@@ -53,13 +53,13 @@ public class PublicationEntity {
     /**
      * Вложенные файлы в пост
      */
-    @OneToMany(mappedBy = "publication", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "publication", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<FileEntity> files;
 
     /**
      * Комментарии к посту
      */
-    @OneToMany(mappedBy = "publication", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "publication", cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<CommentEntity> comments;
 
     @ManyToOne(fetch = FetchType.EAGER)

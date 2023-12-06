@@ -1,5 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.service;
 
+import edu.tinkoff.tinkoffbackendacademypetproject.CommonAbstractTest;
 import edu.tinkoff.tinkoffbackendacademypetproject.config.PostgresTestConfig;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.SubjectAlreadyExistsException;
@@ -15,7 +16,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,9 +23,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 @ContextConfiguration(initializers = PostgresTestConfig.Initializer.class)
-class SubjectEntityServiceTest {
+class SubjectEntityServiceTest extends CommonAbstractTest {
     @Autowired
     private SubjectService subjectService;
 

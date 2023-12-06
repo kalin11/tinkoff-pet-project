@@ -23,6 +23,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
     @Transactional
     public Pair<Account, String> login(String email, String password) {
@@ -33,7 +34,7 @@ public class AuthService {
 
             Account account = accountRepository.findByEmail(email).orElseThrow(LoginFailException::new);
 
-            if (account.getIsBanned()) {
+            if (Boolean.TRUE.equals(account.getIsBanned())) {
                 throw new BannedAccountException();
             }
             return Pair.of(account, jwtService.generateToken(account));
@@ -54,7 +55,7 @@ public class AuthService {
         account.setEmail(email);
         account.setNickname(nickname);
         account.setPassword(passwordEncoder.encode(password));
-        account.setRole(Role.ROLE_USER);
+        account.setRole(roleService.getRoleByName(Role.ROLE_USER));
         account.setIsBanned(false);
         return Pair.of(account, jwtService.generateToken(accountRepository.save(account)));
     }

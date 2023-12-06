@@ -1,6 +1,5 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.dto.requests;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.tinkoff.tinkoffbackendacademypetproject.validation.constraints.ValidEmail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

@@ -1,14 +1,14 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.AccountUpdateRoleRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.PageRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SaveInformationAboutAccountRequestDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.AccountResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.GetAllUserResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.StatusAccountResponseDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.*;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.RoleNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.AccountMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsUser;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.AccountService;
@@ -25,6 +25,7 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -109,5 +110,18 @@ public class AccountController {
                 accountMapper.fromSaveInformationAboutAccountRequestDto(request),
                 request.photo()
         ));
+    }
+
+    @PutMapping("/{id}/role")
+    @Operation(description = "Обновление роли у пользователя. Это может сделать только админ", summary = "Админ имеет возможность изменить роль пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно изменена роль пользователя"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
+            @ApiResponse(responseCode = "403", description = "Недостаточно прав")
+    })
+    @IsAdmin
+    public AccountUpdateRoleResponseDto updateAccountRole(@PathVariable @Valid @Min(0) Long id, @RequestBody @Valid AccountUpdateRoleRequestDto updateRoleRequest) throws RoleNotFoundException {
+        Account account = accountService.updateAccountRole(id, updateRoleRequest.roleId());
+        return accountMapper.toAccountUpdateRoleResponseDto(account);
     }
 }

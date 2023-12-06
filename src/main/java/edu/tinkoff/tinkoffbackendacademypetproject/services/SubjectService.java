@@ -65,4 +65,9 @@ public class SubjectService {
     public SubjectEntity getSubject(Long id) throws EntityModelNotFoundException {
         return subjectRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Предмета", "id", Long.toString(id)));
     }
+
+    @Transactional
+    public void deleteSubject(Long id) {
+        subjectRepository.deleteById(id);
+    }
 }

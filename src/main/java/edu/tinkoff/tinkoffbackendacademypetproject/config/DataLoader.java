@@ -1,8 +1,10 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.config;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.RoleNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.*;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.AuthService;
+import edu.tinkoff.tinkoffbackendacademypetproject.services.RoleService;
+import edu.tinkoff.tinkoffbackendacademypetproject.services.TopicTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -16,6 +18,8 @@ import java.time.LocalDate;
 public class DataLoader implements ApplicationRunner {
 
     private final AuthService authService;
+    private final RoleService roleService;
+    private final TopicTypeService topicTypeService;
 
     @Value("${admin.email}")
     private String adminEmail;
@@ -27,7 +31,9 @@ public class DataLoader implements ApplicationRunner {
     private String nickname;
 
     @Override
-    public void run(ApplicationArguments args) {
+    public void run(ApplicationArguments args) throws RoleNotFoundException {
+        insertRoles();
+        insertTopicTypes();
         authService.registerAdmin(
                 new Account(null,
                         adminEmail,
@@ -39,10 +45,31 @@ public class DataLoader implements ApplicationRunner {
                         null,
                         LocalDate.now(),
                         false,
-                        Role.ROLE_ADMIN,
+                        roleService.getRoleByName(Role.ROLE_ADMIN),
                         null,
                         null,
                         null));
+    }
+
+
+    private void insertRoles() {
+        Role[] roles = Role.values();
+        for (Role role : roles) {
+            if (!roleService.roleExists(role)) {
+                RoleEntity roleEntity = new RoleEntity(null, role, null);
+                roleService.save(roleEntity);
+            }
+        }
+    }
+
+    private void insertTopicTypes() {
+        Topic[] topics = Topic.values();
+        for (Topic topic : topics) {
+            if (!topicTypeService.topicExists(topic)) {
+                TopicTypeEntity type = new TopicTypeEntity(null, topic, null);
+                topicTypeService.save(type);
+            }
+        }
     }
 
 }

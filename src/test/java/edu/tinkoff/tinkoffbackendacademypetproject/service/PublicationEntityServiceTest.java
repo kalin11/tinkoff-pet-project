@@ -1,10 +1,13 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.service;
 
+import edu.tinkoff.tinkoffbackendacademypetproject.CommonAbstractTest;
 import edu.tinkoff.tinkoffbackendacademypetproject.config.PostgresTestConfig;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.RoleNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.*;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.*;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.PublicationService;
+import edu.tinkoff.tinkoffbackendacademypetproject.services.RoleService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,19 +15,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 @ContextConfiguration(initializers = PostgresTestConfig.Initializer.class)
-class PublicationEntityServiceTest {
+class PublicationEntityServiceTest extends CommonAbstractTest {
     @Autowired
     private PublicationService publicationService;
 
@@ -42,6 +41,9 @@ class PublicationEntityServiceTest {
 
     @Autowired
     private TopicRepository topicRepository;
+
+    @Autowired
+    private RoleService roleService;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -67,7 +69,7 @@ class PublicationEntityServiceTest {
     @CsvSource(value = {
             "0, 50, 1",
     })
-    void getPublicationsInOneCategoryTest(Integer pageNumber, Integer pageSize, Long subjectTopicId) {
+    void getPublicationsInOneCategoryTest(Integer pageNumber, Integer pageSize, Long subjectTopicId) throws RoleNotFoundException {
         // given
         createBeforeStart();
         createPublications(subjectTopicId);
@@ -85,7 +87,7 @@ class PublicationEntityServiceTest {
     @DisplayName("Get publication")
     @ParameterizedTest(name = "{index} - publication {0} is find")
     @ValueSource(longs = {1, 2})
-    void getPublicationTest(Long id) throws EntityModelNotFoundException {
+    void getPublicationTest(Long id) throws EntityModelNotFoundException, RoleNotFoundException {
         // given
         createBeforeStart();
         createPublications(1L);
@@ -118,10 +120,10 @@ class PublicationEntityServiceTest {
         assertEquals("Публикации с id: " + id + " не найдено", exception.getMessage());
     }
 
-    private void createBeforeStart() {
+    private void createBeforeStart() throws RoleNotFoundException {
         subjectRepository.save(new SubjectEntity(null, "Mathematics", null, courseRepository.findById(1).get()));
         subjectTopicRepository.save(new SubjectTopicEntity(null, topicRepository.findById(1L).get(), subjectRepository.findById(1L).get(), null));
-        accountRepository.save(new Account(null, "dan@dam.ru", "1234", "Daniil K", null, null, null, null, null, false, Role.ROLE_USER, null, null, null));
+        accountRepository.save(new Account(null, "dan@dam.ru", "1234", "Daniil K", null, null, null, null, null, false, roleService.getRoleByName(Role.ROLE_USER), null, null, null));
     }
 
     private void createPublications(Long subjectTopicId) {

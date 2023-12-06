@@ -51,9 +51,9 @@ public class Account implements UserDetails {
     @Column(name = "is_banned")
     private Boolean isBanned;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private Role role;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private RoleEntity role;
 
     @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PublicationEntity> publications;
@@ -67,7 +67,7 @@ public class Account implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role.getName().name()));
     }
 
     @Override
