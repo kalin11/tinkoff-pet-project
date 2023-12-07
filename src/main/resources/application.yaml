@@ -1,0 +1,26 @@
+datasource:
+  url: 'jdbc:postgresql://localhost:35100/tink'
+  username: 'user'
+  password: 'password'
+jpa:
+  dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+liquibase:
+  change-log: classpath:/db/changelog/main-changelog.yaml
+swagger-setup:
+  swagger-path: /moi-swagger.html
+file:
+  max-size: 5MB
+quartz:
+  driver: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+jwt-token:
+  secret: 77397A24432646294A404E635266556A586E3272357538782F4125442A472D4B
+  issuer: daniil
+local-storage:
+  location: /home/kalin/IdeaProjects/tinkoff-backend-academy-pet-project/files
+  photos-location: /home/kalin/IdeaProjects/tinkoff-backend-academy-pet-project/profile-photos
+front-url: http://localhost:3000
+
+admin-data:
+  email: admin@admin.ru
+  nickname: admin
+  password: admin

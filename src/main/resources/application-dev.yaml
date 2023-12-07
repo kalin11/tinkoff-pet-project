@@ -2,23 +2,23 @@ server:
   port: ${PORT:8080}
 spring:
   datasource:
-    url: 'jdbc:postgresql://localhost:35100/tink'
-    username: 'user'
-    password: 'password'
+    url: ${datasource.url}
+    username: ${datasource.username}
+    password: ${datasource.password}
   jpa:
     properties:
       hibernate:
-        dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+        dialect: ${jpa.dialect}
         format_sql: true
   liquibase:
-    change-log: classpath:/db/changelog/main-changelog.yaml
+    change-log: ${liquibase.change-log}
   springdoc:
     swagger-ui:
-      path: /moi-swagger.html
+      path: ${swagger-setup.swagger-path}
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 5MB
+      max-file-size: ${file.max-size}
+      max-request-size: ${file.max-size}
   quartz:
     job-store-type: jdbc
     jdbc:
@@ -29,7 +29,7 @@ spring:
           scheduler:
             instanceId: AUTO
           jobStore:
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+            driverDelegateClass: ${quartz.driver}
             useProperties: false
             tablePrefix: QRTZ_
             clusterCheckinInterval: 5000
@@ -41,17 +41,17 @@ spring:
     auto-startup: false
 
 jwt:
-  secret: 77397A24432646294A404E635266556A586E3272357538782F4125442A472D4B
-  issuer: daniil
+  secret: ${jwt-token.secret}
+  issuer: ${jwt-token.issuer}
 storage:
-  location: /home/kalin/IdeaProjects/tinkoff-backend-academy-pet-project/files
-  location-for-photos: /home/kalin/IdeaProjects/tinkoff-backend-academy-pet-project/prfile-photos
+  location: ${local-storage.location}
+  location-for-photos: ${local-storage.photos-location}
 cors:
-  allowed-origin: http://localhost:3000
+  allowed-origin: ${front-url}
 admin:
-  email: admin@admin.ru
-  nickname: admin
-  password: admin
+  email: ${admin-data.email}
+  nickname: ${admin-data.nickname}
+  password: ${admin-data.password}
 scheduler:
   permanent-jobs-group-name: PERMANENT
   delete-comment-job-cron: ${DELETE_COMMENT_JOB_CRON:0 */15 * * * ?}
