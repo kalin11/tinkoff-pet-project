@@ -2,10 +2,11 @@ package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.SaveInformationAboutAccountRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.AccountResponseDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.AccountUpdateRoleResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.GetAllUserResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.StatusAccountResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.RoleEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -16,8 +17,8 @@ import java.time.LocalDate;
 public interface AccountMapper {
 
     @Named("getRole")
-    static String getRole(Role role) {
-        return role.getDescription();
+    static String getRole(RoleEntity role) {
+        return role.getName().getDescription();
     }
 
     @Named("getDate")
@@ -25,11 +26,22 @@ public interface AccountMapper {
         return dateTime == null ? null : dateTime.toString();
     }
 
+    @Named("getBirthDate")
+    static LocalDate getBirthDate(String s) {
+        try {
+            return LocalDate.parse(s);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
     @Mapping(target = "photoNameInDirectory", source = "profilePicture.photoNameInDirectory")
     @Mapping(source = "role", target = "role", qualifiedByName = "getRole")
     @Mapping(source = "birthDate", target = "birthDate", qualifiedByName = "getDate")
     AccountResponseDto toAccountResponseDto(Account account);
 
+    @Mapping(source = "role", target = "role", qualifiedByName = "getRole")
     GetAllUserResponseDto toGetAllUserResponseDto(Account account);
 
     StatusAccountResponseDto toStatusAccountResponseDto(Account account);
@@ -45,13 +57,6 @@ public interface AccountMapper {
     @Mapping(target = "birthDate", source = "birthDate", qualifiedByName = "getBirthDate")
     Account fromSaveInformationAboutAccountRequestDto(SaveInformationAboutAccountRequestDto saveInformationAboutAccountRequestDto);
 
-    @Named("getBirthDate")
-    static LocalDate getBirthDate(String s) {
-        try {
-            return LocalDate.parse(s);
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
+    @Mapping(source = "role", target = "role", qualifiedByName = "getRole")
+    AccountUpdateRoleResponseDto toAccountUpdateRoleResponseDto(Account account);
 }

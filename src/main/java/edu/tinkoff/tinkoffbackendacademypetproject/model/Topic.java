@@ -9,7 +9,8 @@ import lombok.Getter;
 public enum Topic {
     TEST("Контрольная работа"),
     SEMINAR_NOTES("Конспекты семинара"),
-    LITERATURE("Литература");
+    LITERATURE("Литература"),
+    EXAM("Экзамен");
 
     /**
      * Описание топика

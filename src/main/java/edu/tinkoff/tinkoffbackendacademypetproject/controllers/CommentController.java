@@ -10,7 +10,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoun
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.CommentMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
-import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
+import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsModerator;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsUser;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,7 +45,7 @@ public class CommentController {
     @IsUser
     public CommentResponseDto createComment(@RequestBody @Valid CreateCommentRequestDto request,
                                             @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
-        if (account.getIsBanned()) {
+        if (Boolean.TRUE.equals(account.getIsBanned())) {
             throw new BannedAccountException();
         }
         return commentMapper.toCommentResponseDto(
@@ -74,7 +74,7 @@ public class CommentController {
             @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
             @ApiResponse(responseCode = "403", description = "Недостаточно прав")
     })
-    @IsAdmin
+    @IsUser
     public CommentResponseDto updateComment(@RequestBody @Valid ChangeCommentRequestDto request) throws EntityModelNotFoundException {
         return commentMapper.toCommentResponseDto(
                 commentService.updateComment(commentMapper.fromChangeCommentRequestDto(request))
@@ -88,7 +88,7 @@ public class CommentController {
             @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
             @ApiResponse(responseCode = "403", description = "Недостаточно прав")
     })
-    @IsAdmin
+    @IsModerator
     public void deleteComment(@PathVariable
                               @Min(value = 1, message = "Id комментария не может быть меньше 1")
                               @NotNull(message = "Id комментария не может быть пустым")

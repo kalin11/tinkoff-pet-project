@@ -3,6 +3,7 @@ package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.AccountLoginRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.AccountRegistrationRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.AuthResponseDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.RoleNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.AccountMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,10 +33,10 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Успешно зарегистрирован новый пользователь"),
             @ApiResponse(responseCode = "400", description = "Что-то пошло не так")
     })
-    public AuthResponseDto registerUserAccount(@RequestBody @Valid AccountRegistrationRequestDto request, HttpServletResponse response) {
+    public AuthResponseDto registerUserAccount(@RequestBody @Valid AccountRegistrationRequestDto request, HttpServletResponse response) throws RoleNotFoundException {
         var answer = authService.register(request.email().trim(), request.nickname().trim(), request.password().trim());
         addCookie(answer.getSecond(), response);
-        return new AuthResponseDto(answer.getFirst().getNickname(), answer.getFirst().getRole().getDescription());
+        return new AuthResponseDto(answer.getFirst().getNickname(), answer.getFirst().getRole().getName().getDescription());
     }
 
     @PostMapping("/login")
@@ -47,7 +48,7 @@ public class AuthController {
     public AuthResponseDto loginUserAccount(@RequestBody @Valid AccountLoginRequestDto request, HttpServletResponse response) {
         var answer = authService.login(request.email().trim(), request.password().trim());
         addCookie(answer.getSecond(), response);
-        return new AuthResponseDto(answer.getFirst().getNickname(), answer.getFirst().getRole().getDescription());
+        return new AuthResponseDto(answer.getFirst().getNickname(), answer.getFirst().getRole().getName().getDescription());
     }
 
     private void addCookie(String token, HttpServletResponse response) {

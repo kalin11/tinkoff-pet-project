@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
@@ -80,5 +81,16 @@ public class SubjectController {
         SubjectEntity subject = subjectMapper.fromSubjectRequestDTO(dto);
         var savedSubject = subjectService.createSubject(subject);
         return subjectMapper.toSubjectResponseDTO(savedSubject);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Удаление предмета", description = "Удаление предмета на указанном курсе")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Предмет был успешно удален"),
+            @ApiResponse(responseCode = "403", description = "Недостаточно прав")
+    })
+    @IsAdmin
+    public void deleteSubject(@Valid @PathVariable @Min(0) Long id) {
+        subjectService.deleteSubject(id);
     }
 }

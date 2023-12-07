@@ -99,7 +99,7 @@ public class CustomExceptionHandler {
         return new ApiErrorResponse(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
-    // todo 
+    // todo
     //  обсудить с архитектором
     //  вспомнить сценарий когда 403 должна быть, а выдает 400
     @ExceptionHandler(RuntimeException.class)
@@ -118,6 +118,12 @@ public class CustomExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ApiErrorResponse handleParseException(ParseException e) {
         return new ApiErrorResponse("Упсс, что-то пошло не так/ " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(RoleNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ApiErrorResponse handleRoleNotFoundException(Exception e) {
+        return new ApiErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     /**

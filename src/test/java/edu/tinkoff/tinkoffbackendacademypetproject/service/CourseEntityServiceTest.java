@@ -1,6 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.service;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.config.PostgresTestConfig;
+import edu.tinkoff.tinkoffbackendacademypetproject.CommonAbstractTest;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CourseRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.CourseService;
@@ -9,14 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@ContextConfiguration(initializers = PostgresTestConfig.Initializer.class)
-class CourseEntityServiceTest {
+class CourseEntityServiceTest extends CommonAbstractTest {
     @Autowired
     private CourseService courseService;
 

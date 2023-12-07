@@ -1,10 +1,12 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Topic;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.TopicTypeEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,5 +32,15 @@ public class TopicTypeService {
 
     public TopicTypeEntity getTopicType(Long id) throws EntityModelNotFoundException {
         return topicRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Типа топика", "id", Long.toString(id)));
+    }
+
+    @Transactional
+    public boolean topicExists(Topic topic) {
+        return topicRepository.existsByTopic(topic);
+    }
+
+    @Transactional
+    public TopicTypeEntity save(TopicTypeEntity type) {
+        return topicRepository.save(type);
     }
 }

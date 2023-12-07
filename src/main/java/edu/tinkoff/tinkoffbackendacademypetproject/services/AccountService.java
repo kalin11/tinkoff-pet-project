@@ -1,11 +1,12 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
-import com.github.dockerjava.api.exception.UnauthorizedException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.BannedAccountException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.NotEnoughRightsException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.RoleNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.RoleEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,9 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class AccountService {
     private final AccountRepository accountRepository;
     private final PhotoService photoService;
+    private final RoleService roleService;
 
     public Page<Account> getAllUsers(Integer pageNumber, Integer pageSize) {
-        return accountRepository.findByRole(Role.ROLE_USER, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
+        return accountRepository.findByRole_NameNot(Role.ROLE_ADMIN, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
 
     @Transactional
@@ -48,7 +50,7 @@ public class AccountService {
                         "почтой",
                         SecurityContextHolder.getContext().getAuthentication().getName())
         );
-        if(accountAuth.getIsBanned()) {
+        if (Boolean.TRUE.equals(accountAuth.getIsBanned())) {
             throw new BannedAccountException();
         }
         if (accountAuth.getNickname().equals(information.getNickname())) {
@@ -85,5 +87,18 @@ public class AccountService {
         return accountRepository.findByEmail(email).orElseThrow(() ->
                 new EntityModelNotFoundException("Пользователя", "почтой", email)
         );
+    }
+
+    @Transactional
+    public Account updateAccountRole(Long accountId, Long roleId) throws RoleNotFoundException {
+        Account account = accountRepository.findById(accountId).orElseThrow(
+                () -> new EntityModelNotFoundException("Пользователя", "id", String.valueOf(accountId))
+        );
+        RoleEntity role = roleService.getRoleById(roleId);
+        if (Role.ROLE_ADMIN.equals(role.getName())) {
+            throw new NotEnoughRightsException();
+        }
+        account.setRole(role);
+        return account;
     }
 }
