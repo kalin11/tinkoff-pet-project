@@ -1,7 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.service;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.CommonAbstractTest;
-import edu.tinkoff.tinkoffbackendacademypetproject.config.PostgresTestConfig;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.RoleNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.*;
@@ -18,11 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ContextConfiguration(initializers = PostgresTestConfig.Initializer.class)
 class PublicationEntityServiceTest extends CommonAbstractTest {
     @Autowired
     private PublicationService publicationService;

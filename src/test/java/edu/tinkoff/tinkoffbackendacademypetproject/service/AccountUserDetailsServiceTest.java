@@ -23,7 +23,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ContextConfiguration(initializers = PostgresTestConfig.Initializer.class)
+
 class AccountUserDetailsServiceTest extends CommonAbstractTest {
     @Autowired
     private AuthService authService;
