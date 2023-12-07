@@ -3,6 +3,7 @@ package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.ChangeCommentRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.CreateCommentRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentResponseDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.PublicationEntity;
 import org.mapstruct.Mapper;
@@ -18,7 +19,13 @@ public interface CommentMapper {
         return publication;
     }
 
+    @Named("getUserId")
+    static Long getUserId(Account account) {
+        return account.getId();
+    }
+
     @Mapping(target = "nickname", expression = "java(comment.getIsAnonymous() ? \"\" : comment.getAccount().getNickname())")
+    @Mapping(target = "userId", source = "comment.account", qualifiedByName = "getUserId")
     CommentResponseDto toCommentResponseDto(CommentEntity comment);
 
     @Mapping(target = "id", ignore = true)
