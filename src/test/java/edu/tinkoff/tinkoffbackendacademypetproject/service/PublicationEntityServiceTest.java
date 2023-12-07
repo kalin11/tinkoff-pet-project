@@ -46,11 +46,22 @@ class PublicationEntityServiceTest extends CommonAbstractTest {
     private AccountRepository accountRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     @AfterEach
     void clear() {
+        roleRepository.deleteAll();
+        jdbcTemplate.execute("ALTER SEQUENCE role_pk_seq RESTART");
+        Role[] roles = Role.values();
+        for (Role role : roles) {
+            RoleEntity roleEntity = new RoleEntity(null, role, null);
+            roleService.save(roleEntity);
+        }
+
         subjectTopicRepository.deleteAll();
         jdbcTemplate.execute("ALTER SEQUENCE subject_topic_pk_seq RESTART");
         subjectRepository.deleteAll();
