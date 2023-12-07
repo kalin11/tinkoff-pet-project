@@ -16,7 +16,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByNickname(String nickname);
 
     Optional<Account> findById(Long id);
-
-    Page<Account> findByRole_Name(Role role, Pageable pageable);
+    Page<Account> findByRole_NameNot(Role role, Pageable pageable);
 }
 

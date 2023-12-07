@@ -25,7 +25,7 @@ public class AccountService {
     private final RoleService roleService;
 
     public Page<Account> getAllUsers(Integer pageNumber, Integer pageSize) {
-        return accountRepository.findByRole_Name(Role.ROLE_USER, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
+        return accountRepository.findByRole_NameNot(Role.ROLE_ADMIN, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
 
     @Transactional
