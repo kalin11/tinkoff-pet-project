@@ -74,7 +74,7 @@ public class CommentController {
     public CommentResponseDto updateComment(@RequestBody @Valid ChangeCommentRequestDto request,
                                             @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
         return commentMapper.toCommentResponseDto(
-                commentService.updateComment(commentMapper.fromChangeCommentRequestDto(request), account.getId())
+                commentService.updateComment(commentMapper.fromChangeCommentRequestDto(request), account.getNickname())
         );
     }
 

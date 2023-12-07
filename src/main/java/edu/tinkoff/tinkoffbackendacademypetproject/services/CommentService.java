@@ -33,9 +33,9 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentEntity updateComment(CommentEntity comment, Long id) throws EntityModelNotFoundException {
+    public CommentEntity updateComment(CommentEntity comment, String nickname) throws EntityModelNotFoundException {
         var changeComment = getComment(comment.getId());
-        if (!id.equals(changeComment.getAccount().getId())) {
+        if (!nickname.equals(changeComment.getAccount().getNickname())) {
             throw new NotYourCommentException();
         }
         changeComment.setContent(comment.getContent());

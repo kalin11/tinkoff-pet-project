@@ -36,7 +36,7 @@ public class AuthController {
     public AuthResponseDto registerUserAccount(@RequestBody @Valid AccountRegistrationRequestDto request, HttpServletResponse response) throws RoleNotFoundException {
         var answer = authService.register(request.email().trim(), request.nickname().trim(), request.password().trim());
         addCookie(answer.getSecond(), response);
-        return new AuthResponseDto(answer.getFirst().getId(), answer.getFirst().getNickname(), answer.getFirst().getRole().getName().getDescription());
+        return new AuthResponseDto(answer.getFirst().getNickname(), answer.getFirst().getRole().getName().getDescription());
     }
 
     @PostMapping("/login")
@@ -48,7 +48,7 @@ public class AuthController {
     public AuthResponseDto loginUserAccount(@RequestBody @Valid AccountLoginRequestDto request, HttpServletResponse response) {
         var answer = authService.login(request.email().trim(), request.password().trim());
         addCookie(answer.getSecond(), response);
-        return new AuthResponseDto(answer.getFirst().getId(), answer.getFirst().getNickname(), answer.getFirst().getRole().getName().getDescription());
+        return new AuthResponseDto(answer.getFirst().getNickname(), answer.getFirst().getRole().getName().getDescription());
     }
 
     private void addCookie(String token, HttpServletResponse response) {
