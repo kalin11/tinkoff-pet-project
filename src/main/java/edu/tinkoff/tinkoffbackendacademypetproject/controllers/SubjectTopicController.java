@@ -66,8 +66,7 @@ public class SubjectTopicController {
             @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
             @ApiResponse(responseCode = "403", description = "Недостаточно прав")
     })
-    public SubjectTopicResponseDto createSubjectTopic(@Valid @RequestBody SubjectTopicRequestDto dto,
-                                                      @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
+    public SubjectTopicResponseDto createSubjectTopic(@Valid @RequestBody SubjectTopicRequestDto dto) throws EntityModelNotFoundException {
         SubjectTopicEntity savedTopic = topicService.createSubjectTopic(subjectTopicMapper.getSubjectTopicFromDTO(dto));
         return subjectTopicMapper.getSubjectTopicResponseDTO(savedTopic);
     }
