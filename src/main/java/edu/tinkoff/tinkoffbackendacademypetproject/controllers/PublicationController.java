@@ -5,7 +5,6 @@ import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.PublicationsInOn
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PublicationResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PublicationTitleAndIdResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.BannedAccountException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PublicationMapper;
@@ -45,9 +44,6 @@ public class PublicationController {
     @IsUser
     public PublicationResponseDto createPublication(@ModelAttribute @Valid CreatePublicationRequestDto request,
                                                     @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
-        if (account.getIsBanned()) {
-            throw new BannedAccountException();
-        }
         return publicationMapper.toPublicationResponseDto(
                 publicationService.createPublication(publicationMapper.fromCreatePublicationRequestDto(request), account, request.files())
         );

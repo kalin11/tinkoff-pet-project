@@ -1,6 +1,5 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.BannedAccountException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.NotEnoughRightsException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.RoleNotFoundException;
@@ -50,9 +49,6 @@ public class AccountService {
                         "почтой",
                         SecurityContextHolder.getContext().getAuthentication().getName())
         );
-        if (Boolean.TRUE.equals(accountAuth.getIsBanned())) {
-            throw new BannedAccountException();
-        }
         if (accountAuth.getNickname().equals(information.getNickname())) {
             accountAuth.setDescription(information.getDescription());
             accountAuth.setFirstName(information.getFirstName());
