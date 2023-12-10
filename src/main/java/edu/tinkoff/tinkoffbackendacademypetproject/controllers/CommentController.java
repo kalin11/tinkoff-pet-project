@@ -3,7 +3,6 @@ package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.*;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.BannedAccountException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.CommentMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
@@ -43,9 +42,6 @@ public class CommentController {
     @IsUser
     public CommentResponseDto createComment(@RequestBody @Valid CreateCommentRequestDto request,
                                             @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
-        if (Boolean.TRUE.equals(account.getIsBanned())) {
-            throw new BannedAccountException();
-        }
         return commentMapper.toCommentResponseDto(
                 commentService.createComment(commentMapper.fromCreateCommentRequestDto(request), account)
         );
@@ -73,9 +69,10 @@ public class CommentController {
             @ApiResponse(responseCode = "403", description = "Недостаточно прав")
     })
     @IsUser
-    public CommentResponseDto updateComment(@RequestBody @Valid ChangeCommentRequestDto request) throws EntityModelNotFoundException {
+    public CommentResponseDto updateComment(@RequestBody @Valid ChangeCommentRequestDto request,
+                                            @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
         return commentMapper.toCommentResponseDto(
-                commentService.updateComment(commentMapper.fromChangeCommentRequestDto(request))
+                commentService.updateComment(commentMapper.fromChangeCommentRequestDto(request), account.getNickname())
         );
     }
 

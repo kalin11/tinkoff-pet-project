@@ -9,5 +9,6 @@ public record CommentResponseDto(Long id,
                                  @JsonProperty("created_at") LocalDateTime createdAt,
                                  @JsonProperty("last_updated_at") LocalDateTime lastUpdatedAt,
                                  String nickname,
-                                 @JsonProperty("is_anonymous") Boolean isAnonymous) {
+                                 @JsonProperty("is_anonymous") Boolean isAnonymous
+) {
 }

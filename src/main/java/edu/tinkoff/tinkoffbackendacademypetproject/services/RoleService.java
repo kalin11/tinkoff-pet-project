@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RoleService {
@@ -23,12 +25,16 @@ public class RoleService {
     }
 
     public RoleEntity getRoleById(Long id) throws RoleNotFoundException {
-        return roleRepository.findById(id).orElseThrow(() -> new RoleNotFoundException(Role.values()[id.intValue()]));
+        return roleRepository.findById(id).orElseThrow(() -> new RoleNotFoundException(id));
     }
 
     @Transactional
     public boolean roleExists(Role role) {
         return roleRepository.existsByName(role);
+    }
+
+    public List<RoleEntity> getAllRolesInsteadOfAdmin() {
+        return roleRepository.findByNameNot(Role.ROLE_ADMIN);
     }
 
 }

@@ -3,6 +3,7 @@ package edu.tinkoff.tinkoffbackendacademypetproject.services;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.DepthThreadException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.NotThreadException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.NotYourCommentException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CommentRepository;
@@ -34,8 +35,11 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentEntity updateComment(CommentEntity comment) throws EntityModelNotFoundException {
+    public CommentEntity updateComment(CommentEntity comment, String nickname) throws EntityModelNotFoundException {
         var changeComment = getComment(comment.getId());
+        if (!nickname.equals(changeComment.getAccount().getNickname())) {
+            throw new NotYourCommentException();
+        }
         changeComment.setContent(comment.getContent());
         return commentRepository.save(changeComment);
     }
@@ -46,7 +50,7 @@ public class CommentService {
     }
 
     public Page<CommentEntity> getCommentsOnThePublication(Integer pageNumber, Integer pageSize, Long publicationId) {
-        return commentRepository.findByParentAndPublication_Id(null, publicationId, PageRequest.of(pageNumber, pageSize));
+        return commentRepository.findByParentAndPublication_Id(null, publicationId, PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "createdAt")));
     }
 
     @Transactional
