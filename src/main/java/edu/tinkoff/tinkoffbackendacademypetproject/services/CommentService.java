@@ -66,11 +66,10 @@ public class CommentService {
         if (publication.getIsThread()) {
             comment.setPublication(publication);
             comment.setAccount(account);
-            if (parentComment.getParent() == null){
+            if (parentComment.getParent() == null) {
                 comment.setParent(parentComment);
                 return commentRepository.save(comment);
-            }
-            else {
+            } else {
                 throw new DepthThreadException();
             }
         } else {

@@ -1,7 +1,10 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.*;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.FileEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.NewsPublicationEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.PublicationEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.NewsPublicationRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.PublicationRepository;
 import lombok.RequiredArgsConstructor;

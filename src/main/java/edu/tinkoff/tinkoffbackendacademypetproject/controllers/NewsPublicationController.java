@@ -1,27 +1,20 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.*;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.CreateNewsPublicationRequestDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.PageRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PublicationResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PublicationTitleAndIdResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.BannedAccountException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PublicationMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
-import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsModerator;
-import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsUser;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.NewsPublicationService;
-import edu.tinkoff.tinkoffbackendacademypetproject.services.PublicationService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -46,9 +39,6 @@ public class NewsPublicationController {
     @IsModerator
     public PublicationResponseDto createPublication(@ModelAttribute @Valid CreateNewsPublicationRequestDto request,
                                                     @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
-        if (account.getIsBanned()) {
-            throw new BannedAccountException();
-        }
         return publicationMapper.toPublicationResponseDto(
                 newsPublicationService.createPublicationInNews(publicationMapper.fromCreateNewsPublicationRequestDto(request), account, request.files())
         );

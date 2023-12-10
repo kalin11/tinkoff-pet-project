@@ -46,7 +46,7 @@ public class FileController {
     }
 
     @GetMapping(
-            value = "/photo/{filename}",
+            value = "/photos/{filename}",
             produces = MediaType.IMAGE_JPEG_VALUE
     )
     @Operation(description = "Достать фотографию из папки", summary = "Достать фотографию из папки")

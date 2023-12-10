@@ -30,8 +30,7 @@ public interface AccountMapper {
     static LocalDate getBirthDate(String s) {
         try {
             return LocalDate.parse(s);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }

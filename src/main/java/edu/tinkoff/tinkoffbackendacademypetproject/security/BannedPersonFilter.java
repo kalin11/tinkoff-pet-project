@@ -45,8 +45,7 @@ public class BannedPersonFilter extends OncePerRequestFilter {
 
             }
             filterChain.doFilter(request, response);
-        }
-        else {
+        } else {
             filterChain.doFilter(request, response);
         }
     }
