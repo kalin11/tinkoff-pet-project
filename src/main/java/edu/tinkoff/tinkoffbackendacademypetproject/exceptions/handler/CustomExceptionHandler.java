@@ -7,6 +7,7 @@ import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededExceptio
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.quartz.SchedulerException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -112,9 +113,6 @@ public class CustomExceptionHandler {
         return new ApiErrorResponse(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
-    // todo
-    //  обсудить с архитектором
-    //  вспомнить сценарий когда 403 должна быть, а выдает 400
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApiErrorResponse handleRuntimeException(Exception e) {
@@ -137,6 +135,12 @@ public class CustomExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ApiErrorResponse handleRoleNotFoundException(Exception e) {
         return new ApiErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ApiErrorResponse handleAccessDeniedException(Exception e) {
+        return new ApiErrorResponse(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     /**

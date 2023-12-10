@@ -69,9 +69,10 @@ public class CommentController {
             @ApiResponse(responseCode = "403", description = "Недостаточно прав")
     })
     @IsUser
-    public CommentResponseDto updateComment(@RequestBody @Valid ChangeCommentRequestDto request) throws EntityModelNotFoundException {
+    public CommentResponseDto updateComment(@RequestBody @Valid ChangeCommentRequestDto request,
+                                            @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
         return commentMapper.toCommentResponseDto(
-                commentService.updateComment(commentMapper.fromChangeCommentRequestDto(request))
+                commentService.updateComment(commentMapper.fromChangeCommentRequestDto(request), account.getNickname())
         );
     }
 

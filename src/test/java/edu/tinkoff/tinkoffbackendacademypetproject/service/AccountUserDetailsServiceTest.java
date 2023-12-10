@@ -1,12 +1,13 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.service;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.CommonAbstractTest;
-import edu.tinkoff.tinkoffbackendacademypetproject.config.PostgresTestConfig;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.AccountAlreadyExistException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.RoleNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.RoleEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.RoleRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.AccountUserDetailsService;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.AuthService;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.RoleService;
@@ -19,7 +20,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,11 +38,21 @@ class AccountUserDetailsServiceTest extends CommonAbstractTest {
     private RoleService roleService;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     @AfterEach
     void clear() {
+        roleRepository.deleteAll();
+        jdbcTemplate.execute("ALTER SEQUENCE role_pk_seq RESTART");
+        Role[] roles = Role.values();
+        for (Role role : roles) {
+            RoleEntity roleEntity = new RoleEntity(null, role, null);
+            roleService.save(roleEntity);
+        }
         accountRepository.deleteAll();
         jdbcTemplate.execute("ALTER SEQUENCE account_pk_seq RESTART");
     }
