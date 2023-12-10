@@ -1,5 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.CreateNewsPublicationRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.CreatePublicationRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PublicationResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PublicationTitleAndIdResponseDto;
@@ -37,5 +38,14 @@ public interface PublicationMapper {
     @Mapping(target = "files", ignore = true)
     @Mapping(target = "account", ignore = true)
     PublicationEntity fromCreatePublicationRequestDto(CreatePublicationRequestDto publication);
+
+    @Mapping(target = "subjectTopics", ignore = true)
+    @Mapping(target = "isThread", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "files", ignore = true)
+    @Mapping(target = "account", ignore = true)
+    PublicationEntity fromCreateNewsPublicationRequestDto(CreateNewsPublicationRequestDto publication);
 
 }

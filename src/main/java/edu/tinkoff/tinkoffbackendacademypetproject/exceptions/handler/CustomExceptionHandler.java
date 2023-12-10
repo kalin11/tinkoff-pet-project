@@ -63,6 +63,19 @@ public class CustomExceptionHandler {
         return new ApiErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NotThreadException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrorResponse handleNotThreadException(NotThreadException ex) {
+        return new ApiErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(DepthThreadException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrorResponse handleDepthThreadException(DepthThreadException ex) {
+        return new ApiErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(SizeLimitExceededException.class)
     @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
     public ApiErrorResponse handleSizeLimitExceededException(SizeLimitExceededException ex) {

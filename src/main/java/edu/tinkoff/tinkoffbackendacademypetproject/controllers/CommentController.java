@@ -1,8 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.ChangeCommentRequestDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.CommentsOnThePublicationRequestDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.CreateCommentRequestDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.*;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.BannedAccountException;
@@ -106,6 +104,36 @@ public class CommentController {
     })
     public PageResponseDto<CommentResponseDto> getCommentsOnThePublication(@ParameterObject @Valid CommentsOnThePublicationRequestDto request) {
         return pageMapper.toPageResponseDto(commentService.getCommentsOnThePublication(request.getPageNumber(), request.getPageSize(), request.getPublicationId()),
+                commentMapper::toCommentResponseDto);
+    }
+
+    @PostMapping("/thread")
+    @Operation(description = "Добавить новый тред", summary = "Добавить новый тред")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно добавлен новый тред"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
+            @ApiResponse(responseCode = "403", description = "Недостаточно прав")
+    })
+    @IsUser
+    public CommentResponseDto createThread(@RequestBody @Valid CreateThreadRequestDto request,
+                                            @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
+        if (Boolean.TRUE.equals(account.getIsBanned())) {
+            throw new BannedAccountException();
+        }
+        return commentMapper.toCommentResponseDto(
+                commentService.createCommentThread(commentMapper.fromCreateThreadRequestDto(request), account)
+        );
+    }
+
+    @GetMapping("/thread")
+    @Operation(description = "Получить все треды к комментарию",
+            summary = "Получить все треды к комментарию")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно получены все треды к комментарию"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так")
+    })
+    public PageResponseDto<CommentResponseDto> getThreadsOnTheComment(@ParameterObject @Valid ThreadsOnTheCommentRequestDto request) {
+        return pageMapper.toPageResponseDto(commentService.getThreadsOnTheComment(request.getPageNumber(), request.getPageSize(), request.getCommentId()),
                 commentMapper::toCommentResponseDto);
     }
 }

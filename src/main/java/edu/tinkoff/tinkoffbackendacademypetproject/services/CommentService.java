@@ -1,12 +1,15 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.DepthThreadException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.NotThreadException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +46,7 @@ public class CommentService {
     }
 
     public Page<CommentEntity> getCommentsOnThePublication(Integer pageNumber, Integer pageSize, Long publicationId) {
-        return commentRepository.findByPublication_Id(publicationId, PageRequest.of(pageNumber, pageSize));
+        return commentRepository.findByParentAndPublication_Id(null, publicationId, PageRequest.of(pageNumber, pageSize));
     }
 
     @Transactional
@@ -54,5 +57,28 @@ public class CommentService {
                 commentRepository.delete(comment);
             }
         }
+    }
+
+    @Transactional
+    public CommentEntity createCommentThread(CommentEntity comment, Account account) throws EntityModelNotFoundException {
+        var parentComment = getComment(comment.getParent().getId());
+        var publication = publicationService.getPublication(parentComment.getPublication().getId());
+        if (publication.getIsThread()) {
+            comment.setPublication(publication);
+            comment.setAccount(account);
+            if (parentComment.getParent() == null){
+                comment.setParent(parentComment);
+                return commentRepository.save(comment);
+            }
+            else {
+                throw new DepthThreadException();
+            }
+        } else {
+            throw new NotThreadException();
+        }
+    }
+
+    public Page<CommentEntity> getThreadsOnTheComment(Integer pageNumber, Integer pageSize, Long commentId) {
+        return commentRepository.findByParent_Id(commentId, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
 }
