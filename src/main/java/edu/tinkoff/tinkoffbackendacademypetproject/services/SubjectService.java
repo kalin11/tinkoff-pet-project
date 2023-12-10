@@ -68,6 +68,6 @@ public class SubjectService {
 
     @Transactional
     public void deleteSubject(Long id) {
-        subjectRepository.deleteById(id);
+        subjectRepository.delete(getSubject(id));
     }
 }

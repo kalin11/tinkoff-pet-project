@@ -1,9 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.FileEntity;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.PublicationEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.*;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.PublicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -24,19 +23,21 @@ public class PublicationService {
     private final FileService fileService;
 
     @Transactional
-    public PublicationEntity createPublication(PublicationEntity publication, Account account, List<MultipartFile> files) throws EntityModelNotFoundException {
+    public PublicationEntity createPublicationInSubjectTopic(PublicationEntity publication, Account account, List<MultipartFile> files) throws EntityModelNotFoundException {
         if (files != null) {
-            var filesInPublication = new ArrayList<FileEntity>();
+            var filesInPublication = new HashSet<FileEntity>();
             for (var file : files) {
                 var fileInPublication = fileService.store(file);
-                fileInPublication.setPublication(publication);
                 filesInPublication.add(fileInPublication);
             }
             publication.setFiles(filesInPublication);
         } else {
-            publication.setFiles(new ArrayList<>());
+            publication.setFiles(new HashSet<>());
         }
-        publication.setSubjectTopic(subjectTopicService.getSubjectTopic(publication.getSubjectTopic().getId()));
+        var subjectTopic = new HashSet<SubjectTopicEntity>();
+        subjectTopic.add(subjectTopicService.getSubjectTopic(publication.getSubjectTopics().iterator().next().getId()));
+        publication.setSubjectTopics(subjectTopic);
+        publication.setIsThread(false);
         publication.setAccount(account);
         return publicationRepository.save(publication);
     }
@@ -51,6 +52,6 @@ public class PublicationService {
     }
 
     public Page<PublicationEntity> getPublicationsInOneCategory(Integer pageNumber, Integer pageSize, Long subjectTopicId) {
-        return publicationRepository.findBySubjectTopic_Id(subjectTopicId, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
+        return publicationRepository.findBySubjectTopics_Id(subjectTopicId, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
 }

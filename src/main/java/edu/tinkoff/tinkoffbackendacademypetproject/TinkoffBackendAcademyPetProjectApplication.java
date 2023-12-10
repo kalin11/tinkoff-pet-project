@@ -19,11 +19,9 @@ public class TinkoffBackendAcademyPetProjectApplication {
     }
 
     @Bean
-    CommandLineRunner init(@Qualifier("fileService") StorageService fileService,
-                           @Qualifier("photoService") StorageService photoService) {
+    CommandLineRunner init(@Qualifier("fileService") StorageService fileService) {
         return (args) -> {
             fileService.init();
-            photoService.init();
         };
     }
 

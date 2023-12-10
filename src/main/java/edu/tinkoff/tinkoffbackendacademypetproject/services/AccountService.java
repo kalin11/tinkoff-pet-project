@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class AccountService {
     private final AccountRepository accountRepository;
-    private final PhotoService photoService;
+    private final FileService fileService;
     private final RoleService roleService;
 
     public Page<Account> getAllUsers(Integer pageNumber, Integer pageSize) {
@@ -60,13 +60,12 @@ public class AccountService {
             accountAuth.setMiddleName(information.getMiddleName());
             accountAuth.setBirthDate(information.getBirthDate());
             if (photo != null) {
-                var photoInProfile = photoService.store(photo);
-                if (accountAuth.getProfilePicture() != null) {
-                    accountAuth.getProfilePicture().setPhotoNameInDirectory(photoInProfile.getPhotoNameInDirectory());
-                    accountAuth.getProfilePicture().setInitialPhotoName(photoInProfile.getInitialPhotoName());
+                var photoInProfile = fileService.store(photo);
+                if (accountAuth.getProfilePhoto() != null) {
+                    accountAuth.getProfilePhoto().setFileNameInDirectory(photoInProfile.getFileNameInDirectory());
+                    accountAuth.getProfilePhoto().setInitialFileName(photoInProfile.getInitialFileName());
                 } else {
-                    photoInProfile.setAccount(accountAuth);
-                    accountAuth.setProfilePicture(photoInProfile);
+                    accountAuth.setProfilePhoto(photoInProfile);
                 }
             }
         } else {

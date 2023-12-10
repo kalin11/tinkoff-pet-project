@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 /**
  * Вложение (файл)
  */
@@ -34,11 +36,4 @@ public class FileEntity {
      */
     @Column(name = "initial_file_name")
     private String initialFileName;
-
-    /**
-     * К какому посту было приложено
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "publication_id", referencedColumnName = "id")
-    private PublicationEntity publication;
 }

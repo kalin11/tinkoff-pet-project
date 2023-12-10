@@ -49,7 +49,7 @@ public class PublicationController {
             throw new BannedAccountException();
         }
         return publicationMapper.toPublicationResponseDto(
-                publicationService.createPublication(publicationMapper.fromCreatePublicationRequestDto(request), account, request.files())
+                publicationService.createPublicationInSubjectTopic(publicationMapper.fromCreatePublicationRequestDto(request), account, request.files())
         );
     }
 
@@ -97,4 +97,5 @@ public class PublicationController {
                         publications.getSubjectTopicId()),
                 publicationMapper::toPublicationTitleAndIdResponseDto);
     }
+
 }

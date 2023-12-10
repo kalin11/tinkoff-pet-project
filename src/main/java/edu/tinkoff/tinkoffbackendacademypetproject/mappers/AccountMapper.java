@@ -36,7 +36,7 @@ public interface AccountMapper {
         }
     }
 
-    @Mapping(target = "photoNameInDirectory", source = "profilePicture.photoNameInDirectory")
+    @Mapping(target = "photoNameInDirectory", source = "profilePhoto.fileNameInDirectory")
     @Mapping(source = "role", target = "role", qualifiedByName = "getRole")
     @Mapping(source = "birthDate", target = "birthDate", qualifiedByName = "getDate")
     AccountResponseDto toAccountResponseDto(Account account);
@@ -48,7 +48,7 @@ public interface AccountMapper {
 
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "publications", ignore = true)
-    @Mapping(target = "profilePicture", ignore = true)
+    @Mapping(target = "profilePhoto", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "isBanned", ignore = true)
     @Mapping(target = "id", ignore = true)
