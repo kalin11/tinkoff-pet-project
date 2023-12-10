@@ -28,7 +28,7 @@ create table news_publication (
 
 --changeset Korshunov Daniil:delete-column-subject_topic_id-from-publication-and-add-column-is_thread
 alter table publication drop column subject_topic_id;
-alter table publication add column is_thread bool not null default false;
+alter table publication add column supports_thread bool not null default false;
 
 --changeset Korshunov Daniil:create-subject_topic_publication-table
 CREATE TABLE subject_topic_publication

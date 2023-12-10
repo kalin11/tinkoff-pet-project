@@ -37,7 +37,7 @@ public class NewsPublicationService {
         } else {
             publication.setFiles(new HashSet<>());
         }
-        publication.setIsThread(true);
+        publication.setSupportsThread(true);
         publication.setAccount(account);
         var savedPublication = publicationRepository.save(publication);
         newsPublicationRepository.save(new NewsPublicationEntity(savedPublication.getId(), savedPublication));

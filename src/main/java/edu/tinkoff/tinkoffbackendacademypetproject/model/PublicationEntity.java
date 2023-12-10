@@ -44,8 +44,8 @@ public class PublicationEntity {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "is_thread")
-    private Boolean isThread;
+    @Column(name = "supports_thread")
+    private Boolean supportsThread;
 
     /**
      * Комментарии к посту

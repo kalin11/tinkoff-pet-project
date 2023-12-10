@@ -104,7 +104,7 @@ public class CommentController {
                 commentMapper::toCommentResponseDto);
     }
 
-    @PostMapping("/thread")
+    @PostMapping("/create-comment-reply")
     @Operation(description = "Добавить новый тред", summary = "Добавить новый тред")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешно добавлен новый тред"),
@@ -119,15 +119,20 @@ public class CommentController {
         );
     }
 
-    @GetMapping("/thread")
+    @GetMapping("/{id}/replies")
     @Operation(description = "Получить все треды к комментарию",
             summary = "Получить все треды к комментарию")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешно получены все треды к комментарию"),
             @ApiResponse(responseCode = "400", description = "Что-то пошло не так")
     })
-    public PageResponseDto<CommentResponseDto> getThreadsOnTheComment(@ParameterObject @Valid ThreadsOnTheCommentRequestDto request) {
-        return pageMapper.toPageResponseDto(commentService.getThreadsOnTheComment(request.getPageNumber(), request.getPageSize(), request.getCommentId()),
+    public PageResponseDto<CommentResponseDto> getThreadsOnTheComment(@ParameterObject @Valid PageRequestDto request,
+                                                                      @PathVariable
+                                                                      @Min(value = 1, message = "Id комментария не может быть меньше 1")
+                                                                      @NotNull(message = "Id комментария не может быть пустым")
+                                                                      @Schema(description = "Id комментария", example = "1")
+                                                                      Long id) {
+        return pageMapper.toPageResponseDto(commentService.getThreadsOnTheComment(request.getPageNumber(), request.getPageSize(), id),
                 commentMapper::toCommentResponseDto);
     }
 }

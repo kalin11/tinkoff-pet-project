@@ -67,7 +67,7 @@ public class CommentService {
     public CommentEntity createCommentThread(CommentEntity comment, Account account) throws EntityModelNotFoundException {
         var parentComment = getComment(comment.getParent().getId());
         var publication = publicationService.getPublication(parentComment.getPublication().getId());
-        if (publication.getIsThread()) {
+        if (publication.getSupportsThread()) {
             comment.setPublication(publication);
             comment.setAccount(account);
             if (parentComment.getParent() == null) {

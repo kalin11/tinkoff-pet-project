@@ -39,7 +39,7 @@ public class PublicationService {
         var subjectTopic = new HashSet<SubjectTopicEntity>();
         subjectTopic.add(subjectTopicService.getSubjectTopic(publication.getSubjectTopics().iterator().next().getId()));
         publication.setSubjectTopics(subjectTopic);
-        publication.setIsThread(false);
+        publication.setSupportsThread(false);
         publication.setAccount(account);
         return publicationRepository.save(publication);
     }

@@ -31,7 +31,7 @@ public interface PublicationMapper {
     PublicationTitleAndIdResponseDto toPublicationTitleAndIdResponseDto(PublicationEntity publication);
 
     @Mapping(target = "subjectTopics", qualifiedByName = "emptySubjectTopicWithId", source = "subjectTopicId")
-    @Mapping(target = "isThread", ignore = true)
+    @Mapping(target = "supportsThread", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "comments", ignore = true)
@@ -40,7 +40,7 @@ public interface PublicationMapper {
     PublicationEntity fromCreatePublicationRequestDto(CreatePublicationRequestDto publication);
 
     @Mapping(target = "subjectTopics", ignore = true)
-    @Mapping(target = "isThread", ignore = true)
+    @Mapping(target = "supportsThread", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "comments", ignore = true)
