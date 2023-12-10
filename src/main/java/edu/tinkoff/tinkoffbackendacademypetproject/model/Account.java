@@ -61,9 +61,9 @@ public class Account implements UserDetails {
     @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CommentEntity> comments;
 
-    @OneToOne(mappedBy = "account", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    @PrimaryKeyJoinColumn
-    private ProfilePictureEntity profilePicture;
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @JoinColumn(name = "photo_id", referencedColumnName = "id")
+    private FileEntity profilePhoto;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

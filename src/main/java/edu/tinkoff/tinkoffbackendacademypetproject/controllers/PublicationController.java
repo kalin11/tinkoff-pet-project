@@ -45,7 +45,7 @@ public class PublicationController {
     public PublicationResponseDto createPublication(@ModelAttribute @Valid CreatePublicationRequestDto request,
                                                     @AuthenticationPrincipal Account account) throws EntityModelNotFoundException {
         return publicationMapper.toPublicationResponseDto(
-                publicationService.createPublication(publicationMapper.fromCreatePublicationRequestDto(request), account, request.files())
+                publicationService.createPublicationInSubjectTopic(publicationMapper.fromCreatePublicationRequestDto(request), account, request.files())
         );
     }
 
@@ -93,4 +93,5 @@ public class PublicationController {
                         publications.getSubjectTopicId()),
                 publicationMapper::toPublicationTitleAndIdResponseDto);
     }
+
 }

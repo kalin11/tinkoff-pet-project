@@ -7,7 +7,6 @@ import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.SubjectTopicRes
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.SubjectTopicMapper;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopicEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsUser;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.SubjectTopicService;
@@ -19,7 +18,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

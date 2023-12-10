@@ -3,8 +3,9 @@ package edu.tinkoff.tinkoffbackendacademypetproject.services;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.FileEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.NewsPublicationEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.PublicationEntity;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.SubjectTopicEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.NewsPublicationRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.PublicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,13 +20,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PublicationService {
+public class NewsPublicationService {
+    private final NewsPublicationRepository newsPublicationRepository;
     private final PublicationRepository publicationRepository;
-    private final SubjectTopicService subjectTopicService;
     private final FileService fileService;
 
     @Transactional
-    public PublicationEntity createPublicationInSubjectTopic(PublicationEntity publication, Account account, List<MultipartFile> files) throws EntityModelNotFoundException {
+    public PublicationEntity createPublicationInNews(PublicationEntity publication, Account account, List<MultipartFile> files) throws EntityModelNotFoundException {
         if (files != null) {
             var filesInPublication = new HashSet<FileEntity>();
             for (var file : files) {
@@ -36,24 +37,14 @@ public class PublicationService {
         } else {
             publication.setFiles(new HashSet<>());
         }
-        var subjectTopic = new HashSet<SubjectTopicEntity>();
-        subjectTopic.add(subjectTopicService.getSubjectTopic(publication.getSubjectTopics().iterator().next().getId()));
-        publication.setSubjectTopics(subjectTopic);
-        publication.setSupportsThread(false);
+        publication.setSupportsThread(true);
         publication.setAccount(account);
-        return publicationRepository.save(publication);
+        var savedPublication = publicationRepository.save(publication);
+        newsPublicationRepository.save(new NewsPublicationEntity(savedPublication.getId(), savedPublication));
+        return savedPublication;
     }
 
-    public PublicationEntity getPublication(Long id) throws EntityModelNotFoundException {
-        return publicationRepository.findById(id).orElseThrow(() -> new EntityModelNotFoundException("Публикации", "id", Long.toString(id)));
-    }
-
-    @Transactional
-    public void deletePublication(Long id) throws EntityModelNotFoundException {
-        publicationRepository.delete(getPublication(id));
-    }
-
-    public Page<PublicationEntity> getPublicationsInOneCategory(Integer pageNumber, Integer pageSize, Long subjectTopicId) {
-        return publicationRepository.findBySubjectTopics_Id(subjectTopicId, PageRequest.of(pageNumber, pageSize, Sort.by("id")));
+    public Page<PublicationEntity> getPublicationsInNews(Integer pageNumber, Integer pageSize) {
+        return newsPublicationRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by("id").reverse())).map(NewsPublicationEntity::getPublication);
     }
 }

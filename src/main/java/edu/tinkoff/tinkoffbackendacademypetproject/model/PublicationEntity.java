@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Пост
@@ -43,18 +44,8 @@ public class PublicationEntity {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    /**
-     * К какому топику относится пост
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subject_topic_id", referencedColumnName = "id")
-    private SubjectTopicEntity subjectTopic;
-
-    /**
-     * Вложенные файлы в пост
-     */
-    @OneToMany(mappedBy = "publication", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<FileEntity> files;
+    @Column(name = "supports_thread")
+    private Boolean supportsThread;
 
     /**
      * Комментарии к посту
@@ -65,4 +56,18 @@ public class PublicationEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "publication_file",
+            joinColumns = @JoinColumn(name = "publication_id"),
+            inverseJoinColumns = @JoinColumn(name = "file_id"))
+    private Set<FileEntity> files;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "subject_topic_publication",
+            joinColumns = @JoinColumn(name = "publication_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_topic_id"))
+    private Set<SubjectTopicEntity> subjectTopics;
 }

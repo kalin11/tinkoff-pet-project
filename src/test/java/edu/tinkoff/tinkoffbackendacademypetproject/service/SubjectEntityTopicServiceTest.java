@@ -81,7 +81,7 @@ class SubjectEntityTopicServiceTest extends CommonAbstractTest {
     void createSubjectTopicTest(Long topicId, Long subjectId) throws EntityModelNotFoundException {
         // given
         createSubjects(1);
-        var subjectTopicGiven = new SubjectTopicEntity(null, topicRepository.findById(topicId).get(), subjectRepository.findById(subjectId).get(), null);
+        var subjectTopicGiven = new SubjectTopicEntity(null, topicRepository.findById(topicId).get(), subjectRepository.findById(subjectId).get());
 
         // when
         subjectTopicService.createSubjectTopic(subjectTopicGiven);
@@ -138,7 +138,7 @@ class SubjectEntityTopicServiceTest extends CommonAbstractTest {
     }
 
     private void createSubjectTopics(Long subjectId) {
-        subjectTopicRepository.save(new SubjectTopicEntity(null, topicRepository.findById(1L).get(), subjectRepository.findById(subjectId).get(), null));
-        subjectTopicRepository.save(new SubjectTopicEntity(null, topicRepository.findById(2L).get(), subjectRepository.findById(subjectId).get(), null));
+        subjectTopicRepository.save(new SubjectTopicEntity(null, topicRepository.findById(1L).get(), subjectRepository.findById(subjectId).get()));
+        subjectTopicRepository.save(new SubjectTopicEntity(null, topicRepository.findById(2L).get(), subjectRepository.findById(subjectId).get()));
     }
 }

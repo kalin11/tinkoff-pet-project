@@ -48,7 +48,7 @@ public class FileService implements StorageService {
                         StandardCopyOption.REPLACE_EXISTING);
             }
 
-            return new FileEntity(null, uuid + file.getOriginalFilename(), file.getOriginalFilename(), null);
+            return new FileEntity(null, uuid + file.getOriginalFilename(), file.getOriginalFilename());
         } catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
         }

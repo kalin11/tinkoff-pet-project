@@ -43,6 +43,5 @@ public interface SubjectTopicMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "subjectId", target = "subject", qualifiedByName = "getSubjectWithId")
     @Mapping(source = "topicId", target = "type", qualifiedByName = "getTopicWithId")
-    @Mapping(target = "publications", ignore = true)
     SubjectTopicEntity getSubjectTopicFromDTO(SubjectTopicRequestDto dto);
 }

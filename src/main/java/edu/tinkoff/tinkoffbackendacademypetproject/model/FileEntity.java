@@ -34,11 +34,4 @@ public class FileEntity {
      */
     @Column(name = "initial_file_name")
     private String initialFileName;
-
-    /**
-     * К какому посту было приложено
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "publication_id", referencedColumnName = "id")
-    private PublicationEntity publication;
 }

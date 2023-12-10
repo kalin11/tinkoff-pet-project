@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 /**
  * Топик предмета
  */
@@ -39,10 +37,4 @@ public class SubjectTopicEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private SubjectEntity subject;
-
-    /**
-     * Посты, которые относятся к топику
-     */
-    @OneToMany(mappedBy = "subjectTopic", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
-    private List<PublicationEntity> publications;
 }

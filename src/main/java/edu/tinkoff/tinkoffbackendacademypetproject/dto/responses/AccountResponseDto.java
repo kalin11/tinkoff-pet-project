@@ -14,4 +14,5 @@ public record AccountResponseDto(
         @JsonProperty("birth_date") String birthDate,
         @JsonProperty("is_banned") Boolean isBanned,
         String role,
-        @JsonProperty("photo_name_in_directory") String photoNameInDirectory) { }
+        @JsonProperty("photo_name_in_directory") String photoNameInDirectory) {
+}

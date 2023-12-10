@@ -45,7 +45,6 @@ jwt:
   issuer: ${jwt-token.issuer}
 storage:
   location: ${local-storage.location}
-  location-for-photos: ${local-storage.photos-location}
 cors:
   allowed-origin: ${front-url}
 admin:

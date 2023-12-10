@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PublicationRepository extends JpaRepository<PublicationEntity, Long> {
-    Page<PublicationEntity> findBySubjectTopic_Id(Long id, Pageable pageable);
+    Page<PublicationEntity> findBySubjectTopics_Id(Long id, Pageable pageable);
 }
