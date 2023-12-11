@@ -70,4 +70,7 @@ public class PublicationEntity {
             joinColumns = @JoinColumn(name = "publication_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_topic_id"))
     private Set<SubjectTopicEntity> subjectTopics;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE}, mappedBy = "publication")
+    private NewsPublicationEntity publication;
 }
