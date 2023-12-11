@@ -1,13 +1,11 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.dto.requests;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-public record SetVerificationTimeRequestDto(@Min(value = 1, message = "Количество минут не может быть меньше 1")
-                                            @NotNull(message = "Количество минут не может быть пустым")
-                                            @Schema(description = "Через сколько минут проверять, что комментарию больше двух лет", example = "2")
-                                            @Max(value = 59, message = "Количество минут не может быть больше 59")
-                                            Integer minutes) {
+public record SetVerificationTimeRequestDto(@Schema(description = "Частота удаления старых комментариев", example = "0 */15 * * * ?")
+                                            @Size(max = 100, message = "Слишком длинная крона")
+                                            @NotBlank(message = "Крона не может быть пустой")
+                                            String cron) {
 }
