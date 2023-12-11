@@ -74,6 +74,9 @@ public class CommentService {
         if (Boolean.TRUE.equals(publication.getSupportsThread())) {
             comment.setPublication(publication);
             comment.setAccount(account);
+            LocalDateTime now = LocalDateTime.now();
+            comment.setCreatedAt(now);
+            comment.setLastUpdatedAt(now);
             if (parentComment.getParent() == null) {
                 comment.setParent(parentComment);
                 return commentRepository.save(comment);
