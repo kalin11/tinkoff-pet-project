@@ -65,4 +65,7 @@ public class CommentEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent", referencedColumnName = "id")
     private CommentEntity parent;
+
+    @OneToMany(mappedBy = "comment", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<CommentAudEntity> commentsHistory;
 }

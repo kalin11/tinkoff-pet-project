@@ -5,6 +5,7 @@ import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoun
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.NotThreadException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.NotYourCommentException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentAudEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +41,16 @@ public class CommentService {
         var changeComment = getComment(comment.getId());
         if (!nickname.equals(changeComment.getAccount().getNickname())) {
             throw new NotYourCommentException();
+        }
+        if (changeComment.getContent().equals(comment.getContent())){
+            return changeComment;
+        }
+        if (changeComment.getCommentsHistory() == null) {
+            var history = new ArrayList<CommentAudEntity>();
+            history.add(new CommentAudEntity(null, changeComment.getContent(), changeComment.getLastUpdatedAt(), changeComment));
+            changeComment.setCommentsHistory(history);
+        } else {
+            changeComment.getCommentsHistory().add(new CommentAudEntity(null, changeComment.getContent(), changeComment.getLastUpdatedAt(), changeComment));
         }
         changeComment.setContent(comment.getContent());
         return commentRepository.save(changeComment);
