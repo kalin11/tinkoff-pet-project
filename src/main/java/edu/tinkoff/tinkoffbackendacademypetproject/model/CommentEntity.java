@@ -55,7 +55,7 @@ public class CommentEntity {
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
     private List<CommentEntity> thread;
 
     @ManyToOne(fetch = FetchType.EAGER)
