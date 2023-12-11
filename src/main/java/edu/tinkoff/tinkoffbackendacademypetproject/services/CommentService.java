@@ -25,8 +25,11 @@ public class CommentService {
 
     @Transactional
     public CommentEntity createComment(CommentEntity comment, Account account) throws EntityModelNotFoundException {
+        LocalDateTime creationTime = LocalDateTime.now();
         comment.setPublication(publicationService.getPublication(comment.getPublication().getId()));
         comment.setAccount(account);
+        comment.setCreatedAt(creationTime);
+        comment.setLastUpdatedAt(creationTime);
         return commentRepository.save(comment);
     }
 
@@ -41,6 +44,7 @@ public class CommentService {
             throw new NotYourCommentException();
         }
         changeComment.setContent(comment.getContent());
+        changeComment.setLastUpdatedAt(LocalDateTime.now());
         return commentRepository.save(changeComment);
     }
 
@@ -67,7 +71,7 @@ public class CommentService {
     public CommentEntity createCommentThread(CommentEntity comment, Account account) throws EntityModelNotFoundException {
         var parentComment = getComment(comment.getParent().getId());
         var publication = publicationService.getPublication(parentComment.getPublication().getId());
-        if (publication.getSupportsThread()) {
+        if (Boolean.TRUE.equals(publication.getSupportsThread())) {
             comment.setPublication(publication);
             comment.setAccount(account);
             if (parentComment.getParent() == null) {
