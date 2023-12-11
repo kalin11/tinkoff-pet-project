@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Публикации", description = "Работа с ролями")
+@Tag(name = "Роли", description = "Работа с ролями")
 @RequestMapping("/v1/roles")
 public class RoleController {
     private final RoleService roleService;
