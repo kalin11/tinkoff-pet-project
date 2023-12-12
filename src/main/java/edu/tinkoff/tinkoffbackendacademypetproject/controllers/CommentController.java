@@ -1,7 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.*;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentAudResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
@@ -9,8 +8,6 @@ import edu.tinkoff.tinkoffbackendacademypetproject.mappers.CommentMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentAudit;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentEntity;
-import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CommentAudRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsModerator;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsUser;
