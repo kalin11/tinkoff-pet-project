@@ -30,6 +30,7 @@ public interface PublicationMapper {
     @Mapping(target = "nickname", source = "account.nickname")
     PublicationTitleAndIdResponseDto toPublicationTitleAndIdResponseDto(PublicationEntity publication);
 
+    @Mapping(target = "publication", ignore = true)
     @Mapping(target = "subjectTopics", qualifiedByName = "emptySubjectTopicWithId", source = "subjectTopicId")
     @Mapping(target = "supportsThread", ignore = true)
     @Mapping(target = "id", ignore = true)
@@ -39,6 +40,7 @@ public interface PublicationMapper {
     @Mapping(target = "account", ignore = true)
     PublicationEntity fromCreatePublicationRequestDto(CreatePublicationRequestDto publication);
 
+    @Mapping(target = "publication", ignore = true)
     @Mapping(target = "subjectTopics", ignore = true)
     @Mapping(target = "supportsThread", ignore = true)
     @Mapping(target = "id", ignore = true)

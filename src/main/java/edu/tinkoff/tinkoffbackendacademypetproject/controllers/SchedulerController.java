@@ -35,6 +35,6 @@ public class SchedulerController {
     })
     @IsAdmin
     public SetVerificationTimeResponseDto setVerificationTime(@RequestBody @Valid SetVerificationTimeRequestDto request) throws SchedulerException, ParseException {
-        return new SetVerificationTimeResponseDto(schedulerService.setVerificationTime(request.minutes()));
+        return new SetVerificationTimeResponseDto(schedulerService.setVerificationTime(request.cron()));
     }
 }

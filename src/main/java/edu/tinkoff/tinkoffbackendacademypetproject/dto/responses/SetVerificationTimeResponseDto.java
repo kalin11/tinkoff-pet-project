@@ -1,4 +1,4 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.dto.responses;
 
-public record SetVerificationTimeResponseDto(Integer minutes) {
+public record SetVerificationTimeResponseDto(String cron) {
 }
