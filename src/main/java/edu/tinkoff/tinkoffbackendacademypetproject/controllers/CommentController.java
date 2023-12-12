@@ -156,7 +156,6 @@ public class CommentController {
     })
     @IsAdmin
     public List<CommentAudit> getRevisions(@ParameterObject @Valid CommentAudRequestDto commentAudRequestDto) {
-        List<CommentAudit> list = commentAudService.getAll(commentAudRequestDto.getCommentId(), commentAudRequestDto.getRevisionNumber());
-        return list;
+        return commentAudService.getRevisionForComment(commentAudRequestDto.getCommentId());
     }
 }
