@@ -14,7 +14,7 @@ import java.util.List;
 public class CommentAudService {
     private final CommentAudRepository commentAudRepository;
 
-    public List<CommentAudit> getAll(Long commentId, Long revisionNumber) {
-        return commentAudRepository.getAll(commentId, revisionNumber);
+    public List<CommentAudit> getRevisionForComment(Long commentId) {
+        return commentAudRepository.getRevisionForComment(commentId);
     }
 }

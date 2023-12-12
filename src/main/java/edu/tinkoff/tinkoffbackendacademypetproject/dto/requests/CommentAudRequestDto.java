@@ -13,9 +13,4 @@ public class CommentAudRequestDto extends PageRequestDto {
     @NotNull(message = "Id комментария не может быть пустой")
     @Schema(description = "Id комментария", example = "1")
     private final Long commentId;
-
-    @Min(value = 1, message = "Номер ревизии не может быть меньше 1")
-    @NotNull(message = "Номер ревизии не может быть пустой")
-    @Schema(description = "Номер ревизии", example = "1")
-    private final Long revisionNumber;
 }

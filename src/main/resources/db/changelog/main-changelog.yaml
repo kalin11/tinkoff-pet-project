@@ -35,3 +35,6 @@ databaseChangeLog:
   - include:
       file: '././2023/12/10-01-changelog.sql'
       relativeToChangelogFile: true
+  - include:
+      file: '././2023/12/12-01-changelog.sql'
+      relativeToChangelogFile: true

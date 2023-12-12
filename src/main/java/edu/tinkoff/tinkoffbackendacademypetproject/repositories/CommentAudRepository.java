@@ -18,14 +18,13 @@ import java.util.List;
 public class CommentAudRepository {
     private final EntityManager entityManager;
 
-    public List<CommentAudit> getAll(Long commentId, Long revisionNumber) {
+    public List<CommentAudit> getRevisionForComment(Long commentId) {
         AuditReader auditReader = AuditReaderFactory.get(entityManager);
 
 // Создаем запрос на получение данных из аудиторской таблицы для конкретной ревизии
         List<Object[]> revisionData = auditReader.createQuery()
                 .forRevisionsOfEntity(CommentEntity.class, false, true)
                 .add(AuditEntity.id().eq(commentId))
-                .add(AuditEntity.revisionNumber().eq(revisionNumber))
                 .getResultList();
 
         List<CommentAudit> list = new ArrayList<>();
