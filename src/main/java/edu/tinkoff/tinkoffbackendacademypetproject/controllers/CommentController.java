@@ -1,14 +1,20 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.*;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentAudResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.CommentMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentAudit;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CommentAudRepository;
+import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsModerator;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsUser;
+import edu.tinkoff.tinkoffbackendacademypetproject.services.CommentAudService;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,12 +29,15 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Комментарии", description = "Работа с комментариями")
 @RequestMapping("/v1/comments")
 public class CommentController {
     private final CommentService commentService;
+    private final CommentAudService commentAudService;
     private final CommentMapper commentMapper;
     private final PageMapper pageMapper;
 
@@ -134,5 +143,20 @@ public class CommentController {
                                                                       Long id) {
         return pageMapper.toPageResponseDto(commentService.getThreadsOnTheComment(request.getPageNumber(), request.getPageSize(), id),
                 commentMapper::toCommentResponseDto);
+    }
+
+
+    @GetMapping("/revisions")
+    @Operation(description = "Получить ревезии",
+            summary = "Получить ревезии")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешно получены ревезии"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
+            @ApiResponse(responseCode = "403", description = "Нет прав")
+    })
+    @IsAdmin
+    public List<CommentAudit> getRevisions(@ParameterObject @Valid CommentAudRequestDto commentAudRequestDto) {
+        List<CommentAudit> list = commentAudService.getAll(commentAudRequestDto.getCommentId(), commentAudRequestDto.getRevisionNumber());
+        return list;
     }
 }
