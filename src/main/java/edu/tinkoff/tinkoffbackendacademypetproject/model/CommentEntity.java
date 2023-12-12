@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "comment")
+@Audited
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -32,6 +35,7 @@ public class CommentEntity {
     @Column(name = "content")
     private String content;
 
+    @NotAudited
     @Column(name = "is_anonymous")
     private Boolean isAnonymous;
 
@@ -47,21 +51,22 @@ public class CommentEntity {
     /**
      * Пост, к которому комментарий был написан
      */
+    @NotAudited
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publication_id", referencedColumnName = "id")
     private PublicationEntity publication;
 
+    @NotAudited
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
+    @NotAudited
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
     private List<CommentEntity> thread;
 
+    @NotAudited
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent", referencedColumnName = "id")
     private CommentEntity parent;
-
-    @OneToMany(mappedBy = "comment", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    private List<CommentAudEntity> commentsHistory;
 }

@@ -1,7 +1,6 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.*;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentHistoryResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
@@ -10,7 +9,6 @@ import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsModerator;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsUser;
-import edu.tinkoff.tinkoffbackendacademypetproject.services.CommentAudService;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/comments")
 public class CommentController {
     private final CommentService commentService;
-    private final CommentAudService commentAudService;
     private final CommentMapper commentMapper;
     private final PageMapper pageMapper;
 
@@ -137,23 +134,5 @@ public class CommentController {
                                                                       Long id) {
         return pageMapper.toPageResponseDto(commentService.getThreadsOnTheComment(request.getPageNumber(), request.getPageSize(), id),
                 commentMapper::toCommentResponseDto);
-    }
-
-    @GetMapping("/{id}/history")
-    @Operation(description = "Получить историю комментария",
-            summary = "Получить историю комментария")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешно получена история комментария"),
-            @ApiResponse(responseCode = "400", description = "Что-то пошло не так")
-    })
-    @IsModerator
-    public PageResponseDto<CommentHistoryResponseDto> getCommentHistory(@ParameterObject @Valid PageRequestDto request,
-                                                                        @PathVariable
-                                                                        @Min(value = 1, message = "Id комментария не может быть меньше 1")
-                                                                        @NotNull(message = "Id комментария не может быть пустым")
-                                                                        @Schema(description = "Id комментария", example = "1")
-                                                                        Long id) {
-        return pageMapper.toPageResponseDto(commentAudService.getCommentHistory(request.getPageNumber(), request.getPageSize(), id),
-                commentMapper::toCommentHistoryResponseDto);
     }
 }
