@@ -1,13 +1,17 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.controllers;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.*;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentHistoryResponseDto;
+import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentAudResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.PageResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.CommentMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.mappers.PageMapper;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentAudit;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CommentAudRepository;
+import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsAdmin;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsModerator;
 import edu.tinkoff.tinkoffbackendacademypetproject.security.annotations.IsUser;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.CommentAudService;
@@ -24,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -139,21 +145,18 @@ public class CommentController {
                 commentMapper::toCommentResponseDto);
     }
 
-    @GetMapping("/{id}/history")
-    @Operation(description = "Получить историю комментария",
-            summary = "Получить историю комментария")
+
+    @GetMapping("/revisions")
+    @Operation(description = "Получить ревезии",
+            summary = "Получить ревезии")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешно получена история комментария"),
-            @ApiResponse(responseCode = "400", description = "Что-то пошло не так")
+            @ApiResponse(responseCode = "200", description = "Успешно получены ревезии"),
+            @ApiResponse(responseCode = "400", description = "Что-то пошло не так"),
+            @ApiResponse(responseCode = "403", description = "Нет прав")
     })
-    @IsModerator
-    public PageResponseDto<CommentHistoryResponseDto> getCommentHistory(@ParameterObject @Valid PageRequestDto request,
-                                                                        @PathVariable
-                                                                        @Min(value = 1, message = "Id комментария не может быть меньше 1")
-                                                                        @NotNull(message = "Id комментария не может быть пустым")
-                                                                        @Schema(description = "Id комментария", example = "1")
-                                                                        Long id) {
-        return pageMapper.toPageResponseDto(commentAudService.getCommentHistory(request.getPageNumber(), request.getPageSize(), id),
-                commentMapper::toCommentHistoryResponseDto);
+    @IsAdmin
+    public List<CommentAudit> getRevisions(@ParameterObject @Valid CommentAudRequestDto commentAudRequestDto) {
+        List<CommentAudit> list = commentAudService.getAll(commentAudRequestDto.getCommentId(), commentAudRequestDto.getRevisionNumber());
+        return list;
     }
 }

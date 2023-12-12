@@ -3,9 +3,7 @@ package edu.tinkoff.tinkoffbackendacademypetproject.mappers;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.ChangeCommentRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.CreateCommentRequestDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.requests.CreateThreadRequestDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentHistoryResponseDto;
 import edu.tinkoff.tinkoffbackendacademypetproject.dto.responses.CommentResponseDto;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentAudEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.PublicationEntity;
 import org.mapstruct.Mapper;
@@ -31,9 +29,7 @@ public interface CommentMapper {
     @Mapping(target = "nickname", expression = "java(comment.getIsAnonymous() ? \"\" : comment.getAccount().getNickname())")
     CommentResponseDto toCommentResponseDto(CommentEntity comment);
 
-    CommentHistoryResponseDto toCommentHistoryResponseDto(CommentAudEntity comment);
 
-    @Mapping(target = "commentsHistory", ignore = true)
     @Mapping(target = "thread", ignore = true)
     @Mapping(target = "parent", ignore = true)
     @Mapping(target = "lastUpdatedAt", ignore = true)
@@ -43,7 +39,6 @@ public interface CommentMapper {
     @Mapping(target = "account", ignore = true)
     CommentEntity fromCreateCommentRequestDto(CreateCommentRequestDto comment);
 
-    @Mapping(target = "commentsHistory", ignore = true)
     @Mapping(target = "thread", ignore = true)
     @Mapping(target = "parent", ignore = true)
     @Mapping(target = "lastUpdatedAt", ignore = true)
@@ -53,7 +48,6 @@ public interface CommentMapper {
     @Mapping(target = "account", ignore = true)
     CommentEntity fromChangeCommentRequestDto(ChangeCommentRequestDto comment);
 
-    @Mapping(target = "commentsHistory", ignore = true)
     @Mapping(target = "thread", ignore = true)
     @Mapping(target = "parent", qualifiedByName = "emptyCommentWithId", source = "parentCommentId")
     @Mapping(target = "lastUpdatedAt", ignore = true)
