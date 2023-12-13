@@ -1,3 +1,11 @@
+services:
+  - name: docker:dind
+    command: ["--tls=false"]
+
+variables:
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
+
 image: maven:latest
 
 stages:
@@ -16,12 +24,12 @@ test-job:
   stage: test
   script:
     - echo "Starting tests..."
-    - "mvn test"
+    - "mvn clean test"
     - echo "Successfully tested"
 
 package-job:
   stage: package
   script:
     - echo "Starting packaging..."
-    - "mvn package"
+    - "mvn clean package"
     - echo "Successfully packed"
