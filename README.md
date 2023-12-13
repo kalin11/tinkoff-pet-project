@@ -27,10 +27,10 @@ docker compose up --build -d postgres
 <li>
 
 ``
-mvn clean package -DskipTests
+mvn clean package
 ``
 
-Мы пропускаем тесты для того, чтобы не возникло ошибки с подключением к БД
+
 
 </li>
 <li>
@@ -42,3 +42,5 @@ docker compose up --build -d
 </li>
 
 </ol>
+
+Теперь наше приложение работает в докере на порту `8080`. 
