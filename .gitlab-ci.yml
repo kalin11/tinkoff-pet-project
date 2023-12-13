@@ -1,0 +1,27 @@
+image: maven:latest
+
+stages:
+  - build
+  - test
+  - package
+
+build-job:
+  stage: build
+  script:
+    - echo "Starting building..."
+    - "mvn compile"
+    - echo "Successfully build"
+
+test-job:
+  stage: test
+  script:
+    - echo "Starting tests..."
+    - "mvn test"
+    - echo "Successfully tested"
+
+package-job:
+  stage: package
+  script:
+    - echo "Starting packaging..."
+    - "mvn package"
+    - echo "Successfully packed"
