@@ -2,7 +2,6 @@ package edu.tinkoff.tinkoffbackendacademypetproject.services;
 
 
 import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentAudit;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.CommentEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.CommentAudRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

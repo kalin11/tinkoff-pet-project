@@ -1,30 +1,24 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.service;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.CommonAbstractTest;
-import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.RoleNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.*;
-import edu.tinkoff.tinkoffbackendacademypetproject.repositories.*;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.NewsPublicationRepository;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.PublicationRepository;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.RoleRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.NewsPublicationService;
-import edu.tinkoff.tinkoffbackendacademypetproject.services.PublicationService;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.RoleService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.util.HashSet;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NewsPublicationServiceTest extends CommonAbstractTest {
@@ -41,6 +35,9 @@ class NewsPublicationServiceTest extends CommonAbstractTest {
     private RoleService roleService;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private AccountRepository accountRepository;
 
     @Autowired
@@ -53,6 +50,8 @@ class NewsPublicationServiceTest extends CommonAbstractTest {
         jdbcTemplate.execute("ALTER SEQUENCE publication_pk_seq RESTART");
         accountRepository.deleteAll();
         jdbcTemplate.execute("ALTER SEQUENCE account_pk_seq RESTART");
+        roleRepository.deleteAll();
+        jdbcTemplate.execute("ALTER SEQUENCE role_pk_seq RESTART");
     }
 
     @DisplayName("Find all publications in news")
@@ -76,6 +75,7 @@ class NewsPublicationServiceTest extends CommonAbstractTest {
     }
 
     private void createBeforeStart() throws RoleNotFoundException {
+        insertRoles();
         accountRepository.save(new Account(null, "dan@dam.ru", "1234", "Daniil K", null, null, null, null, null, false, roleService.getRoleByName(Role.ROLE_USER), null, null, null));
     }
 
@@ -88,5 +88,15 @@ class NewsPublicationServiceTest extends CommonAbstractTest {
 
         savedPublication = publicationRepository.save(new PublicationEntity(null, "Третья публикация", "Third",null, true,  null, accountRepository.findById(1L).get(), null, null, null));
         newsPublicationRepository.save(new NewsPublicationEntity(savedPublication.getId(), savedPublication));
+    }
+
+    private void insertRoles() {
+        Role[] roles = Role.values();
+        for (Role role : roles) {
+            if (!roleService.roleExists(role)) {
+                RoleEntity roleEntity = new RoleEntity(null, role, null);
+                roleService.save(roleEntity);
+            }
+        }
     }
 }
