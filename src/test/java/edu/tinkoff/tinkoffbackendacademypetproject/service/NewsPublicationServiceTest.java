@@ -1,6 +1,7 @@
 package edu.tinkoff.tinkoffbackendacademypetproject.service;
 
 import edu.tinkoff.tinkoffbackendacademypetproject.CommonAbstractTest;
+import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.RoleNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.*;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
@@ -18,6 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.charset.Charset;
+import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -72,6 +79,41 @@ class NewsPublicationServiceTest extends CommonAbstractTest {
         for (int i = 0; i < publications.getContent().size(); i++) {
             assertEquals(publications.getContent().get(i).getId(), publicationsWhen.getContent().get(i).getId());
         }
+    }
+
+    @DisplayName("Create news publication")
+    @ParameterizedTest(name = "{index} - create news publication")
+    @CsvSource(value = {
+            "First, Первая новость"
+    })
+    void createPublicationInNewsTest(String title,  String description) throws EntityModelNotFoundException {
+        // given
+        createBeforeStart();
+        var publicationNewsGiven = new PublicationEntity(null, description, title, null, true,  null, null, null, null, null);
+
+        MultipartFile fileA = new MockMultipartFile(
+                "test.txt",
+                "test.txt",
+                "text/plain",
+                "Lorem ipsum dolores".getBytes(Charset.defaultCharset())
+        );
+        MultipartFile fileB = new MockMultipartFile(
+                "test.txt",
+                "test.txt",
+                "text/plain",
+                "Lorem ipsum dolores".getBytes(Charset.defaultCharset())
+        );
+        List<MultipartFile> files = List.of(fileA, fileB);
+        // when
+        newsPublicationService.createPublicationInNews(publicationNewsGiven, accountRepository.findById(1L).get(), files);
+
+        // then
+        var publications = publicationRepository.findAll();
+        assertEquals(1, publications.size());
+        var publication = publications.get(0);
+        assertEquals(title, publication.getTitle());
+        assertEquals(description, publication.getDescription());
+        assertEquals(1, publication.getId());
     }
 
     private void createBeforeStart() throws RoleNotFoundException {

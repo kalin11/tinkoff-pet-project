@@ -17,8 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.charset.Charset;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -122,6 +126,43 @@ class PublicationEntityServiceTest extends CommonAbstractTest {
 
         // then
         assertEquals("Публикации с id: " + id + " не найдено", exception.getMessage());
+    }
+
+    @DisplayName("Create publication")
+    @ParameterizedTest(name = "{index} - create publication")
+    @CsvSource(value = {
+            "First, Первая публикация, 1"
+    })
+    void createPublicationInSubjectTopicTest(String title,  String description, Long subjectTopicId) throws EntityModelNotFoundException {
+        // given
+        createBeforeStart();
+        var set = new HashSet<SubjectTopicEntity>();
+        set.add(subjectTopicRepository.findById(subjectTopicId).get());
+        var publicationGiven = new PublicationEntity(null, description, title, null, false,  null, null, null, set, null);
+
+        MultipartFile fileA = new MockMultipartFile(
+                "test.txt",
+                "test.txt",
+                "text/plain",
+                "Lorem ipsum dolores".getBytes(Charset.defaultCharset())
+        );
+        MultipartFile fileB = new MockMultipartFile(
+                "test.txt",
+                "test.txt",
+                "text/plain",
+                "Lorem ipsum dolores".getBytes(Charset.defaultCharset())
+        );
+        List<MultipartFile> files = List.of(fileA, fileB);
+        // when
+        publicationService.createPublicationInSubjectTopic(publicationGiven, accountRepository.findById(1L).get(), files);
+
+        // then
+        var publications = publicationRepository.findAll();
+        assertEquals(1, publications.size());
+        var publication = publications.get(0);
+        assertEquals(title, publication.getTitle());
+        assertEquals(description, publication.getDescription());
+        assertEquals(1, publication.getId());
     }
 
     private void createBeforeStart() throws RoleNotFoundException {
