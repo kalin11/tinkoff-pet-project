@@ -34,21 +34,7 @@ public class DataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws RoleNotFoundException {
         insertRoles();
         insertTopicTypes();
-        authService.registerAdmin(
-                new Account(null,
-                        adminEmail,
-                        password,
-                        nickname,
-                        null,
-                        null,
-                        null,
-                        null,
-                        LocalDate.now(),
-                        false,
-                        roleService.getRoleByName(Role.ROLE_ADMIN),
-                        null,
-                        null,
-                        null));
+        registerAdmin();
     }
 
 
@@ -70,6 +56,24 @@ public class DataLoader implements ApplicationRunner {
                 topicTypeService.save(type);
             }
         }
+    }
+
+    private void registerAdmin() {
+        authService.registerAdmin(
+                new Account(null,
+                        adminEmail,
+                        password,
+                        nickname,
+                        null,
+                        null,
+                        null,
+                        null,
+                        LocalDate.now(),
+                        false,
+                        roleService.getRoleByName(Role.ROLE_ADMIN),
+                        null,
+                        null,
+                        null));
     }
 
 }
