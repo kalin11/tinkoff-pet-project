@@ -3,12 +3,13 @@ package edu.tinkoff.tinkoffbackendacademypetproject.service;
 import edu.tinkoff.tinkoffbackendacademypetproject.CommonAbstractTest;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.EntityModelNotFoundException;
 import edu.tinkoff.tinkoffbackendacademypetproject.exceptions.RoleNotFoundException;
-import edu.tinkoff.tinkoffbackendacademypetproject.model.*;
-import edu.tinkoff.tinkoffbackendacademypetproject.repositories.*;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Account;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
+import edu.tinkoff.tinkoffbackendacademypetproject.model.RoleEntity;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
+import edu.tinkoff.tinkoffbackendacademypetproject.repositories.RoleRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.AccountService;
-import edu.tinkoff.tinkoffbackendacademypetproject.services.NewsPublicationService;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.RoleService;
-import edu.tinkoff.tinkoffbackendacademypetproject.services.SubjectTopicService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,20 +21,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.Charset;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AccountServiceTest extends CommonAbstractTest {
     @Autowired

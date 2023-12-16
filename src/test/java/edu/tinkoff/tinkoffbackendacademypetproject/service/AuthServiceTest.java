@@ -8,7 +8,6 @@ import edu.tinkoff.tinkoffbackendacademypetproject.model.Role;
 import edu.tinkoff.tinkoffbackendacademypetproject.model.RoleEntity;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.AccountRepository;
 import edu.tinkoff.tinkoffbackendacademypetproject.repositories.RoleRepository;
-import edu.tinkoff.tinkoffbackendacademypetproject.services.AccountService;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.AuthService;
 import edu.tinkoff.tinkoffbackendacademypetproject.services.RoleService;
 import org.junit.jupiter.api.AfterEach;
@@ -16,21 +15,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.charset.Charset;
-import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AuthServiceTest extends CommonAbstractTest {
     @Autowired

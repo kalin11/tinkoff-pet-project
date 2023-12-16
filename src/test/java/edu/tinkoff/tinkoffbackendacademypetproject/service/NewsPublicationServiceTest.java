@@ -23,7 +23,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.Charset;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -86,10 +85,10 @@ class NewsPublicationServiceTest extends CommonAbstractTest {
     @CsvSource(value = {
             "First, Первая новость"
     })
-    void createPublicationInNewsTest(String title,  String description) throws EntityModelNotFoundException {
+    void createPublicationInNewsTest(String title, String description) throws EntityModelNotFoundException {
         // given
         createBeforeStart();
-        var publicationNewsGiven = new PublicationEntity(null, description, title, null, true,  null, null, null, null, null);
+        var publicationNewsGiven = new PublicationEntity(null, description, title, null, true, null, null, null, null, null);
 
         MultipartFile fileA = new MockMultipartFile(
                 "test.txt",
@@ -122,13 +121,13 @@ class NewsPublicationServiceTest extends CommonAbstractTest {
     }
 
     private void createPublications() {
-        var savedPublication = publicationRepository.save(new PublicationEntity(null, "Первая публикация", "First", null, true,  null, accountRepository.findById(1L).get(), null, null, null));
+        var savedPublication = publicationRepository.save(new PublicationEntity(null, "Первая публикация", "First", null, true, null, accountRepository.findById(1L).get(), null, null, null));
         newsPublicationRepository.save(new NewsPublicationEntity(savedPublication.getId(), savedPublication));
 
-        savedPublication = publicationRepository.save(new PublicationEntity(null, "Вторая публикация", "Second",null, true,  null, accountRepository.findById(1L).get(), null, null, null));
+        savedPublication = publicationRepository.save(new PublicationEntity(null, "Вторая публикация", "Second", null, true, null, accountRepository.findById(1L).get(), null, null, null));
         newsPublicationRepository.save(new NewsPublicationEntity(savedPublication.getId(), savedPublication));
 
-        savedPublication = publicationRepository.save(new PublicationEntity(null, "Третья публикация", "Third",null, true,  null, accountRepository.findById(1L).get(), null, null, null));
+        savedPublication = publicationRepository.save(new PublicationEntity(null, "Третья публикация", "Third", null, true, null, accountRepository.findById(1L).get(), null, null, null));
         newsPublicationRepository.save(new NewsPublicationEntity(savedPublication.getId(), savedPublication));
     }
 

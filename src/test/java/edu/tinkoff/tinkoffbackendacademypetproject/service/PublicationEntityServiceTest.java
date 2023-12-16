@@ -133,12 +133,12 @@ class PublicationEntityServiceTest extends CommonAbstractTest {
     @CsvSource(value = {
             "First, Первая публикация, 1"
     })
-    void createPublicationInSubjectTopicTest(String title,  String description, Long subjectTopicId) throws EntityModelNotFoundException {
+    void createPublicationInSubjectTopicTest(String title, String description, Long subjectTopicId) throws EntityModelNotFoundException {
         // given
         createBeforeStart();
         var set = new HashSet<SubjectTopicEntity>();
         set.add(subjectTopicRepository.findById(subjectTopicId).get());
-        var publicationGiven = new PublicationEntity(null, description, title, null, false,  null, null, null, set, null);
+        var publicationGiven = new PublicationEntity(null, description, title, null, false, null, null, null, set, null);
 
         MultipartFile fileA = new MockMultipartFile(
                 "test.txt",
@@ -175,9 +175,9 @@ class PublicationEntityServiceTest extends CommonAbstractTest {
     private void createPublications(Long subjectTopicId) {
         var set = new HashSet<SubjectTopicEntity>();
         set.add(subjectTopicRepository.findById(subjectTopicId).get());
-        publicationRepository.save(new PublicationEntity(null, "Первая публикация", "First", null, false,  null, accountRepository.findById(1L).get(), null, set, null));
-        publicationRepository.save(new PublicationEntity(null, "Вторая публикация", "Second",null, false,  null, accountRepository.findById(1L).get(), null, set, null));
-        publicationRepository.save(new PublicationEntity(null, "Третья публикация", "Third",null, false,  null, accountRepository.findById(1L).get(), null, set, null));
+        publicationRepository.save(new PublicationEntity(null, "Первая публикация", "First", null, false, null, accountRepository.findById(1L).get(), null, set, null));
+        publicationRepository.save(new PublicationEntity(null, "Вторая публикация", "Second", null, false, null, accountRepository.findById(1L).get(), null, set, null));
+        publicationRepository.save(new PublicationEntity(null, "Третья публикация", "Third", null, false, null, accountRepository.findById(1L).get(), null, set, null));
     }
 
     private void insertRoles() {
