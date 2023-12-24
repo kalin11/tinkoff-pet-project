@@ -45,6 +45,7 @@ spring:
 jwt:
   secret: ${jwt-token.secret}
   issuer: ${jwt-token.issuer}
+  expiration: ${jwt-token.expiration}
 storage:
   location: ${local-storage.location}
 cors:

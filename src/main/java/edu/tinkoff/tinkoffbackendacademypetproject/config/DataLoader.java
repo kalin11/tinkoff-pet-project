@@ -60,20 +60,15 @@ public class DataLoader implements ApplicationRunner {
 
     private void registerAdmin() {
         authService.registerAdmin(
-                new Account(null,
-                        adminEmail,
-                        password,
-                        nickname,
-                        null,
-                        null,
-                        null,
-                        null,
-                        LocalDate.now(),
-                        false,
-                        roleService.getRoleByName(Role.ROLE_ADMIN),
-                        null,
-                        null,
-                        null));
+                Account.builder()
+                        .email(adminEmail)
+                        .password(password)
+                        .nickname(nickname)
+                        .birthDate(LocalDate.now())
+                        .isBanned(false)
+                        .role(roleService.getRoleByName(Role.ROLE_ADMIN))
+                        .build()
+        );
     }
 
 }

@@ -20,6 +20,9 @@ public class JwtService {
     @Value("${jwt.issuer}")
     private String jwtIssuer;
 
+    @Value("${jwt.expiration}")
+    private long jwtExpiration;
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -34,7 +37,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 10 * 24 * 60 * 60 * 1000)) // 10 days
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .setIssuer(jwtIssuer)
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .compact();
